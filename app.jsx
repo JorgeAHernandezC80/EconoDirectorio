@@ -127,7 +127,7 @@ function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, o
           <I.Plus size={14} />
           <span>Soy comerciante</span>
         </button>
-        <div className="avatar" title="Cuenta">MA</div>
+        <div className="avatar" title="Cuenta">JH</div>
       </div>
     </header>
   );
@@ -359,7 +359,10 @@ function BusinessCard({ b, onOpen, onSave, saved, view, onContact }) {
               <I.Message size={14} />
             </button>
           ) : (
-            <button className="btn-icon" onClick={e => { e.stopPropagation(); onContact(b, 'route'); }} title="Cómo llegar">
+            <button className="btn-icon" onClick={e => {
+              e.stopPropagation();
+              window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.address + ', ' + b.barrio + ', Colombia')}`, '_blank');
+            }} title="Cómo llegar en Google Maps">
               <I.Navigate size={14} />
             </button>
           )}
@@ -487,19 +490,25 @@ function DetailPanel({ business, onClose, onContact, saved, onSave, onRate }) {
             <p className="detail-desc">{business.desc}</p>
 
             <div className="detail-actions">
+              {/* Fila 1: acción principal */}
               <button className="btn-primary big" onClick={() => onContact(business, 'call')}>
-                <I.Phone size={14} /> Llamar {business.phone}
+                <I.Phone size={14} /> Llamar · {business.phone}
               </button>
+              {/* Fila 2: acciones secundarias */}
               {business.whatsapp && (
                 <button className="btn-secondary big" onClick={() => onContact(business, 'wa')}>
                   <I.Message size={14} /> WhatsApp
                 </button>
               )}
-              <button className="btn-secondary big" onClick={() => onRate(business)} title="Calificar">
+              <button className="btn-secondary big" onClick={() => onRate(business)}>
                 <I.Star size={14} /> Calificar
               </button>
-              <button className="btn-icon big" onClick={() => onSave(business.id)} title="Guardar">
+              <button
+                className={'btn-secondary big ' + (saved ? 'is-saved' : '')}
+                onClick={() => onSave(business.id)}
+                title={saved ? 'Quitar de guardados' : 'Guardar negocio'}>
                 <I.Bookmark size={14} />
+                {saved ? 'Guardado' : 'Guardar'}
               </button>
             </div>
 
@@ -552,7 +561,10 @@ function DetailPanel({ business, onClose, onContact, saved, onSave, onRate }) {
 function MiniMap({ business }) {
   // Stylized grid — deliberately schematic
   return (
-    <div className="mini-map" role="img" aria-label="Mapa esquemático del barrio">
+    <div className="mini-map" role="img" aria-label="Mapa esquemático del barrio"
+      style={{cursor:'pointer'}}
+      onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.address + ', ' + business.barrio + ', Colombia')}`, '_blank')}
+      title="Ver en Google Maps">
       <svg viewBox="0 0 320 180" width="100%" height="180" preserveAspectRatio="none">
         <defs>
           <pattern id="map-grid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -575,8 +587,15 @@ function MiniMap({ business }) {
         <text x="160" y="120" fontSize="9" fill="var(--ink-3)" fontFamily="JetBrains Mono">{business.barrio.toUpperCase()}</text>
       </svg>
       <div className="map-meta">
-        <span><I.Navigate size={11} /> ~ 6 min a pie · 2 min en bici</span>
-        <button className="link">Cómo llegar →</button>
+        <span><I.MapPin size={11} /> {business.address} · {business.barrio}</span>
+        <a
+          className="link"
+          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(business.address + ', ' + business.barrio + ', Colombia')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Abrir en Google Maps">
+          <I.Navigate size={11} /> Cómo llegar →
+        </a>
       </div>
     </div>
   );
@@ -1505,7 +1524,10 @@ function App() {
     if (mode === 'rate') { setRatingTarget(b); return; }
     if (mode === 'call') showToast(`Llamando a ${b.name} · ${b.phone}`);
     else if (mode === 'wa') showToast(`Abriendo WhatsApp · ${b.name}`);
-    else if (mode === 'route') showToast(`Calculando ruta a ${b.address}`);
+    else if (mode === 'route') {
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.address + ', ' + b.barrio + ', Colombia')}`, '_blank');
+      showToast(`Abriendo Google Maps · ${b.address}`);
+    }
   };
 
   const onRate = (b) => setRatingTarget(b);
