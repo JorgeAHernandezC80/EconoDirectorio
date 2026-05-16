@@ -1235,6 +1235,17 @@
 
 
 
+
+  /* Búsqueda inteligente — hint */
+  .search-hint {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 8px; border-radius: 20px;
+    font-style: normal;
+  }
+  .search-hint em { font-style: normal; font-weight: 500; }
+
   /* ============ COMPARADOR ============ */
   .compare-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
@@ -2283,28 +2294,28 @@ window.DATA = {
   BARRIOS: ['La Esperanza', 'El Centro', 'Villa Rosa', 'El Prado', 'Barrio Norte', 'Barrio Nuevo', 'La Paz', 'Alegría'],
 
   BUSINESSES: [
-    { id: 1,  cat: 'restaurantes', name: 'La Sazón de Doña Rosa',        owner: 'Rosa Martínez',     desc: 'Comida casera con los mejores sabores de la región. Menú del día con sopa, segundo y jugo natural.',                          rating: 4.8, reviews: 124, address: 'Calle 12 #34-56',        barrio: 'La Esperanza', phone: '311 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–16:00',      openNow: true,  closesAt: '4pm',  specialty: 'Menú del día',         tags: ['Comida casera', 'Domicilio'],         payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1, delivery: { precio: 3000, minPedido: 15000, zonas: ['La Esperanza', 'El Centro', 'Villa Rosa'], tiempo: '20–35 min' } },
-    { id: 2,  cat: 'restaurantes', name: 'El Fogón Criollo',             owner: 'Carlos Pedraza',    desc: 'Especialidad en asados y fritanga. Ambiente familiar y precios populares para toda la familia.',                              rating: 4.6, reviews: 89,  address: 'Av. Popular #12-20',    barrio: 'El Centro',    phone: '320 456 7890', whatsapp: true,  hours: 'Vie–Dom · 11:00–22:00',      openNow: false, closesAt: null,   specialty: 'Fritanga',             tags: ['Parrilla', 'Para llevar'],            payments: ['Efectivo', 'Daviplata'],          verified: false, since: '2021', priceLevel: 2 },
-    { id: 3,  cat: 'restaurantes', name: 'Sabores del Valle',            owner: 'Lucía Rondón',      desc: 'Platos típicos de la región andina. Bandeja paisa, ajiaco santafereño y postres artesanales.',                              rating: 4.9, reviews: 203, address: 'Carrera 5 #8-90',       barrio: 'Barrio Nuevo', phone: '301 678 9012', whatsapp: true,  hours: 'Todos los días · 7:00–21:00', openNow: true,  closesAt: '9pm',  specialty: 'Bandeja paisa',        tags: ['Regional', 'Domicilio', 'Reservas'], payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2015', priceLevel: 2, delivery: { precio: 4000, minPedido: 20000, zonas: ['Barrio Nuevo', 'El Centro', 'Barrio Norte', 'El Prado'], tiempo: '25–40 min' } },
-    { id: 4,  cat: 'restaurantes', name: 'Tacos Don Memo',               owner: 'Guillermo Flores',  desc: 'Auténtica cocina mexicana adaptada al paladar local. Tacos, burritos y salsas caseras.',                                     rating: 4.5, reviews: 67,  address: 'Diagonal 45 #23-10',   barrio: 'Barrio Norte', phone: '315 890 1234', whatsapp: false, hours: 'Lun–Sáb · 12:00–21:00',     openNow: true,  closesAt: '9pm',  specialty: 'Tacos al pastor',      tags: ['Mexicana', 'Para llevar'],            payments: ['Efectivo'],                       verified: false, since: '2022', priceLevel: 1 },
-    { id: 5,  cat: 'restaurantes', name: 'Caldo de Pollo Mama Juanita',  owner: 'Juanita Sánchez',   desc: 'Caldos, sancochos y sopas preparados con recetas de abuela. El mejor remedio para cualquier día.',                           rating: 4.7, reviews: 156, address: 'Calle 23 #45-67',       barrio: 'Villa Rosa',   phone: '317 012 3456', whatsapp: true,  hours: 'Lun–Dom · 6:00–15:00',      openNow: true,  closesAt: '3pm',  specialty: 'Sancocho de gallina',  tags: ['Sopas', 'Desayunos'],                payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2010', priceLevel: 1 },
-    { id: 6,  cat: 'restaurantes', name: 'Pizzas al Carbón',             owner: 'Fernando Castro',   desc: 'Pizzas artesanales horneadas en leña. Masa madre, ingredientes frescos y sabor auténtico.',                                  rating: 4.4, reviews: 44,  address: 'Calle 7 #12-34',        barrio: 'Barrio Norte', phone: '310 234 5678', whatsapp: true,  hours: 'Mié–Dom · 17:00–23:00',     openNow: false, closesAt: null,   specialty: 'Pizza artesanal',      tags: ['Italiana', 'Domicilio'],              payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: false, since: '2023', priceLevel: 2, delivery: { precio: 5000, minPedido: 25000, zonas: ['Barrio Norte', 'La Esperanza', 'El Centro'], tiempo: '30–45 min' } },
-    { id: 7,  cat: 'tiendas',      name: 'Tienda El Progreso',           owner: 'Marlene Ríos',      desc: 'Todo lo que necesitas para el hogar. Abarrotes, aseo y más. Fiado a clientes frecuentes.',                                  rating: 4.7, reviews: 211, address: 'Carrera 8 #15-30',      barrio: 'La Esperanza', phone: '312 345 6789', whatsapp: false, hours: 'Lun–Dom · 6:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Abarrotes',            tags: ['General', 'Fiado'],                   payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2005', priceLevel: 1 },
-    { id: 8,  cat: 'tiendas',      name: 'Minimercado La Victoria',      owner: 'Pedro Gómez',       desc: 'Productos frescos, carnes y lácteos directos del proveedor. Precios justos cada día.',                                       rating: 4.5, reviews: 98,  address: 'Av. 3 #20-45',          barrio: 'El Centro',    phone: '316 456 7890', whatsapp: true,  hours: 'Lun–Sáb · 7:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Carnes',               tags: ['Mercado', 'Domicilio'],               payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2012', priceLevel: 1, delivery: { precio: 2000, minPedido: 10000, zonas: ['El Centro', 'La Esperanza', 'Barrio Nuevo'], tiempo: '15–25 min' } },
-    { id: 9,  cat: 'ropa',         name: 'Modas Valentina',              owner: 'Valentina Cruz',    desc: 'Ropa para mujer confeccionada a mano. Diseños únicos con telas de calidad a precio accesible.',                             rating: 4.8, reviews: 78,  address: 'C.C. Popular L-34',     barrio: 'El Centro',    phone: '318 567 8901', whatsapp: true,  hours: 'Lun–Sáb · 9:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Confección a medida',  tags: ['Confección', 'A medida'],             payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2019', priceLevel: 2 },
-    { id: 10, cat: 'ropa',         name: 'Zapatos y Más Don Julio',      owner: 'Julio Herrera',     desc: 'Ventas al por mayor y detal, calzado directamente de fábrica para damas, caballeros y niños.',                                                  rating: 4.3, reviews: 55,  address: 'Calle 10 #6-78',        barrio: 'Villa Rosa',   phone: '313 678 9012', whatsapp: false, hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Reparación',           tags: ['Zapatería', 'Reparación'],            payments: ['Efectivo'],                       verified: false, since: '2008', priceLevel: 1 },
-    { id: 11, cat: 'salud',        name: 'Farmacia Popular San Rafael',  owner: 'Dra. Ana Bernal',   desc: 'Medicamentos genéricos y de marca. Servicio de tensión y glucosa gratuito. Atención personalizada.',                         rating: 4.9, reviews: 312, address: 'Calle 5 #9-20',         barrio: 'El Centro',    phone: '319 789 0123', whatsapp: true,  hours: 'Lun–Dom · 8:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Farmacia 24h',         tags: ['Salud', 'Domicilio'],                payments: ['Efectivo', 'Tarjeta', 'Nequi'],   verified: true,  since: '2014', priceLevel: 2, delivery: { precio: 0, minPedido: 0, zonas: ['El Centro', 'La Esperanza', 'Villa Rosa', 'El Prado', 'Barrio Norte', 'Barrio Nuevo', 'La Paz', 'Alegría'], tiempo: '20–40 min' } },
-    { id: 12, cat: 'talleres',     name: 'Taller El Mecánico Honesto',   owner: 'Rodrigo Vargas',    desc: 'Servicio mecánico a domicilio y en taller. Motos y carros. Garantía en todos los trabajos.',                                rating: 4.7, reviews: 143, address: 'Calle Industrial #45-20', barrio: 'El Prado',     phone: '321 890 1234', whatsapp: true,  hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Mecánica general',     tags: ['Automotriz', 'A domicilio'],          payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2011', priceLevel: 2, delivery: { precio: 10000, minPedido: 0, zonas: ['El Prado', 'La Esperanza', 'El Centro', 'Villa Rosa', 'Barrio Norte'], tiempo: '30–60 min' } },
-    { id: 13, cat: 'talleres',     name: 'Eléctrico Don Jaime',          owner: 'Jaime Morales',     desc: 'Instalaciones eléctricas residenciales y comerciales. Reparación de electrodomésticos.',                                     rating: 4.6, reviews: 88,  address: 'Calle 3 #18-44',        barrio: 'La Paz',       phone: '322 901 2345', whatsapp: true,  hours: 'Lun–Vie · 8:00–17:00',      openNow: true,  closesAt: '5pm',  specialty: 'Eléctrico residencial', tags: ['Eléctrico', 'Urgencias'],             payments: ['Efectivo'],                       verified: false, since: '2016', priceLevel: 2 },
-    { id: 14, cat: 'belleza',      name: 'Peluquería Estilo Total',      owner: 'Sandra López',      desc: 'Cortes, tintes, alisados y peinados para toda la familia. Atención con y sin cita.',                                        rating: 4.8, reviews: 189, address: 'Carrera 12 #34-56',     barrio: 'Villa Rosa',   phone: '323 012 3456', whatsapp: true,  hours: 'Mar–Dom · 9:00–19:00',       openNow: true,  closesAt: '7pm',  specialty: 'Tintes y alisados',    tags: ['Cabello', 'Sin cita'],               payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2013', priceLevel: 2 },
-    { id: 15, cat: 'panaderia',    name: 'Panadería El Trigal',          owner: 'Miguel Á. Torres',  desc: 'Pan artesanal horneado cada mañana. Postres, tortas para ocasiones especiales y café.',                                     rating: 4.9, reviews: 267, address: 'Calle 8 #20-10',        barrio: 'La Esperanza', phone: '324 123 4567', whatsapp: true,  hours: 'Lun–Dom · 5:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Pan de masa madre',    tags: ['Panadería', 'Tortas'],               payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2007', priceLevel: 1 },
-    { id: 16, cat: 'electronicos', name: 'Tecno Reparaciones JR',        owner: 'Javier Rojas',      desc: 'Reparación de celulares, tablets y computadores. Venta de accesorios originales y económicos.',                             rating: 4.5, reviews: 112, address: 'C.C. Centro L-22',      barrio: 'El Centro',    phone: '325 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Pantallas y baterías', tags: ['Tecnología', 'Garantía'],             payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2017', priceLevel: 2 },
-    { id: 17, cat: 'educacion',    name: 'Academia Futuro Brillante',    owner: 'Prof. Clara Mendoza', desc: 'Clases de refuerzo, matemáticas, español e inglés para niños y jóvenes. Grupos reducidos.',                               rating: 4.8, reviews: 76,  address: 'Calle 15 #7-30',        barrio: 'El Centro',    phone: '326 345 6789', whatsapp: true,  hours: 'Lun–Vie · 14:00–19:00',     openNow: false, closesAt: null,   specialty: 'Refuerzo escolar',     tags: ['Académico', 'Niños'],                payments: ['Efectivo', 'Transferencia'],      verified: true,  since: '2019', priceLevel: 2 },
-    { id: 18, cat: 'transporte',   name: 'Fletes y Mudanzas El Confiable', owner: 'Hernán Díaz',    desc: 'Servicio de fletes locales y mudanzas. Camioneta disponible las 24 horas para emergencias.',                                rating: 4.6, reviews: 54,  address: 'Cra 22 #8-12',          barrio: 'El Prado',     phone: '327 456 7890', whatsapp: true,  hours: '24 horas · 7 días',         openNow: true,  closesAt: '24h',  specialty: 'Mudanzas',             tags: ['Logística', '24h'],                  payments: ['Efectivo', 'Tarjeta'],            verified: false, since: '2020', priceLevel: 2 },
-    { id: 19, cat: 'artesania',    name: 'Arte y Manos Creativas',       owner: 'Patricia Suárez',   desc: 'Artesanías en madera, cerámica y tejido. Talleres para niños y adultos los fines de semana.',                               rating: 4.9, reviews: 91,  address: 'Casa Cultural, Calle 10', barrio: 'La Esperanza', phone: '328 567 8901', whatsapp: true,  hours: 'Mié–Dom · 10:00–17:00',     openNow: true,  closesAt: '5pm',  specialty: 'Cerámica artesanal',   tags: ['Arte', 'Talleres'],                  payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2016', priceLevel: 2 },
-    { id: 20, cat: 'frutas',       name: 'Frutería La Cosecha Fresca',   owner: 'Esperanza Quiñones', desc: 'Frutas y verduras directas del campo. Domicilios sin costo adicional. Todo fresco cada mañana.',                           rating: 4.8, reviews: 178, address: 'Mercado Central L-45',   barrio: 'El Centro',    phone: '329 678 9012', whatsapp: true,  hours: 'Lun–Dom · 6:00–12:00',      openNow: true,  closesAt: '12pm', specialty: 'Frutas del campo',     tags: ['Orgánico', 'Domicilio'],              payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1, delivery: { precio: 0, minPedido: 8000, zonas: ['El Centro', 'La Esperanza', 'Barrio Nuevo', 'Villa Rosa'], tiempo: '10–20 min' } },
-    { id: 21, cat: 'tecnologia',   name: 'Soluciones TIC Popular',       owner: 'Diego Ramírez',     desc: 'Diseño de páginas web, redes sociales y soporte técnico para pequeños negocios.',                                           rating: 4.7, reviews: 63,  address: 'Coworking Centro p2',    barrio: 'El Centro',    phone: '330 789 0123', whatsapp: true,  hours: 'Lun–Vie · 9:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Web para pymes',       tags: ['Digital', 'Pymes'],                  payments: ['Transferencia', 'Tarjeta'],       verified: true,  since: '2021', priceLevel: 3 },
-    { id: 22, cat: 'eventos',      name: 'Fiestas y Detalles Don Augusto', owner: 'Augusto Palacios', desc: 'Organización de fiestas, cumpleaños y reuniones. Decoración, sonido y catering incluidos.',                               rating: 4.5, reviews: 47,  address: 'Cra 20 #14-08',         barrio: 'Alegría',      phone: '331 890 1234', whatsapp: true,  hours: 'Con cita previa',           openNow: false, closesAt: null,   specialty: 'Eventos sociales',     tags: ['Eventos', 'Catering'],               payments: ['Efectivo', 'Transferencia'],      verified: false, since: '2019', priceLevel: 2 },
+    { id: 1,  cat: 'restaurantes', name: 'La Sazón de Doña Rosa',        owner: 'Rosa Martínez',     desc: 'Comida casera con los mejores sabores de la región. Menú del día con sopa, segundo y jugo natural.',                          rating: 4.8, reviews: 124, address: 'Calle 12 #34-56',        barrio: 'La Esperanza', phone: '+57 311 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–16:00',      openNow: true,  closesAt: '4pm',  specialty: 'Menú del día',         tags: ['Comida casera', 'Domicilio'],         payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1 },
+    { id: 2,  cat: 'restaurantes', name: 'El Fogón Criollo',             owner: 'Carlos Pedraza',    desc: 'Especialidad en asados y fritanga. Ambiente familiar y precios populares para toda la familia.',                              rating: 4.6, reviews: 89,  address: 'Av. Popular #12-20',    barrio: 'El Centro',    phone: '+57 320 456 7890', whatsapp: true,  hours: 'Vie–Dom · 11:00–22:00',      openNow: false, closesAt: null,   specialty: 'Fritanga',             tags: ['Parrilla', 'Para llevar'],            payments: ['Efectivo', 'Daviplata'],          verified: false, since: '2021', priceLevel: 2 },
+    { id: 3,  cat: 'restaurantes', name: 'Sabores del Valle',            owner: 'Lucía Rondón',      desc: 'Platos típicos de la región andina. Bandeja paisa, ajiaco santafereño y postres artesanales.',                              rating: 4.9, reviews: 203, address: 'Carrera 5 #8-90',       barrio: 'Barrio Nuevo', phone: '+57 301 678 9012', whatsapp: true,  hours: 'Todos los días · 7:00–21:00', openNow: true,  closesAt: '9pm',  specialty: 'Bandeja paisa',        tags: ['Regional', 'Domicilio', 'Reservas'], payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2015', priceLevel: 2 },
+    { id: 4,  cat: 'restaurantes', name: 'Tacos Don Memo',               owner: 'Guillermo Flores',  desc: 'Auténtica cocina mexicana adaptada al paladar local. Tacos, burritos y salsas caseras.',                                     rating: 4.5, reviews: 67,  address: 'Diagonal 45 #23-10',   barrio: 'Barrio Norte', phone: '+57 315 890 1234', whatsapp: false, hours: 'Lun–Sáb · 12:00–21:00',     openNow: true,  closesAt: '9pm',  specialty: 'Tacos al pastor',      tags: ['Mexicana', 'Para llevar'],            payments: ['Efectivo'],                       verified: false, since: '2022', priceLevel: 1 },
+    { id: 5,  cat: 'restaurantes', name: 'Caldo de Pollo Mama Juanita',  owner: 'Juanita Sánchez',   desc: 'Caldos, sancochos y sopas preparados con recetas de abuela. El mejor remedio para cualquier día.',                           rating: 4.7, reviews: 156, address: 'Calle 23 #45-67',       barrio: 'Villa Rosa',   phone: '+57 317 012 3456', whatsapp: true,  hours: 'Lun–Dom · 6:00–15:00',      openNow: true,  closesAt: '3pm',  specialty: 'Sancocho de gallina',  tags: ['Sopas', 'Desayunos'],                payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2010', priceLevel: 1 },
+    { id: 6,  cat: 'restaurantes', name: 'Pizzas al Carbón',             owner: 'Fernando Castro',   desc: 'Pizzas artesanales horneadas en leña. Masa madre, ingredientes frescos y sabor auténtico.',                                  rating: 4.4, reviews: 44,  address: 'Calle 7 #12-34',        barrio: 'Barrio Norte', phone: '+57 310 234 5678', whatsapp: true,  hours: 'Mié–Dom · 17:00–23:00',     openNow: false, closesAt: null,   specialty: 'Pizza artesanal',      tags: ['Italiana', 'Domicilio'],              payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: false, since: '2023', priceLevel: 2 },
+    { id: 7,  cat: 'tiendas',      name: 'Tienda El Progreso',           owner: 'Marlene Ríos',      desc: 'Todo lo que necesitas para el hogar. Abarrotes, aseo y más. Fiado a clientes frecuentes.',                                  rating: 4.7, reviews: 211, address: 'Carrera 8 #15-30',      barrio: 'La Esperanza', phone: '+57 312 345 6789', whatsapp: false, hours: 'Lun–Dom · 6:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Abarrotes',            tags: ['General', 'Fiado'],                   payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2005', priceLevel: 1 },
+    { id: 8,  cat: 'tiendas',      name: 'Minimercado La Victoria',      owner: 'Pedro Gómez',       desc: 'Productos frescos, carnes y lácteos directos del proveedor. Precios justos cada día.',                                       rating: 4.5, reviews: 98,  address: 'Av. 3 #20-45',          barrio: 'El Centro',    phone: '+57 316 456 7890', whatsapp: true,  hours: 'Lun–Sáb · 7:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Carnes',               tags: ['Mercado', 'Domicilio'],               payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2012', priceLevel: 1 },
+    { id: 9,  cat: 'ropa',         name: 'Modas Valentina',              owner: 'Valentina Cruz',    desc: 'Ropa para mujer confeccionada a mano. Diseños únicos con telas de calidad a precio accesible.',                             rating: 4.8, reviews: 78,  address: 'C.C. Popular L-34',     barrio: 'El Centro',    phone: '+57 318 567 8901', whatsapp: true,  hours: 'Lun–Sáb · 9:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Confección a medida',  tags: ['Confección', 'A medida'],             payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2019', priceLevel: 2 },
+    { id: 10, cat: 'ropa',         name: 'Zapatos y Más Don Julio',      owner: 'Julio Herrera',     desc: 'Ventas al por mayor y detal, calzado directamente de fábrica para damas, caballeros y niños.',                                                  rating: 4.3, reviews: 55,  address: 'Calle 10 #6-78',        barrio: 'Villa Rosa',   phone: '+57 313 678 9012', whatsapp: false, hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Reparación',           tags: ['Zapatería', 'Reparación'],            payments: ['Efectivo'],                       verified: false, since: '2008', priceLevel: 1 },
+    { id: 11, cat: 'salud',        name: 'Farmacia Popular San Rafael',  owner: 'Dra. Ana Bernal',   desc: 'Medicamentos genéricos y de marca. Servicio de tensión y glucosa gratuito. Atención personalizada.',                         rating: 4.9, reviews: 312, address: 'Calle 5 #9-20',         barrio: 'El Centro',    phone: '+57 319 789 0123', whatsapp: true,  hours: 'Lun–Dom · 8:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Farmacia 24h',         tags: ['Salud', 'Domicilio'],                payments: ['Efectivo', 'Tarjeta', 'Nequi'],   verified: true,  since: '2014', priceLevel: 2 },
+    { id: 12, cat: 'talleres',     name: 'Taller El Mecánico Honesto',   owner: 'Rodrigo Vargas',    desc: 'Servicio mecánico a domicilio y en taller. Motos y carros. Garantía en todos los trabajos.',                                rating: 4.7, reviews: 143, address: 'Calle Industrial #45-20', barrio: 'El Prado',     phone: '+57 321 890 1234', whatsapp: true,  hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Mecánica general',     tags: ['Automotriz', 'A domicilio'],          payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2011', priceLevel: 2 },
+    { id: 13, cat: 'talleres',     name: 'Eléctrico Don Jaime',          owner: 'Jaime Morales',     desc: 'Instalaciones eléctricas residenciales y comerciales. Reparación de electrodomésticos.',                                     rating: 4.6, reviews: 88,  address: 'Calle 3 #18-44',        barrio: 'La Paz',       phone: '+57 322 901 2345', whatsapp: true,  hours: 'Lun–Vie · 8:00–17:00',      openNow: true,  closesAt: '5pm',  specialty: 'Eléctrico residencial', tags: ['Eléctrico', 'Urgencias'],             payments: ['Efectivo'],                       verified: false, since: '2016', priceLevel: 2 },
+    { id: 14, cat: 'belleza',      name: 'Peluquería Estilo Total',      owner: 'Sandra López',      desc: 'Cortes, tintes, alisados y peinados para toda la familia. Atención con y sin cita.',                                        rating: 4.8, reviews: 189, address: 'Carrera 12 #34-56',     barrio: 'Villa Rosa',   phone: '+57 323 012 3456', whatsapp: true,  hours: 'Mar–Dom · 9:00–19:00',       openNow: true,  closesAt: '7pm',  specialty: 'Tintes y alisados',    tags: ['Cabello', 'Sin cita'],               payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2013', priceLevel: 2 },
+    { id: 15, cat: 'panaderia',    name: 'Panadería El Trigal',          owner: 'Miguel Á. Torres',  desc: 'Pan artesanal horneado cada mañana. Postres, tortas para ocasiones especiales y café.',                                     rating: 4.9, reviews: 267, address: 'Calle 8 #20-10',        barrio: 'La Esperanza', phone: '+57 324 123 4567', whatsapp: true,  hours: 'Lun–Dom · 5:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Pan de masa madre',    tags: ['Panadería', 'Tortas'],               payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2007', priceLevel: 1 },
+    { id: 16, cat: 'electronicos', name: 'Tecno Reparaciones JR',        owner: 'Javier Rojas',      desc: 'Reparación de celulares, tablets y computadores. Venta de accesorios originales y económicos.',                             rating: 4.5, reviews: 112, address: 'C.C. Centro L-22',      barrio: 'El Centro',    phone: '+57 325 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Pantallas y baterías', tags: ['Tecnología', 'Garantía'],             payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2017', priceLevel: 2 },
+    { id: 17, cat: 'educacion',    name: 'Academia Futuro Brillante',    owner: 'Prof. Clara Mendoza', desc: 'Clases de refuerzo, matemáticas, español e inglés para niños y jóvenes. Grupos reducidos.',                               rating: 4.8, reviews: 76,  address: 'Calle 15 #7-30',        barrio: 'El Centro',    phone: '+57 326 345 6789', whatsapp: true,  hours: 'Lun–Vie · 14:00–19:00',     openNow: false, closesAt: null,   specialty: 'Refuerzo escolar',     tags: ['Académico', 'Niños'],                payments: ['Efectivo', 'Transferencia'],      verified: true,  since: '2019', priceLevel: 2 },
+    { id: 18, cat: 'transporte',   name: 'Fletes y Mudanzas El Confiable', owner: 'Hernán Díaz',    desc: 'Servicio de fletes locales y mudanzas. Camioneta disponible las 24 horas para emergencias.',                                rating: 4.6, reviews: 54,  address: 'Cra 22 #8-12',          barrio: 'El Prado',     phone: '+57 327 456 7890', whatsapp: true,  hours: '24 horas · 7 días',         openNow: true,  closesAt: '24h',  specialty: 'Mudanzas',             tags: ['Logística', '24h'],                  payments: ['Efectivo', 'Tarjeta'],            verified: false, since: '2020', priceLevel: 2 },
+    { id: 19, cat: 'artesania',    name: 'Arte y Manos Creativas',       owner: 'Patricia Suárez',   desc: 'Artesanías en madera, cerámica y tejido. Talleres para niños y adultos los fines de semana.',                               rating: 4.9, reviews: 91,  address: 'Casa Cultural, Calle 10', barrio: 'La Esperanza', phone: '+57 328 567 8901', whatsapp: true,  hours: 'Mié–Dom · 10:00–17:00',     openNow: true,  closesAt: '5pm',  specialty: 'Cerámica artesanal',   tags: ['Arte', 'Talleres'],                  payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2016', priceLevel: 2 },
+    { id: 20, cat: 'frutas',       name: 'Frutería La Cosecha Fresca',   owner: 'Esperanza Quiñones', desc: 'Frutas y verduras directas del campo. Domicilios sin costo adicional. Todo fresco cada mañana.',                           rating: 4.8, reviews: 178, address: 'Mercado Central L-45',   barrio: 'El Centro',    phone: '+57 329 678 9012', whatsapp: true,  hours: 'Lun–Dom · 6:00–12:00',      openNow: true,  closesAt: '12pm', specialty: 'Frutas del campo',     tags: ['Orgánico', 'Domicilio'],              payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1 },
+    { id: 21, cat: 'tecnologia',   name: 'Soluciones TIC Popular',       owner: 'Diego Ramírez',     desc: 'Diseño de páginas web, redes sociales y soporte técnico para pequeños negocios.',                                           rating: 4.7, reviews: 63,  address: 'Coworking Centro p2',    barrio: 'El Centro',    phone: '+57 330 789 0123', whatsapp: true,  hours: 'Lun–Vie · 9:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Web para pymes',       tags: ['Digital', 'Pymes'],                  payments: ['Transferencia', 'Tarjeta'],       verified: true,  since: '2021', priceLevel: 3 },
+    { id: 22, cat: 'eventos',      name: 'Fiestas y Detalles Don Augusto', owner: 'Augusto Palacios', desc: 'Organización de fiestas, cumpleaños y reuniones. Decoración, sonido y catering incluidos.',                               rating: 4.5, reviews: 47,  address: 'Cra 20 #14-08',         barrio: 'Alegría',      phone: '+57 331 890 1234', whatsapp: true,  hours: 'Con cita previa',           openNow: false, closesAt: null,   specialty: 'Eventos sociales',     tags: ['Eventos', 'Catering'],               payments: ['Efectivo', 'Transferencia'],      verified: false, since: '2019', priceLevel: 2 },
   ],
 };
 </script>
@@ -3119,6 +3130,18 @@ function FilterToggle({ label, active, onChange, dot }) {
 
 // ---------- Toolbar ----------
 function Toolbar({ count, sort, setSort, view, setView, density, catName, query }) {
+  // Detectar si la query fue expandida por sinónimos
+  const expandHint = React.useMemo(() => {
+    if (!query) return null;
+    const q = query.toLowerCase().trim();
+    const hits = Object.entries(SINONIMOS)
+      .filter(([sin]) => q.includes(sin) || sin.includes(q))
+      .flatMap(([, exps]) => exps)
+      .filter(e => !['openNow','priceLevel','delivery','domicilio','24h'].includes(e))
+      .slice(0, 3);
+    return hits.length ? hits.join(', ') : null;
+  }, [query]);
+
   const title = query
     ? <>Resultados para <em>«{query}»</em></>
     : (catName ? <>{catName}</> : <>Cerca de ti</>);
@@ -3130,6 +3153,11 @@ function Toolbar({ count, sort, setSort, view, setView, density, catName, query 
           <span><b>{count}</b> {count === 1 ? 'negocio' : 'negocios'}</span>
           <span className="sep">·</span>
           <span>Actualizado hace 4 min</span>
+          {expandHint && (
+            <span className="search-hint">
+              🔍 También buscado: <em>{expandHint}</em>
+            </span>
+          )}
         </div>
       </div>
       <div className="toolbar-right">
@@ -3445,7 +3473,7 @@ function DeliveryPanel({ delivery }) {
   );
 }
 
-// Detail Panel
+// ---------- Detail Panel ----------
 function DetailPanel({ business, onClose, onContact, saved, onSave, onRate, showToast }) {
   const cat = business && CATEGORIES.find(c => c.id === business.cat);
   const [reportOpen, setReportOpen] = React.useState(false);
@@ -4857,6 +4885,194 @@ function CompareModal({ compareIds, businesses, onClose, onContact }) {
   );
 }
 
+
+// ── Motor de búsqueda contextual ────────────────────────────
+// Entiende intención, sinónimos y contexto — no solo texto exacto
+const SINONIMOS = {
+  // Comidas y momentos del día
+  'desayuno':     ['panaderia', 'restaurantes', '5:00', '6:00', '7:00', '8:00', 'sopas', 'desayunos', 'pan', 'café'],
+  'almuerzo':     ['restaurantes', 'menú', 'menu', 'casera', 'sazón', 'corrientazo', 'bandeja', 'sancocho'],
+  'cena':         ['restaurantes', 'pizza', 'carbón', 'fritanga', 'parrilla', '20:00', '21:00', '22:00'],
+  'merienda':     ['panaderia', 'pan', 'café', 'torta', 'postre'],
+  'algo para comer': ['restaurantes', 'panaderia', 'frutas'],
+  'comida':       ['restaurantes', 'panaderia', 'frutas'],
+  'tinto':        ['panaderia', 'café'],
+  'café':         ['panaderia'],
+
+  // Salud y bienestar
+  'medicina':     ['salud', 'farmacia'],
+  'medicamento':  ['salud', 'farmacia'],
+  'droguería':    ['salud', 'farmacia'],
+  'droga':        ['salud', 'farmacia'],
+  'urgencia':     ['salud', 'farmacia', 'mecánico', 'eléctrico'],
+  'pastilla':     ['salud', 'farmacia'],
+  'dolor':        ['salud', 'farmacia'],
+  'enfermo':      ['salud', 'farmacia'],
+  'tensión':      ['salud', 'farmacia'],
+  'glucosa':      ['salud', 'farmacia'],
+
+  // Arreglos y servicios
+  'arreglo':      ['talleres', 'reparación', 'electrónico', 'mecánico'],
+  'reparar':      ['talleres', 'electrónico', 'mecánico'],
+  'daño':         ['talleres', 'electrónico', 'mecánico'],
+  'moto':         ['talleres', 'mecánico'],
+  'carro':        ['talleres', 'mecánico'],
+  'carro dañado': ['talleres', 'mecánico'],
+  'luz':          ['talleres', 'eléctrico'],
+  'electricidad': ['talleres', 'eléctrico'],
+  'corriente':    ['talleres', 'eléctrico'],
+  'celular':      ['electronicos', 'pantalla', 'batería'],
+  'pantalla':     ['electronicos'],
+  'computador':   ['electronicos', 'tecnologia'],
+
+  // Mercado y compras
+  'mercado':      ['tiendas', 'frutas', 'verduras'],
+  'tienda':       ['tiendas'],
+  'víveres':      ['tiendas', 'frutas'],
+  'verdura':      ['frutas'],
+  'fruta':        ['frutas'],
+  'carne':        ['tiendas'],
+  'pollo':        ['tiendas', 'restaurantes'],
+  'leche':        ['tiendas'],
+  'huevos':       ['tiendas'],
+  'granos':       ['tiendas'],
+  'abarrotes':    ['tiendas'],
+
+  // Belleza y estética
+  'peluquería':   ['belleza'],
+  'cabello':      ['belleza'],
+  'pelo':         ['belleza'],
+  'corte':        ['belleza'],
+  'tinte':        ['belleza'],
+  'uñas':         ['belleza'],
+  'manicure':     ['belleza'],
+  'alisado':      ['belleza'],
+
+  // Ropa y calzado
+  'zapatos':      ['ropa', 'zapatería'],
+  'tenis':        ['ropa', 'zapatería'],
+  'ropa':         ['ropa'],
+  'vestido':      ['ropa'],
+  'calzado':      ['ropa', 'zapatería'],
+  'confección':   ['ropa'],
+
+  // Logística
+  'mudanza':      ['transporte'],
+  'flete':        ['transporte'],
+  'trasteo':      ['transporte'],
+  'envío':        ['transporte', 'delivery'],
+  'llevar':       ['transporte'],
+  'mover':        ['transporte'],
+
+  // Educación
+  'clases':       ['educacion'],
+  'refuerzo':     ['educacion'],
+  'matemáticas':  ['educacion'],
+  'inglés':       ['educacion'],
+  'tareas':       ['educacion'],
+  'niños':        ['educacion'],
+  'colegio':      ['educacion'],
+
+  // Fiestas y eventos
+  'fiesta':       ['eventos'],
+  'cumpleaños':   ['eventos'],
+  'decoración':   ['eventos'],
+  'catering':     ['eventos'],
+  'sonido':       ['eventos'],
+
+  // Artesanías
+  'artesanía':    ['artesania'],
+  'cerámica':     ['artesania'],
+  'tejido':       ['artesania'],
+  'madera':       ['artesania'],
+  'taller':       ['artesania', 'talleres'],
+
+  // Tecnología
+  'página web':   ['tecnologia'],
+  'redes sociales': ['tecnologia'],
+  'internet':     ['tecnologia'],
+  'wifi':         ['tecnologia'],
+  'sistema':      ['tecnologia'],
+  'computadora':  ['electronicos', 'tecnologia'],
+
+  // Pagos y servicios
+  'fiado':        ['tiendas'],
+  'domicilio':    ['delivery', 'domicilio'],
+  'a domicilio':  ['delivery', 'domicilio'],
+  'despacho':     ['delivery', 'domicilio'],
+  'gratis':       ['gratis', 'free'],
+  'barato':       ['priceLevel'],
+  'económico':    ['priceLevel'],
+  'nequi':        ['nequi'],
+
+  // Estados
+  'abierto':      ['openNow'],
+  'abiertos':     ['openNow'],
+  'disponible':   ['openNow'],
+  'ahora':        ['openNow'],
+  'hoy':          ['openNow'],
+  '24 horas':     ['24h'],
+  '24h':          ['24h'],
+  'toda la noche': ['24h', '23:00', '24:00'],
+};
+
+function busquedaInteligente(businesses, query) {
+  const q = query.toLowerCase().trim();
+  if (!q) return businesses;
+
+  // Términos de la consulta
+  const terminos = q.split(/\s+/);
+
+  // Recolectar términos expandidos vía sinónimos
+  const expandidos = new Set([q, ...terminos]);
+  for (const [sinonimo, expansiones] of Object.entries(SINONIMOS)) {
+    if (q.includes(sinonimo) || terminos.some(t => sinonimo.includes(t) || t.includes(sinonimo))) {
+      expansiones.forEach(e => expandidos.add(e.toLowerCase()));
+    }
+  }
+
+  // Flags especiales
+  const buscarAbiertos   = expandidos.has('openNow');
+  const buscarBarato     = expandidos.has('priceLevel');
+  const buscarDomicilio  = expandidos.has('delivery') || expandidos.has('domicilio');
+  const buscar24h        = expandidos.has('24h');
+
+  // Función de score por negocio
+  const score = (b) => {
+    let pts = 0;
+    const campos = [
+      b.name, b.desc, b.specialty, b.owner,
+      b.cat, b.barrio,
+      ...(b.tags || []),
+      ...(b.payments || []),
+      b.hours || '',
+    ].map(s => (s || '').toLowerCase());
+
+    // Búsqueda directa en campos
+    for (const exp of expandidos) {
+      if (['openNow','priceLevel','delivery','domicilio','24h'].includes(exp)) continue;
+      for (const campo of campos) {
+        if (campo.includes(exp)) pts += exp.length > 3 ? 3 : 1;
+      }
+    }
+
+    // Flags contextuales
+    if (buscarAbiertos  && b.openNow)              pts += 5;
+    if (buscarBarato    && b.priceLevel === 1)      pts += 4;
+    if (buscarDomicilio && b.delivery)             pts += 4;
+    if (buscarDomicilio && b.tags?.some(t => /domicilio/i.test(t))) pts += 3;
+    if (buscar24h       && b.hours?.includes('24')) pts += 5;
+
+    return pts;
+  };
+
+  return businesses
+    .map(b => ({ b, pts: score(b) }))
+    .filter(({ pts }) => pts > 0)
+    .sort((a, b) => b.pts - a.pts)
+    .map(({ b }) => b);
+}
+
 // ---------- App Root ----------
 function App() {
   const [catId, setCatId] = useState(null);
@@ -4954,14 +5170,7 @@ function App() {
     let r = businesses.slice();
     if (catId) r = r.filter(b => b.cat === catId);
     if (query) {
-      const q = query.toLowerCase();
-      r = r.filter(b =>
-        b.name.toLowerCase().includes(q) ||
-        b.desc.toLowerCase().includes(q) ||
-        b.specialty.toLowerCase().includes(q) ||
-        b.tags.some(t => t.toLowerCase().includes(q)) ||
-        b.owner.toLowerCase().includes(q)
-      );
+      r = busquedaInteligente(r, query);
     }
     if (filters.openNow) r = r.filter(b => b.openNow);
     if (filters.verified) r = r.filter(b => b.verified);
