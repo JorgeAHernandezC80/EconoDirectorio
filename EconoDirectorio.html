@@ -4,41 +4,4201 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EconoDirectorio — Economía Popular</title>
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>/* ============ TOKENS ============ */
+  :root {
+    --bg:        oklch(96.5% 0.008 80);
+    --surface:   oklch(99% 0.005 80);
+    --surface-2: oklch(94% 0.008 80);
+    --surface-3: oklch(91% 0.010 80);
+    --line:      oklch(88% 0.010 80);
+    --line-2:    oklch(82% 0.012 80);
 
-<!-- Styles -->
-<link rel="stylesheet" href="styles.css">
+    --ink:       oklch(20% 0.015 80);
+    --ink-2:     oklch(40% 0.012 80);
+    --ink-3:     oklch(58% 0.010 80);
+    --ink-4:     oklch(72% 0.008 80);
+
+    --accent:        oklch(40% 0.075 155);
+    --accent-2:      oklch(48% 0.085 155);
+    --accent-soft:   oklch(94% 0.030 155);
+    --accent-ink:    oklch(28% 0.06  155);
+
+    --open:    oklch(58% 0.13 150);
+    --closed:  oklch(60% 0.02 70);
+    --warn:    oklch(64% 0.13 60);
+
+    --f-display: 'Newsreader', 'Times New Roman', serif;
+    --f-ui:      'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --f-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 14px;
+    --shadow-1: 0 1px 0 oklch(100% 0 0 / 0.6) inset, 0 1px 2px oklch(0% 0 0 / 0.04);
+    --shadow-2: 0 4px 12px oklch(0% 0 0 / 0.05), 0 1px 2px oklch(0% 0 0 / 0.04);
+    --shadow-3: 0 12px 32px oklch(0% 0 0 / 0.10), 0 2px 6px oklch(0% 0 0 / 0.04);
+  }
+
+  .is-dark {
+    --bg:        oklch(18% 0.012 80);
+    --surface:   oklch(22% 0.014 80);
+    --surface-2: oklch(26% 0.013 80);
+    --surface-3: oklch(30% 0.013 80);
+    --line:      oklch(32% 0.013 80);
+    --line-2:    oklch(38% 0.013 80);
+    --ink:       oklch(96% 0.008 80);
+    --ink-2:     oklch(80% 0.010 80);
+    --ink-3:     oklch(62% 0.010 80);
+    --ink-4:     oklch(48% 0.010 80);
+    --accent-soft: oklch(30% 0.04 155);
+    --accent-ink:  oklch(85% 0.06 155);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+  body {
+    font-family: var(--f-ui);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button { font: inherit; color: inherit; cursor: pointer; }
+  input, select { font: inherit; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ LAYOUT ============ */
+  .app { min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ============ TOPBAR ============ */
+  .topbar {
+    height: 64px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 1px 0 var(--line), 0 2px 8px oklch(0% 0 0 / 0.03);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    position: sticky; top: 0; z-index: 30;
+  }
+
+  /* Brand zone — left column with right border */
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 24px;
+    height: 100%;
+    border-right: 1px solid var(--line);
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent); color: oklch(98% 0.02 155);
+    font-family: var(--f-mono); font-weight: 600; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-family: var(--f-display);
+    font-size: 17px; font-weight: 500; letter-spacing: -0.01em;
+    line-height: 1;
+    display: flex; align-items: baseline; gap: 6px;
+    white-space: nowrap;
+  }
+  .brand-accent { color: var(--accent); font-style: italic; }
+  .brand-meta {
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.08em;
+    color: var(--ink-4); padding: 2px 6px;
+    border: 1px solid var(--line);
+    border-radius: 4px; text-transform: uppercase;
+  }
+
+
+  /* Search zone — center, full height */
+  .search-shell {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 0 14px;
+    height: 38px;
+    margin: 0 24px;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  .search-shell:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px oklch(40% 0.075 155 / 0.10);
+    background: var(--surface);
+  }
+  .search-shell svg { color: var(--ink-4); flex-shrink: 0; }
+  .search-shell input {
+    border: none; outline: none; background: transparent;
+    flex: 1; font-size: 15px; color: var(--ink);
+  }
+  .search-shell input::placeholder { color: var(--ink-4); font-size: 15px; }
+  .search-shell kbd {
+    font-family: var(--f-mono); font-size: 10px;
+    background: var(--surface); color: var(--ink-4);
+    padding: 2px 6px; border-radius: 4px;
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  /* Actions zone — right column with left border */
+  .top-actions {
+    display: flex; align-items: center; gap: 6px;
+    padding: 0 20px;
+    height: 100%;
+    border-left: 1px solid var(--line);
+  }
+
+  /* Divider between action groups */
+  .top-actions-sep {
+    width: 1px; height: 20px;
+    background: var(--line);
+    flex-shrink: 0;
+    margin: 0 2px;
+  }
+
+  .barrio-pill {
+    position: relative;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    height: 34px;
+    padding: 0 10px 0 8px;
+    display: flex; align-items: center; gap: 5px;
+    font-size: 13px;
+    color: var(--ink-2);
+    transition: border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .barrio-pill:hover { border-color: var(--line-2); color: var(--ink); background: var(--surface-2); }
+  .barrio-pill > svg:first-child { color: var(--accent); }
+
+  .barrio-menu {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: var(--shadow-3);
+    padding: 6px; min-width: 210px;
+    cursor: default;
+    z-index: 50;
+  }
+  .barrio-menu-head {
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-4);
+    padding: 8px 12px 6px;
+  }
+  .barrio-item {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 8px 12px;
+    background: none; border: none; border-radius: 8px;
+    font-size: 14px; color: var(--ink-2); text-align: left;
+    transition: background 0.1s, color 0.1s;
+  }
+  .barrio-item:hover { background: var(--surface-2); color: var(--ink); }
+  .barrio-item.is-active { color: var(--accent); background: var(--accent-soft); font-weight: 500; }
+  .barrio-item > svg:first-child { color: var(--ink-4); }
+  .barrio-item.is-active > svg:first-child { color: var(--accent); }
+  .barrio-item span { flex: 1; }
+
+  .top-link {
+    background: var(--ink); color: var(--surface);
+    border: none; border-radius: 8px;
+    height: 34px; padding: 0 14px;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .top-link:hover { background: var(--ink-2); transform: translateY(-1px); }
+  .top-link:active { transform: translateY(0); }
+
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent-soft);
+    border: 1.5px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--f-mono); font-size: 11px; font-weight: 600;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+
+  /* ── Search clear button ── */
+  .search-clear {
+    background: none; border: none; padding: 2px;
+    color: var(--ink-4); border-radius: 4px;
+    display: flex; align-items: center;
+    transition: color 0.12s, background 0.12s;
+    flex-shrink: 0;
+  }
+  .search-clear:hover { color: var(--ink); background: var(--surface-3); }
+
+  /* ── Sidebar label row with reset ── */
+  .side-label-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 10px;
+  }
+  .side-label-row .side-label { padding: 0; }
+
+  .side-reset {
+    display: flex; align-items: center; gap: 4px;
+    background: none; border: none;
+    font-size: 11px; color: var(--ink-4);
+    cursor: pointer; padding: 2px 4px; border-radius: 4px;
+    transition: color 0.12s, background 0.12s;
+  }
+  .side-reset:hover { color: var(--accent); background: var(--accent-soft); }
+
+  .filter-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 16px; height: 16px; padding: 0 4px;
+    background: var(--accent); color: white;
+    border-radius: 8px; font-size: 10px; font-weight: 600;
+    font-family: var(--f-mono);
+  }
+
+  /* ============ SHELL ============ */
+  .shell {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar {
+    background: var(--surface);
+    border-right: 2px solid var(--line);
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 10px; /* gap 10px */
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+    position: sticky; top: 60px;
+  }
+
+  .side-label {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-4);
+    padding: 4px 10px;
+  }
+
+  .cat-row {
+    width: 100%; display: flex; align-items: center; gap: 10px; /* gap 10px */
+    padding: 8px 10px;
+    background: none; border: none; border-radius: 10px;
+    text-align: left;
+    font-size: 15px; color: var(--ink-2);
+    transition: background 0.12s, color 0.12s;
+  }
+  .cat-row:hover { background: var(--surface-2); color: var(--ink); }
+  .cat-row.is-active {
+    background: var(--accent-soft); color: var(--accent-ink);
+  }
+  .cat-row.is-active .cat-code {
+    background: var(--accent); color: oklch(98% 0.02 155); border-color: transparent;
+  }
+  .cat-row.is-active .cat-count { color: var(--accent); }
+
+  .cat-code {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.05em;
+    font-weight: 500;
+    width: 24px; height: 22px; border-radius: 4px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cat-code.dim { background: transparent; border-color: transparent; color: var(--ink-4); }
+
+  .cat-name { flex: 1; }
+  .cat-count {
+    font-family: var(--f-mono); font-size: 13px;
+    color: var(--ink-4); font-variant-numeric: tabular-nums;
+  }
+
+  .filter-row {
+    width: 100%; display: flex; align-items: center; gap: 10px; /* gap 10px */
+    padding: 8px 10px;
+    background: none; border: none; border-radius: 10px;
+    text-align: left; font-size: 15px; color: var(--ink-2);
+    position: relative;
+  }
+  .filter-row:hover { background: var(--surface-2); }
+  .check-box {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 2px solid var(--line-2);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.12s;
+    color: transparent;
+  }
+  .filter-row.is-on .check-box {
+    background: var(--accent); border-color: var(--accent);
+    color: white;
+  }
+  .filter-row.is-on { color: var(--ink); }
+  .filter-label { flex: 1; }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--open);
+    box-shadow: 0 0 0 3px oklch(58% 0.13 150 / 0.2);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .side-footer {
+    margin-top: auto;
+    background: var(--surface-2);
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .kv { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-3); }
+  .kv b { color: var(--ink); font-weight: 500; font-family: var(--f-mono); font-size: 13px; }
+
+  /* ============ MAIN ============ */
+  .main {
+    padding: 24px 28px 80px;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .toolbar {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 18px; margin-bottom: 15px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .toolbar h1 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: 22px; letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+  .toolbar h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .toolbar-meta {
+    margin-top: 6px;
+    font-size: 14px; color: var(--ink-3);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toolbar-meta b { color: var(--ink-2); font-weight: 500; }
+  .toolbar-meta .sep { color: var(--ink-4); }
+
+  .toolbar-right { display: flex; align-items: center; gap: 8px; }
+
+  .select-wrap {
+    position: relative;
+    display: flex; align-items: center;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 7px; height: 32px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+  .select-wrap:hover { border-color: var(--line-2); }
+  .select-wrap select {
+    appearance: none; background: none; border: none; outline: none;
+    padding: 0 20px 0 4px; cursor: pointer; font-size: 14px;
+  }
+  .select-wrap svg {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    color: var(--ink-3); pointer-events: none;
+  }
+
+  .view-seg {
+    display: flex; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 7px; padding: 2px; gap: 2px;
+  }
+  .view-seg button {
+    background: none; border: none; padding: 5px 9px; border-radius: 5px;
+    color: var(--ink-3);
+    transition: all 0.12s;
+    display: flex; align-items: center;
+  }
+  .view-seg button:hover { color: var(--ink); }
+  .view-seg button.on { background: var(--ink); color: var(--surface); }
+
+  /* ============ SPOTLIGHT ============ */
+  .spotlight {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .spotlight::before {
+    content: '';
+    position: absolute; inset: 0 auto auto 0; width: 4px; height: 100%;
+    background: var(--accent);
+  }
+  .spotlight-head {
+    display: flex; align-items: baseline; gap: 10px; /* gap 10px */
+    margin-bottom: 16px;
+  }
+  .kicker {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .kicker-sub { font-size: 12px; color: var(--ink-3); }
+
+  .spotlight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .spot-card {
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    transition: all 0.18s ease;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .spot-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--ink);
+    box-shadow: var(--shadow-2);
+  }
+  .spot-tag {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em;
+    color: var(--ink-3);
+  }
+  .spot-card h3 {
+    font-family: var(--f-display); font-weight: 500; font-size: 18px;
+    line-height: 1.2; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .spot-card p {
+    font-size: 14px; color: var(--ink-3); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .spot-meta {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; color: var(--ink-3);
+    margin-top: 4px;
+  }
+  .spot-meta b { color: var(--ink); }
+  .spot-meta .sep { color: var(--ink-4); }
+  .spot-meta .arrow { margin-left: auto; color: var(--accent); font-family: var(--f-mono); }
+
+  /* ============ RESULTS ============ */
+  .results.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    align-items: stretch;
+  }
+  .results.list {
+    display: flex; flex-direction: column; gap: 10px; /* gap 10px */
+  }
+
+  .is-compact .results.grid { gap: 10px; }
+  .is-compact .card.grid .card-body { padding: 10px 12px 12px; }
+
+  /* ============ CARD ============ */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.16s ease;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .card:hover {
+    border-color: var(--line-2);
+    box-shadow: var(--shadow-2);
+    transform: translateY(-1px);
+  }
+  .card.saved { border-color: var(--accent); }
+  .card.saved::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+  }
+
+  /* Grid variant */
+  .card.grid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .card.grid .card-thumb-wrap {
+    position: relative;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .card.grid .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+    min-width: 0;
+  }
+  .card.grid .card-row-top { flex-shrink: 0; }
+  .card.grid .card-name { min-height: calc(18px * 1.25 * 2); }
+  .card.grid .card-owner,
+  .card.grid .card-rating,
+  .card.grid .card-meta-row,
+  .card.grid .card-tags { flex-shrink: 0; }
+  .card.grid .card-actions {
+    display: flex; gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  .thumb {
+    position: relative;
+    width: 100%;
+    display: block;
+  }
+  .thumb-tag {
+    position: absolute; left: 10px; bottom: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 3px 8px 3px 6px;
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.05em;
+    color: var(--ink-2);
+  }
+  .thumb-tag .cat-code { width: 20px; height: 16px; font-size: 9px; }
+
+  .thumb-overlay {
+    position: absolute; top: 10px; left: 10px; right: 10px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    pointer-events: none;
+  }
+  .thumb-overlay > * { pointer-events: auto; }
+
+  .badge-v {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 4px; padding: 2px 7px;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent);
+  }
+  .badge-v.light {
+    background: oklch(98% 0.005 80 / 0.92);
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-save {
+    width: 26px; height: 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2);
+    transition: all 0.15s;
+  }
+  .btn-save:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .card.saved .btn-save { background: var(--accent); color: white; border-color: var(--accent); }
+  .btn-save.is-saved    { background: var(--accent); color: white; border-color: var(--accent); }
+  .btn-icon.is-saved    { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
+  .thumb-status {
+    position: absolute; bottom: 10px; right: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 3px 8px;
+    display: flex; align-items: center; gap: 5px;
+    font-size: 14px; color: var(--ink-2);
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-dot.open { background: var(--open); box-shadow: 0 0 0 2px oklch(58% 0.13 150 / 0.18); }
+  .status-dot.closed { background: var(--ink-4); }
+
+  .card-row-top {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  }
+  .card-name {
+    font-family: var(--f-display); font-weight: 500; font-size: 18px;
+    letter-spacing: -0.01em; line-height: 1.25; color: var(--ink);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+    flex: 1;
+  }
+  .card-owner {
+    font-size: 13px;
+    color: var(--ink-3);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    line-clamp: 1;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+  .card-rating {
+    display: flex; align-items: center; justify-content: flex-start; gap: 6px;
+    flex-wrap: nowrap; overflow: hidden;
+    height: 22px; line-height: 22px;
+  }
+  /* Stars compact en card-rating: solo llenas, sin vacías */
+  .card-rating .stars   { flex-shrink: 0; line-height: 22px; gap: 1px; }
+  .stars.compact        { gap: 1px; }
+  .star-single { color: oklch(70% 0.14 80); font-size: 14px; line-height: 22px; flex-shrink: 0; }
+  .card-rating b { color: var(--ink); font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
+  .card-rating .reviews { color: var(--ink-4); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; min-width: 0; }
+
+  .card-meta-row {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; color: var(--ink-3);
+    flex-wrap: nowrap; overflow: hidden;
+    line-height: 1.4;
+  }
+  .card-meta-row .sep { color: var(--ink-4); }
+  .card-meta-row .meta-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .meta-item { display: inline-flex; align-items: center; gap: 4px; }
+  .meta-item svg { color: var(--ink-4); flex-shrink: 0; }
+
+  .card.grid .card-tags {
+    display: flex; flex-wrap: nowrap; gap: 6px;
+    overflow: hidden;
+    height: 28px;
+  }
+  .tag {
+    font-size: 13px; padding: 4px 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.3;
+  }
+
+  .card.list .card-actions { display: flex; gap: 10px; }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--ink); color: var(--surface);
+    border: none; height: 32px;
+    border-radius: 7px; padding: 0 12px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 15px; font-weight: 500;
+    transition: background 0.12s;
+  }
+  .btn-primary:hover { background: var(--ink-2); }
+  .btn-primary.big { height: 44px; font-size: 15px; padding: 0 16px; flex: 1; }
+
+  .btn-secondary {
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line);
+    height: 32px; padding: 0 12px; border-radius: 7px;
+    font-size: 15px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.12s;
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+  .btn-secondary.big { height: 44px; font-size: 15px; padding: 0 16px; }
+
+  .btn-ghost {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    height: 32px; padding: 0 12px;
+    border-radius: 7px;
+    color: var(--ink-2);
+    font-size: 15px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.12s;
+  }
+  .btn-ghost:hover { background: var(--surface); border-color: var(--line-2); color: var(--ink); }
+
+  .btn-icon {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    width: 32px; height: 32px;
+    border-radius: 7px;
+    color: var(--ink-2);
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+  }
+  .btn-icon:hover { border-color: var(--ink); color: var(--ink); }
+  .btn-icon.big { width: 40px; height: 40px; }
+
+  /* List variant */
+  .card.list {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 16px;
+    padding: 14px;
+    align-items: stretch;
+  }
+  .card-thumb-wrap.small {
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .card.list .card-body {
+    display: flex; flex-direction: column; gap: 6px; min-width: 0;
+  }
+  .card-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; /* gap 10px */
+  }
+  .card-status {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11.5px; color: var(--ink-2);
+  }
+  .card-status .status-text { white-space: nowrap; }
+  .card.list .card-name { font-size: 18px; margin-top: 2px; }
+  .card-desc {
+    font-size: 14px; color: var(--ink-3); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .card-meta {
+    display: flex; flex-wrap: wrap; gap: 10px; /* gap 10px */
+    font-size: 14px; color: var(--ink-3);
+    align-items: center;
+  }
+
+  .card-actions.vertical {
+    display: flex; flex-direction: column; gap: 8px;
+    align-items: stretch; justify-content: flex-start;
+    min-width: 140px;
+    margin-top: 0;
+    padding-left: 12px;
+    border-left: 1px solid var(--line);
+  }
+  .card-actions.vertical .btn-icon { align-self: flex-end; }
+
+  /* ============ STARS / PRICE ============ */
+  .stars {
+    display: inline-flex; gap: 1px;
+    font-size: var(--star-size, 12px);
+    line-height: 1;
+    color: var(--ink-4);
+  }
+  .stars .full { color: oklch(70% 0.14 80); }
+  .stars .half {
+    background: linear-gradient(90deg, oklch(70% 0.14 80) 50%, var(--ink-4) 50%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+  }
+
+  .price-level {
+    font-family: var(--f-mono); font-size: 11px;
+    color: var(--ink-4);
+    display: inline-flex; gap: 1px;
+  }
+  .price-level .on { color: var(--ink); }
+
+  /* ============ EMPTY ============ */
+  .empty {
+    padding: 80px 20px;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 10px; /* gap 10px */
+  }
+  .empty-mark {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .empty h3 { font-family: var(--f-display); font-size: 22px; font-weight: 500; } /* H1 */
+  .empty p { color: var(--ink-3); font-size: 15px; max-width: 360px; }
+  .empty .btn-primary { flex: none; padding: 0 18px; margin-top: 6px; }
+
+  /* ============ DETAIL PANEL ============ */
+  .detail-panel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 480px; max-width: 92vw;
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    box-shadow: var(--shadow-3);
+    z-index: 40;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(.22,.61,.36,1);
+    overflow-y: auto;
+  }
+  .detail-panel.is-open { transform: translateX(0); }
+
+  .scrim {
+    position: fixed; inset: 0; background: oklch(10% 0 0 / 0.32);
+    z-index: 35;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .detail-head { position: relative; }
+  .detail-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2);
+    z-index: 2;
+  }
+  .detail-close:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  .detail-body { padding: 20px 24px 40px; }
+  .detail-status {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--ink-2);
+    margin-bottom: 8px;
+  }
+  .detail-name {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: 30px; letter-spacing: -0.015em; line-height: 1.05;
+    color: var(--ink);
+  }
+  .detail-sub { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+  .detail-rating {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; color: var(--ink-3);
+    margin-top: 10px;
+    flex-wrap: nowrap; overflow: hidden;
+  }
+  .detail-rating b { color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .detail-rating .sep { color: var(--ink-4); flex-shrink: 0; }
+  .detail-rating .stars .empty { color: var(--line-2); }
+  .detail-desc {
+    margin-top: 16px;
+    font-size: 15px; line-height: 1.6; color: var(--ink-2);
+  }
+
+  .detail-actions {
+    display: flex; gap: 8px; margin: 20px 0 24px;
+  }
+
+  .detail-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 24px;
+  }
+  .info-block {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .info-label {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-4);
+    margin-bottom: 6px;
+  }
+  .info-value { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .info-sub { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
+
+  .detail-section { margin-bottom: 24px; }
+  .detail-section-title {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+
+  /* Mini map */
+  .mini-map {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .mini-map svg { display: block; }
+  .map-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+    font-size: 12px; color: var(--ink-3);
+  }
+  .link {
+    background: none; border: none; color: var(--accent);
+    font-size: 12px; font-weight: 500;
+    font-family: var(--f-ui);
+  }
+  .link:hover { text-decoration: underline; }
+
+  /* Reviews */
+  .reviews-list {
+    display: flex; flex-direction: column; gap: 10px; /* gap 10px */
+  }
+  .review {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .review-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .review-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--f-mono); font-size: 10px; font-weight: 500;
+  }
+  .review-meta { display: flex; flex-direction: column; flex: 1; }
+  .review-meta b { font-size: 12px; }
+  .review-meta span { font-size: 11px; color: var(--ink-4); }
+  .review p { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+
+  /* ============ MAP VIEW ============ */
+  .map-view {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 14px;
+    height: calc(100vh - 240px);
+    min-height: 480px;
+  }
+  .map-canvas {
+    position: relative;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .map-canvas svg { display: block; width: 100%; height: 100%; }
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    background: none; border: none;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px;
+  }
+  .map-pin-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--surface);
+    box-shadow: var(--shadow-2);
+    transition: all 0.15s;
+  }
+  .map-pin.hot .map-pin-dot {
+    transform: scale(1.4);
+    background: var(--ink);
+  }
+  .map-pin-label {
+    font-size: 10px; padding: 2px 6px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 4px; white-space: nowrap;
+    color: var(--ink); font-weight: 500;
+    box-shadow: var(--shadow-1);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  .map-pin:hover .map-pin-label, .map-pin.hot .map-pin-label { opacity: 1; }
+
+  .map-side {
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 6px;
+    padding-right: 4px;
+  }
+  .map-row {
+    display: flex; align-items: center; gap: 10px; /* gap 10px */
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: left;
+    transition: all 0.12s;
+  }
+  .map-row:hover, .map-row.hot {
+    border-color: var(--accent); background: var(--accent-soft);
+  }
+  .map-row-thumb {
+    width: 36px; height: 36px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .map-row-body { display: flex; flex-direction: column; min-width: 0; }
+  .map-row-body b { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .map-row-body span { font-size: 11px; color: var(--ink-3); }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translate(-50%, 100px);
+    background: var(--ink); color: var(--surface);
+    padding: 10px 18px; border-radius: 8px;
+    font-size: 13px;
+    box-shadow: var(--shadow-3);
+    transition: transform 0.3s cubic-bezier(.22,.61,.36,1), opacity 0.3s;
+    opacity: 0;
+    z-index: 100;
+  }
+  .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+
+
+  /* ============ STATS PAGE ============ */
+
+  .st-topbar-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 500; color: var(--ink-2);
+    flex: 1; justify-content: center;
+  }
+
+  .top-stats-btn {
+    display: flex; align-items: center; gap: 6px;
+    height: 34px; padding: 0 12px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--surface-2);
+    font: inherit; font-size: 13px; color: var(--ink-2);
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.12s;
+  }
+  .top-stats-btn:hover { border-color: var(--line-2); color: var(--ink); background: var(--surface); }
+
+  .st-page {
+    padding: 32px 36px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* KPIs */
+  .st-kpis {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .st-kpi {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 18px;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: box-shadow 0.12s;
+  }
+  .st-kpi:hover { box-shadow: var(--shadow-2); }
+  .st-kpi-val {
+    font-family: var(--f-display); font-size: 32px; font-weight: 500;
+    letter-spacing: -0.02em; color: var(--ink); line-height: 1;
+  }
+  .st-kpi-val.st-kpi-accent { color: var(--accent); }
+  .st-kpi-label {
+    font-size: 12px; color: var(--ink-3); font-family: var(--f-mono);
+    letter-spacing: 0.03em;
+  }
+
+  /* Grid de tarjetas */
+  .st-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .st-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .st-card--wide { grid-column: 1 / -1; }
+  .st-card-head {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  }
+  .st-card-title {
+    font-family: var(--f-display); font-size: 18px; font-weight: 500;
+    letter-spacing: -0.01em; color: var(--ink);
+  }
+  .st-card-sub { font-size: 12px; color: var(--ink-4); font-family: var(--f-mono); }
+
+  /* Barras por barrio */
+  .st-bars { padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; }
+  .st-bar-row {
+    display: grid; grid-template-columns: 180px 1fr 80px;
+    align-items: center; gap: 14px;
+    padding: 8px 10px; border-radius: 8px;
+    cursor: pointer; transition: background 0.12s;
+  }
+  .st-bar-row:hover { background: var(--surface-2); }
+  .st-bar-row--active { background: var(--accent-soft); }
+  .st-bar-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .st-bar-name { font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st-bar-meta { font-size: 11px; color: var(--ink-4); }
+  .st-bar-track {
+    height: 8px; background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  }
+  .st-bar-fill {
+    height: 100%; background: var(--accent);
+    border-radius: 4px; transition: width 0.4s ease;
+  }
+  .st-bar-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+  .st-bar-count { font-family: var(--f-mono); font-size: 14px; font-weight: 600; color: var(--ink); }
+  .st-bar-rating { font-size: 11px; color: oklch(70% 0.14 80); }
+  .st-clear-filter {
+    display: flex; align-items: center; gap: 5px;
+    margin: 0 24px 16px; padding: 6px 12px;
+    background: var(--accent-soft); border: 1px solid var(--accent);
+    border-radius: 6px; font: inherit; font-size: 12px;
+    color: var(--accent-ink); cursor: pointer;
+    transition: all 0.12s;
+  }
+  .st-clear-filter:hover { background: var(--accent); color: white; }
+
+  /* Categorías */
+  .st-cat-list { padding: 16px 24px; display: flex; flex-direction: column; gap: 10px; }
+  .st-cat-row {
+    display: grid; grid-template-columns: 28px 1fr auto auto auto;
+    align-items: center; gap: 10px;
+  }
+  .st-cat-name { font-size: 13px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st-cat-bar-track {
+    height: 6px; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 3px; overflow: hidden;
+  }
+  .st-cat-bar-fill {
+    height: 100%; background: var(--accent-2);
+    border-radius: 3px; transition: width 0.4s ease;
+  }
+  .st-cat-count { font-family: var(--f-mono); font-size: 13px; font-weight: 600; color: var(--ink); min-width: 24px; text-align: right; }
+  .st-cat-rating { font-size: 11px; color: oklch(70% 0.14 80); min-width: 36px; text-align: right; }
+
+  /* Pagos */
+  .st-payments { padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .st-payment-row { display: grid; grid-template-columns: 110px 1fr 36px 40px; align-items: center; gap: 10px; }
+  .st-payment-name { font-size: 13px; color: var(--ink-2); }
+  .st-payment-track {
+    height: 8px; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 4px; overflow: hidden;
+  }
+  .st-payment-fill {
+    height: 100%; background: var(--accent);
+    border-radius: 4px; transition: width 0.4s ease;
+  }
+  .st-payment-pct { font-family: var(--f-mono); font-size: 12px; color: var(--accent); text-align: right; }
+  .st-payment-count { font-family: var(--f-mono); font-size: 12px; color: var(--ink-4); text-align: right; }
+
+  /* Ranking */
+  .st-ranking { padding: 12px 24px; display: flex; flex-direction: column; gap: 4px; }
+  .st-rank-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 8px; border-radius: 8px;
+    transition: background 0.12s;
+  }
+  .st-rank-row:hover { background: var(--surface-2); }
+  .st-rank-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--f-mono); font-size: 12px; font-weight: 700;
+    background: var(--surface-2); border: 1px solid var(--line);
+    color: var(--ink-3); flex-shrink: 0;
+  }
+  .st-rank-num--gold   { background: oklch(88% 0.12 80);  border-color: oklch(72% 0.14 80);  color: oklch(35% 0.10 80); }
+  .st-rank-num--silver { background: oklch(88% 0.005 80); border-color: oklch(72% 0.008 80); color: oklch(40% 0.008 80); }
+  .st-rank-num--bronze { background: oklch(88% 0.08 40);  border-color: oklch(72% 0.10 40);  color: oklch(38% 0.10 40); }
+  .st-rank-body { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .st-rank-name { font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st-rank-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-4); }
+  .st-rank-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex-shrink: 0; }
+  .st-rank-rating { font-size: 13px; font-weight: 600; color: oklch(70% 0.14 80); }
+  .st-rank-reviews { font-size: 11px; color: var(--ink-4); }
+  .st-empty { font-size: 13px; color: var(--ink-4); padding: 16px 0; text-align: center; }
+
+  /* Cobertura */
+  .st-coverage { padding: 16px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .st-cov-row { display: grid; grid-template-columns: 180px 1fr 52px 40px; align-items: center; gap: 12px; }
+  .st-cov-label { font-size: 13px; color: var(--ink-2); }
+  .st-cov-track {
+    height: 10px; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 5px; overflow: hidden;
+  }
+  .st-cov-fill {
+    height: 100%; border-radius: 5px; transition: width 0.4s ease;
+    opacity: 0.85;
+  }
+  .st-cov-val { font-family: var(--f-mono); font-size: 13px; font-weight: 600; color: var(--ink); text-align: right; }
+  .st-cov-total { color: var(--ink-4); font-weight: 400; }
+  .st-cov-pct { font-family: var(--f-mono); font-size: 12px; color: var(--ink-3); text-align: right; }
+
+  @media (max-width: 900px) {
+    .st-page { padding: 20px 16px 60px; }
+    .st-kpis { grid-template-columns: repeat(3, 1fr); }
+    .st-grid { grid-template-columns: 1fr; }
+    .st-card--wide { grid-column: 1; }
+    .st-bar-row { grid-template-columns: 130px 1fr 70px; }
+    .st-cov-row { grid-template-columns: 140px 1fr 44px 36px; }
+    .top-stats-btn span { display: none; }
+  }
+
+
+  /* ============ RATING MODAL ============ */
+  .rm-scrim {
+    position: fixed; inset: 0;
+    background: oklch(10% 0 0 / 0.45);
+    z-index: 60;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.15s ease;
+  }
+  .rm-modal {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-3);
+    width: 100%; max-width: 440px;
+    overflow: hidden;
+    animation: slideUp 0.2s cubic-bezier(.22,.61,.36,1);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(16px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .rm-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--line);
+    gap: 12px;
+  }
+  .rm-eyebrow {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+  }
+  .rm-title {
+    font-family: var(--f-display); font-size: 20px; font-weight: 500;
+    letter-spacing: -0.01em; color: var(--ink); line-height: 1.2;
+  }
+  .rm-close {
+    background: none; border: 1px solid var(--line);
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-3); cursor: pointer; flex-shrink: 0;
+    transition: all 0.12s;
+  }
+  .rm-close:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  .rm-body { padding: 22px 24px; display: flex; flex-direction: column; gap: 18px; }
+
+  /* Estrellas interactivas */
+  .rm-stars-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .rm-stars { display: flex; gap: 6px; }
+  .rm-star {
+    background: none; border: none; cursor: pointer;
+    font-size: 36px; color: var(--line-2);
+    transition: color 0.1s, transform 0.1s;
+    line-height: 1; padding: 2px;
+  }
+  .rm-star:hover       { transform: scale(1.15); }
+  .rm-star--on         { color: oklch(70% 0.14 80); }
+  .rm-star-label {
+    font-size: 13px; color: var(--ink-3); font-weight: 500;
+    min-height: 20px;
+  }
+
+  /* Campos */
+  .rm-field { display: flex; flex-direction: column; gap: 6px; }
+  .rm-label {
+    font-size: 13px; font-weight: 600; color: var(--ink-2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .rm-char { font-size: 11px; color: var(--ink-4); font-family: var(--f-mono); font-weight: 400; }
+  .rm-input, .rm-textarea {
+    height: 42px;
+    background: var(--surface-2); border: 1.5px solid var(--line);
+    border-radius: 9px; padding: 0 14px;
+    font: inherit; font-size: 14px; color: var(--ink);
+    outline: none; width: 100%; box-sizing: border-box;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .rm-textarea {
+    height: auto; padding: 10px 14px; resize: none; line-height: 1.5;
+  }
+  .rm-input:focus, .rm-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    background: var(--surface);
+  }
+  .rm-error {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: oklch(55% 0.18 25);
+    padding: 8px 12px; background: oklch(96% 0.04 25);
+    border: 1px solid oklch(85% 0.08 25); border-radius: 7px;
+  }
+
+  /* Footer */
+  .rm-footer {
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+  .rm-btn-cancel {
+    height: 40px; padding: 0 16px; border-radius: 8px;
+    border: 1px solid var(--line); background: none;
+    font: inherit; font-size: 14px; color: var(--ink-2);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .rm-btn-cancel:hover { border-color: var(--line-2); color: var(--ink); }
+  .rm-btn-submit {
+    height: 40px; padding: 0 20px; border-radius: 8px;
+    border: none; background: var(--accent); color: white;
+    font: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+    transition: all 0.12s;
+  }
+  .rm-btn-submit:hover { background: var(--accent-2); transform: translateY(-1px); }
+
+  /* Reviews vacías */
+  .reviews-empty {
+    font-size: 13px; color: var(--ink-4);
+    text-align: center; padding: 12px 0;
+    font-style: italic;
+  }
+
+  /* ============ REGISTER PAGE ============ */
+
+  .rp-app { background: var(--bg); }
+
+  /* ── Layout dos columnas ── */
+  .rp-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: calc(100vh - 64px);
+  }
+
+  /* ── Sidebar izquierda ── */
+  .rp-sidebar {
+    background: var(--ink);
+    position: sticky; top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: 0;
+  }
+  .rp-sidebar-inner {
+    display: flex; flex-direction: column;
+    padding: 48px 36px 48px;
+    min-height: 100%;
+  }
+  .rp-sidebar-top { margin-bottom: 48px; }
+
+  .rp-eyebrow {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent-2);
+    margin-bottom: 16px;
+  }
+  .rp-hero-title {
+    font-family: var(--f-display); font-size: 42px; font-weight: 500;
+    letter-spacing: -0.02em; line-height: 1.05;
+    color: oklch(97% 0.005 80);
+    margin-bottom: 16px;
+  }
+  .rp-hero-title em { color: var(--accent-2); font-style: italic; }
+  .rp-hero-sub {
+    font-size: 14px; color: oklch(62% 0.008 80); line-height: 1.6;
+  }
+
+  /* Steps verticales en sidebar */
+  .rp-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 40px; }
+  .rp-step { display: flex; align-items: flex-start; gap: 14px; }
+  .rp-step-track {
+    display: flex; flex-direction: column; align-items: center;
+    flex-shrink: 0;
+  }
+  .rp-step-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--f-mono); font-size: 12px; font-weight: 600;
+    border: 1.5px solid oklch(40% 0.008 80);
+    color: oklch(50% 0.008 80);
+    background: transparent;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .rp-step-connector {
+    width: 1.5px; height: 32px;
+    background: oklch(32% 0.008 80);
+    margin: 4px 0;
+  }
+  .rp-step-text {
+    display: flex; flex-direction: column; gap: 1px;
+    padding-top: 4px; padding-bottom: 36px;
+  }
+  .rp-step-label { font-size: 14px; font-weight: 500; color: oklch(50% 0.008 80); }
+  .rp-step-desc  { font-size: 12px; color: oklch(40% 0.008 80); }
+
+  /* States */
+  .rp-step--active .rp-step-dot {
+    background: var(--accent); border-color: var(--accent);
+    color: white; box-shadow: 0 0 0 4px oklch(40% 0.075 155 / 0.25);
+  }
+  .rp-step--active .rp-step-connector { background: oklch(32% 0.008 80); }
+  .rp-step--active .rp-step-label { color: oklch(94% 0.005 80); font-weight: 600; }
+  .rp-step--active .rp-step-desc  { color: oklch(62% 0.008 80); }
+
+  .rp-step--done .rp-step-dot {
+    background: oklch(35% 0.06 155); border-color: oklch(35% 0.06 155);
+    color: oklch(85% 0.06 155);
+  }
+  .rp-step--done .rp-step-connector { background: oklch(35% 0.06 155); }
+  .rp-step--done .rp-step-label { color: oklch(65% 0.008 80); }
+  .rp-step--done .rp-step-desc  { color: oklch(45% 0.008 80); }
+
+  .rp-step--pending .rp-step-text { padding-bottom: 36px; }
+
+  /* Preview card */
+  .rp-preview { margin-top: auto; }
+  .rp-preview-label {
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: oklch(40% 0.008 80);
+    margin-bottom: 10px;
+  }
+  .rp-preview-card {
+    background: oklch(26% 0.010 80);
+    border: 1px solid oklch(32% 0.010 80);
+    border-radius: 10px; padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .rp-preview-cat {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: oklch(55% 0.008 80);
+  }
+  .rp-preview-cat .cat-code {
+    background: oklch(32% 0.010 80); border-color: oklch(38% 0.010 80);
+    color: oklch(65% 0.008 80);
+  }
+  .rp-preview-name {
+    font-family: var(--f-display); font-size: 18px; font-weight: 500;
+    color: oklch(94% 0.005 80); letter-spacing: -0.01em;
+  }
+  .rp-preview-owner { font-size: 12px; color: oklch(55% 0.008 80); }
+  .rp-preview-meta {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: oklch(50% 0.008 80);
+  }
+
+  /* ── Main derecha — Formulario ── */
+  .rp-main {
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 48px 48px 80px;
+    background: var(--bg);
+  }
+  .rp-form-wrap {
+    width: 100%; max-width: 560px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-2);
+  }
+
+  /* Header del step */
+  .rp-form-header {
+    padding: 36px 36px 0;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0;
+    padding-bottom: 28px;
+  }
+  .rp-form-step-num {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 600;
+    display: block; margin-bottom: 6px;
+  }
+  .rp-form-title {
+    font-family: var(--f-display); font-size: 26px; font-weight: 500;
+    letter-spacing: -0.01em; color: var(--ink); margin-bottom: 4px;
+  }
+  .rp-form-sub { font-size: 14px; color: var(--ink-3); }
+
+  /* Campos */
+  .rp-step-content { padding: 0; }
+  .rp-fields { padding: 28px 36px 0; display: flex; flex-direction: column; gap: 22px; }
+
+  .rp-field { display: flex; flex-direction: column; gap: 7px; }
+  .rp-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .rp-label {
+    font-size: 13px; font-weight: 600; color: var(--ink-2);
+    display: flex; align-items: center; justify-content: space-between;
+    letter-spacing: 0.01em;
+  }
+  .rp-req { color: var(--accent); font-weight: 400; }
+  .rp-hint { font-size: 12px; color: var(--ink-4); margin-top: 2px; }
+  .rp-char-count { font-size: 12px; color: var(--ink-4); font-weight: 400; font-family: var(--f-mono); }
+
+  .rp-input, .rp-textarea {
+    height: 44px;
+    background: var(--surface-2); border: 1.5px solid var(--line);
+    border-radius: 10px; padding: 0 14px;
+    font: inherit; font-size: 15px; color: var(--ink);
+    outline: none; width: 100%; box-sizing: border-box;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  .rp-textarea {
+    height: auto; padding: 12px 14px; resize: vertical; line-height: 1.5;
+  }
+  .rp-input:focus, .rp-textarea:focus {
+    border-color: var(--accent); background: var(--surface);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .rp-input--err { border-color: oklch(55% 0.18 25) !important; }
+  .rp-error {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 12px; color: oklch(55% 0.18 25); margin-top: -2px;
+  }
+
+  /* Input con icono */
+  .rp-input-icon-wrap {
+    position: relative;
+    display: flex; align-items: center;
+    background: var(--surface-2); border: 1.5px solid var(--line);
+    border-radius: 10px; overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .rp-input-icon-wrap:focus-within {
+    border-color: var(--accent); background: var(--surface);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .rp-input-icon-wrap svg { flex-shrink: 0; margin-left: 14px; color: var(--ink-4); }
+  .rp-input-icon {
+    flex: 1; height: 44px; padding: 0 14px;
+    background: none; border: none; outline: none;
+    font: inherit; font-size: 15px; color: var(--ink);
+  }
+
+  /* Select con icono */
+  .rp-select-wrap {
+    position: relative; display: flex; align-items: center;
+    background: var(--surface-2); border: 1.5px solid var(--line);
+    border-radius: 10px; overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .rp-select-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .rp-select-wrap > svg:first-child { flex-shrink: 0; margin-left: 14px; color: var(--ink-4); }
+  .rp-select-wrap > svg:last-child {
+    position: absolute; right: 12px; color: var(--ink-3); pointer-events: none;
+  }
+  .rp-select-sm { width: 130px; }
+  .rp-select {
+    appearance: none; background: none; border: none; outline: none;
+    flex: 1; height: 44px; padding: 0 32px 0 14px;
+    font: inherit; font-size: 15px; color: var(--ink); cursor: pointer;
+  }
+  .rp-select-wrap > svg:first-child ~ .rp-select { padding-left: 10px; }
+
+  /* Checkbox custom */
+  .rp-checkbox-label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--ink-2); cursor: pointer;
+    margin-top: 4px;
+  }
+  .rp-checkbox { display: none; }
+  .rp-checkbox-box {
+    width: 18px; height: 18px; border-radius: 5px;
+    border: 1.5px solid var(--line-2);
+    background: var(--surface-2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.12s;
+    color: white;
+  }
+  .rp-checkbox:checked + .rp-checkbox-box {
+    background: var(--accent); border-color: var(--accent);
+  }
+
+  /* Días */
+  .rp-days { display: flex; gap: 6px; flex-wrap: wrap; }
+  .rp-day {
+    width: 46px; height: 38px; border-radius: 8px;
+    border: 1.5px solid var(--line); background: var(--surface-2);
+    font: inherit; font-size: 12px; font-weight: 600; color: var(--ink-3);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .rp-day:hover { border-color: var(--line-2); color: var(--ink); }
+  .rp-day--on {
+    background: var(--accent-soft); border-color: var(--accent);
+    color: var(--accent-ink); font-weight: 700;
+  }
+
+  /* Horario */
+  .rp-hours-row { display: flex; align-items: center; gap: 16px; }
+  .rp-hours-block { display: flex; align-items: center; gap: 10px; }
+  .rp-hours-lbl { font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+  .rp-hours-dash { color: var(--ink-4); font-size: 16px; }
+
+  /* Categorías grid */
+  .rp-cat-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  .rp-cat-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-radius: 9px;
+    border: 1.5px solid var(--line); background: var(--surface-2);
+    font: inherit; font-size: 13px; color: var(--ink-2);
+    cursor: pointer; text-align: left;
+    transition: all 0.12s;
+  }
+  .rp-cat-chip:hover { border-color: var(--line-2); color: var(--ink); }
+  .rp-cat-chip--on {
+    border-color: var(--accent); background: var(--accent-soft);
+    color: var(--accent-ink); font-weight: 600;
+  }
+  .rp-cat-chip--on .cat-code {
+    background: var(--accent); border-color: transparent;
+    color: white;
+  }
+
+  /* Métodos de pago */
+  .rp-payment-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+  }
+  .rp-payment-chip {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; padding: 16px 12px;
+    border-radius: 12px; border: 1.5px solid var(--line);
+    background: var(--surface-2); cursor: pointer;
+    transition: all 0.15s; font: inherit;
+  }
+  .rp-payment-chip:hover { border-color: var(--line-2); transform: translateY(-1px); box-shadow: var(--shadow-1); }
+  .rp-payment-chip--on {
+    border-color: var(--accent); background: var(--accent-soft);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .rp-payment-icon { font-size: 22px; line-height: 1; }
+  .rp-payment-label { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  .rp-payment-chip--on .rp-payment-label { color: var(--accent-ink); }
+  .rp-payment-check {
+    position: absolute; top: 8px; right: 8px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Resumen */
+  .rp-summary {
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 12px; padding: 20px 22px;
+  }
+  .rp-summary-title {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-4); margin-bottom: 14px;
+  }
+  .rp-summary-grid { display: flex; flex-direction: column; gap: 10px; }
+  .rp-summary-item {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    font-size: 13px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .rp-summary-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .rp-summary-key { color: var(--ink-4); flex-shrink: 0; }
+  .rp-summary-val { color: var(--ink); font-weight: 500; text-align: right; }
+
+  /* Navegación del form */
+  .rp-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 24px 36px 28px;
+    border-top: 1px solid var(--line);
+    margin-top: 28px;
+    background: var(--surface-2);
+  }
+  .rp-nav-left { display: flex; align-items: center; }
+  .rp-nav-right { display: flex; align-items: center; gap: 16px; }
+  .rp-nav-progress {
+    font-family: var(--f-mono); font-size: 11px; color: var(--ink-4);
+  }
+  .rp-btn-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 42px; padding: 0 16px; border-radius: 9px;
+    border: 1.5px solid var(--line); background: none;
+    font: inherit; font-size: 14px; color: var(--ink-2);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .rp-btn-back:hover { border-color: var(--line-2); color: var(--ink); }
+  .rp-btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 44px; padding: 0 24px; border-radius: 9px;
+    border: none; background: var(--ink); color: var(--surface);
+    font: inherit; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.12s;
+    letter-spacing: 0.01em;
+  }
+  .rp-btn-primary:hover { background: var(--ink-2); transform: translateY(-1px); box-shadow: var(--shadow-2); }
+  .rp-btn-submit { background: var(--accent); }
+  .rp-btn-submit:hover { background: var(--accent-2); }
+
+  /* ── Pantalla de éxito ── */
+  .rp-success {
+    min-height: calc(100vh - 64px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 24px;
+  }
+  .rp-success-ring {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 0 0 12px oklch(94% 0.030 155 / 0.4);
+  }
+  .rp-success-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .rp-success-body {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; max-width: 440px;
+  }
+  .rp-success-eyebrow {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .rp-success-title {
+    font-family: var(--f-display); font-size: 30px; font-weight: 500;
+    letter-spacing: -0.01em; color: var(--ink); margin-bottom: 12px;
+  }
+  .rp-success-sub {
+    font-size: 15px; color: var(--ink-3); line-height: 1.6; margin-bottom: 24px;
+  }
+  .rp-success-card {
+    width: 100%; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 28px;
+  }
+  .rp-success-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--ink-2);
+  }
+  .rp-success-row svg { color: var(--accent); flex-shrink: 0; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .rp-layout { grid-template-columns: 1fr; }
+    .rp-sidebar {
+      position: static; height: auto;
+      padding-bottom: 0;
+    }
+    .rp-sidebar-inner { padding: 32px 24px 24px; }
+    .rp-hero-title { font-size: 32px; }
+    .rp-steps { flex-direction: row; gap: 0; margin-bottom: 0; }
+    .rp-step { flex-direction: column; align-items: center; flex: 1; }
+    .rp-step-track { flex-direction: row; width: 100%; }
+    .rp-step-connector { width: auto; flex: 1; height: 1.5px; margin: 0 4px; }
+    .rp-step-text { align-items: center; padding: 8px 0 0; }
+    .rp-step-desc { display: none; }
+    .rp-preview { display: none; }
+    .rp-main { padding: 24px 16px 60px; }
+    .rp-form-header { padding: 24px 20px 20px; }
+    .rp-fields { padding: 20px 20px 0; gap: 18px; }
+    .rp-nav { padding: 20px 20px 24px; }
+    .rp-field-row { grid-template-columns: 1fr; }
+    .rp-cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .rp-payment-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .topbar { grid-template-columns: auto 1fr auto; gap: 0; }
+    .brand { min-width: unset; padding: 0 16px; }
+    .brand-meta, .top-link span, .top-actions-sep { display: none; }
+    .search-shell { margin: 0 16px; }
+    .top-actions { padding: 0 16px; }
+    .spotlight-grid { grid-template-columns: 1fr; }
+    .card.list { grid-template-columns: 96px 1fr; }
+    .card.list .card-actions { grid-column: 1 / -1; flex-direction: row; min-width: 0; }
+    .map-view { grid-template-columns: 1fr; height: auto; }
+    .map-canvas { height: 360px; }
+  }
+</style>
 </head>
 <body>
-<template id="__bundler_thumbnail">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-    <rect width="200" height="200" fill="oklch(96.5% 0.008 80)"/>
-    <rect x="60" y="60" width="80" height="80" rx="14" fill="oklch(40% 0.075 155)"/>
-    <text x="100" y="116" text-anchor="middle" font-family="ui-monospace, Menlo, monospace"
-          font-size="34" font-weight="600" fill="oklch(98% 0.02 155)" letter-spacing="2">ED</text>
-  </svg>
-</template>
 <div id="root"></div>
-
-<!-- React + Babel (pinned) -->
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "density": "regular",
+    "theme": "light",
+    "accent": "oklch(40% 0.075 155)"
+  }/*EDITMODE-END*/;</script>
+<script type="text/babel">// Catálogo — expuesto via window.DATA únicamente
+window.DATA = {
+  CATEGORIES: [
+    { id: 'restaurantes', name: 'Restaurantes',      code: 'RE', count: 42 },
+    { id: 'tiendas',      name: 'Tiendas',           code: 'TI', count: 38 },
+    { id: 'ropa',         name: 'Ropa & Calzado',    code: 'RO', count: 27 },
+    { id: 'salud',        name: 'Salud',             code: 'SA', count: 19 },
+    { id: 'talleres',     name: 'Talleres',          code: 'TA', count: 23 },
+    { id: 'belleza',      name: 'Belleza',           code: 'BE', count: 31 },
+    { id: 'panaderia',    name: 'Panadería',         code: 'PA', count: 14 },
+    { id: 'electronicos', name: 'Electrónicos',      code: 'EL', count: 18 },
+    { id: 'educacion',    name: 'Educación',         code: 'ED', count: 12 },
+    { id: 'transporte',   name: 'Transporte',        code: 'TR', count: 9  },
+    { id: 'artesania',    name: 'Artesanías',        code: 'AR', count: 16 },
+    { id: 'frutas',       name: 'Frutas & Verduras', code: 'FR', count: 21 },
+    { id: 'tecnologia',   name: 'Tecnología',        code: 'TC', count: 15 },
+    { id: 'eventos',      name: 'Eventos',           code: 'EV', count: 8  },
+  ],
 
-<!-- Config (tweak defaults) -->
-<script src="config.js"></script>
+  BARRIOS: ['La Esperanza', 'El Centro', 'Villa Rosa', 'El Prado', 'Barrio Norte', 'Barrio Nuevo', 'La Paz', 'Alegría'],
 
-<!-- App modules -->
-<script type="text/babel" src="data.jsx"></script>
-<script type="text/babel" src="icons.jsx"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel" src="app.jsx"></script>
+  BUSINESSES: [
+    { id: 1,  cat: 'restaurantes', name: 'La Sazón de Doña Rosa',        owner: 'Rosa Martínez',     desc: 'Comida casera con los mejores sabores de la región. Menú del día con sopa, segundo y jugo natural.',                          rating: 4.8, reviews: 124, address: 'Calle 12 #34-56',        barrio: 'La Esperanza', phone: '311 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–16:00',      openNow: true,  closesAt: '4pm',  specialty: 'Menú del día',         tags: ['Comida casera', 'Domicilio'],         payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1 },
+    { id: 2,  cat: 'restaurantes', name: 'El Fogón Criollo',             owner: 'Carlos Pedraza',    desc: 'Especialidad en asados y fritanga. Ambiente familiar y precios populares para toda la familia.',                              rating: 4.6, reviews: 89,  address: 'Av. Popular #12-20',    barrio: 'El Centro',    phone: '320 456 7890', whatsapp: true,  hours: 'Vie–Dom · 11:00–22:00',      openNow: false, closesAt: null,   specialty: 'Fritanga',             tags: ['Parrilla', 'Para llevar'],            payments: ['Efectivo', 'Daviplata'],          verified: false, since: '2021', priceLevel: 2 },
+    { id: 3,  cat: 'restaurantes', name: 'Sabores del Valle',            owner: 'Lucía Rondón',      desc: 'Platos típicos de la región andina. Bandeja paisa, ajiaco santafereño y postres artesanales.',                              rating: 4.9, reviews: 203, address: 'Carrera 5 #8-90',       barrio: 'Barrio Nuevo', phone: '301 678 9012', whatsapp: true,  hours: 'Todos los días · 7:00–21:00', openNow: true,  closesAt: '9pm',  specialty: 'Bandeja paisa',        tags: ['Regional', 'Domicilio', 'Reservas'], payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2015', priceLevel: 2 },
+    { id: 4,  cat: 'restaurantes', name: 'Tacos Don Memo',               owner: 'Guillermo Flores',  desc: 'Auténtica cocina mexicana adaptada al paladar local. Tacos, burritos y salsas caseras.',                                     rating: 4.5, reviews: 67,  address: 'Diagonal 45 #23-10',   barrio: 'Barrio Norte', phone: '315 890 1234', whatsapp: false, hours: 'Lun–Sáb · 12:00–21:00',     openNow: true,  closesAt: '9pm',  specialty: 'Tacos al pastor',      tags: ['Mexicana', 'Para llevar'],            payments: ['Efectivo'],                       verified: false, since: '2022', priceLevel: 1 },
+    { id: 5,  cat: 'restaurantes', name: 'Caldo de Pollo Mama Juanita',  owner: 'Juanita Sánchez',   desc: 'Caldos, sancochos y sopas preparados con recetas de abuela. El mejor remedio para cualquier día.',                           rating: 4.7, reviews: 156, address: 'Calle 23 #45-67',       barrio: 'Villa Rosa',   phone: '317 012 3456', whatsapp: true,  hours: 'Lun–Dom · 6:00–15:00',      openNow: true,  closesAt: '3pm',  specialty: 'Sancocho de gallina',  tags: ['Sopas', 'Desayunos'],                payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2010', priceLevel: 1 },
+    { id: 6,  cat: 'restaurantes', name: 'Pizzas al Carbón',             owner: 'Fernando Castro',   desc: 'Pizzas artesanales horneadas en leña. Masa madre, ingredientes frescos y sabor auténtico.',                                  rating: 4.4, reviews: 44,  address: 'Calle 7 #12-34',        barrio: 'Barrio Norte', phone: '310 234 5678', whatsapp: true,  hours: 'Mié–Dom · 17:00–23:00',     openNow: false, closesAt: null,   specialty: 'Pizza artesanal',      tags: ['Italiana', 'Domicilio'],              payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: false, since: '2023', priceLevel: 2 },
+    { id: 7,  cat: 'tiendas',      name: 'Tienda El Progreso',           owner: 'Marlene Ríos',      desc: 'Todo lo que necesitas para el hogar. Abarrotes, aseo y más. Fiado a clientes frecuentes.',                                  rating: 4.7, reviews: 211, address: 'Carrera 8 #15-30',      barrio: 'La Esperanza', phone: '312 345 6789', whatsapp: false, hours: 'Lun–Dom · 6:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Abarrotes',            tags: ['General', 'Fiado'],                   payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2005', priceLevel: 1 },
+    { id: 8,  cat: 'tiendas',      name: 'Minimercado La Victoria',      owner: 'Pedro Gómez',       desc: 'Productos frescos, carnes y lácteos directos del proveedor. Precios justos cada día.',                                       rating: 4.5, reviews: 98,  address: 'Av. 3 #20-45',          barrio: 'El Centro',    phone: '316 456 7890', whatsapp: true,  hours: 'Lun–Sáb · 7:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Carnes',               tags: ['Mercado', 'Domicilio'],               payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2012', priceLevel: 1 },
+    { id: 9,  cat: 'ropa',         name: 'Modas Valentina',              owner: 'Valentina Cruz',    desc: 'Ropa para mujer confeccionada a mano. Diseños únicos con telas de calidad a precio accesible.',                             rating: 4.8, reviews: 78,  address: 'C.C. Popular L-34',     barrio: 'El Centro',    phone: '318 567 8901', whatsapp: true,  hours: 'Lun–Sáb · 9:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Confección a medida',  tags: ['Confección', 'A medida'],             payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2019', priceLevel: 2 },
+    { id: 10, cat: 'ropa',         name: 'Zapatos y Más Don Julio',      owner: 'Julio Herrera',     desc: 'Ventas al por mayor y detal, calzado directamente de fábrica para damas, caballeros y niños.',                                                  rating: 4.3, reviews: 55,  address: 'Calle 10 #6-78',        barrio: 'Villa Rosa',   phone: '313 678 9012', whatsapp: false, hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Reparación',           tags: ['Zapatería', 'Reparación'],            payments: ['Efectivo'],                       verified: false, since: '2008', priceLevel: 1 },
+    { id: 11, cat: 'salud',        name: 'Farmacia Popular San Rafael',  owner: 'Dra. Ana Bernal',   desc: 'Medicamentos genéricos y de marca. Servicio de tensión y glucosa gratuito. Atención personalizada.',                         rating: 4.9, reviews: 312, address: 'Calle 5 #9-20',         barrio: 'El Centro',    phone: '319 789 0123', whatsapp: true,  hours: 'Lun–Dom · 8:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Farmacia 24h',         tags: ['Salud', 'Domicilio'],                payments: ['Efectivo', 'Tarjeta', 'Nequi'],   verified: true,  since: '2014', priceLevel: 2 },
+    { id: 12, cat: 'talleres',     name: 'Taller El Mecánico Honesto',   owner: 'Rodrigo Vargas',    desc: 'Servicio mecánico a domicilio y en taller. Motos y carros. Garantía en todos los trabajos.',                                rating: 4.7, reviews: 143, address: 'Calle Industrial #45-20', barrio: 'El Prado',     phone: '321 890 1234', whatsapp: true,  hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Mecánica general',     tags: ['Automotriz', 'A domicilio'],          payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2011', priceLevel: 2 },
+    { id: 13, cat: 'talleres',     name: 'Eléctrico Don Jaime',          owner: 'Jaime Morales',     desc: 'Instalaciones eléctricas residenciales y comerciales. Reparación de electrodomésticos.',                                     rating: 4.6, reviews: 88,  address: 'Calle 3 #18-44',        barrio: 'La Paz',       phone: '322 901 2345', whatsapp: true,  hours: 'Lun–Vie · 8:00–17:00',      openNow: true,  closesAt: '5pm',  specialty: 'Eléctrico residencial', tags: ['Eléctrico', 'Urgencias'],             payments: ['Efectivo'],                       verified: false, since: '2016', priceLevel: 2 },
+    { id: 14, cat: 'belleza',      name: 'Peluquería Estilo Total',      owner: 'Sandra López',      desc: 'Cortes, tintes, alisados y peinados para toda la familia. Atención con y sin cita.',                                        rating: 4.8, reviews: 189, address: 'Carrera 12 #34-56',     barrio: 'Villa Rosa',   phone: '323 012 3456', whatsapp: true,  hours: 'Mar–Dom · 9:00–19:00',       openNow: true,  closesAt: '7pm',  specialty: 'Tintes y alisados',    tags: ['Cabello', 'Sin cita'],               payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2013', priceLevel: 2 },
+    { id: 15, cat: 'panaderia',    name: 'Panadería El Trigal',          owner: 'Miguel Á. Torres',  desc: 'Pan artesanal horneado cada mañana. Postres, tortas para ocasiones especiales y café.',                                     rating: 4.9, reviews: 267, address: 'Calle 8 #20-10',        barrio: 'La Esperanza', phone: '324 123 4567', whatsapp: true,  hours: 'Lun–Dom · 5:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Pan de masa madre',    tags: ['Panadería', 'Tortas'],               payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2007', priceLevel: 1 },
+    { id: 16, cat: 'electronicos', name: 'Tecno Reparaciones JR',        owner: 'Javier Rojas',      desc: 'Reparación de celulares, tablets y computadores. Venta de accesorios originales y económicos.',                             rating: 4.5, reviews: 112, address: 'C.C. Centro L-22',      barrio: 'El Centro',    phone: '325 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Pantallas y baterías', tags: ['Tecnología', 'Garantía'],             payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2017', priceLevel: 2 },
+    { id: 17, cat: 'educacion',    name: 'Academia Futuro Brillante',    owner: 'Prof. Clara Mendoza', desc: 'Clases de refuerzo, matemáticas, español e inglés para niños y jóvenes. Grupos reducidos.',                               rating: 4.8, reviews: 76,  address: 'Calle 15 #7-30',        barrio: 'El Centro',    phone: '326 345 6789', whatsapp: true,  hours: 'Lun–Vie · 14:00–19:00',     openNow: false, closesAt: null,   specialty: 'Refuerzo escolar',     tags: ['Académico', 'Niños'],                payments: ['Efectivo', 'Transferencia'],      verified: true,  since: '2019', priceLevel: 2 },
+    { id: 18, cat: 'transporte',   name: 'Fletes y Mudanzas El Confiable', owner: 'Hernán Díaz',    desc: 'Servicio de fletes locales y mudanzas. Camioneta disponible las 24 horas para emergencias.',                                rating: 4.6, reviews: 54,  address: 'Cra 22 #8-12',          barrio: 'El Prado',     phone: '327 456 7890', whatsapp: true,  hours: '24 horas · 7 días',         openNow: true,  closesAt: '24h',  specialty: 'Mudanzas',             tags: ['Logística', '24h'],                  payments: ['Efectivo', 'Tarjeta'],            verified: false, since: '2020', priceLevel: 2 },
+    { id: 19, cat: 'artesania',    name: 'Arte y Manos Creativas',       owner: 'Patricia Suárez',   desc: 'Artesanías en madera, cerámica y tejido. Talleres para niños y adultos los fines de semana.',                               rating: 4.9, reviews: 91,  address: 'Casa Cultural, Calle 10', barrio: 'La Esperanza', phone: '328 567 8901', whatsapp: true,  hours: 'Mié–Dom · 10:00–17:00',     openNow: true,  closesAt: '5pm',  specialty: 'Cerámica artesanal',   tags: ['Arte', 'Talleres'],                  payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2016', priceLevel: 2 },
+    { id: 20, cat: 'frutas',       name: 'Frutería La Cosecha Fresca',   owner: 'Esperanza Quiñones', desc: 'Frutas y verduras directas del campo. Domicilios sin costo adicional. Todo fresco cada mañana.',                           rating: 4.8, reviews: 178, address: 'Mercado Central L-45',   barrio: 'El Centro',    phone: '329 678 9012', whatsapp: true,  hours: 'Lun–Dom · 6:00–12:00',      openNow: true,  closesAt: '12pm', specialty: 'Frutas del campo',     tags: ['Orgánico', 'Domicilio'],              payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1 },
+    { id: 21, cat: 'tecnologia',   name: 'Soluciones TIC Popular',       owner: 'Diego Ramírez',     desc: 'Diseño de páginas web, redes sociales y soporte técnico para pequeños negocios.',                                           rating: 4.7, reviews: 63,  address: 'Coworking Centro p2',    barrio: 'El Centro',    phone: '330 789 0123', whatsapp: true,  hours: 'Lun–Vie · 9:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Web para pymes',       tags: ['Digital', 'Pymes'],                  payments: ['Transferencia', 'Tarjeta'],       verified: true,  since: '2021', priceLevel: 3 },
+    { id: 22, cat: 'eventos',      name: 'Fiestas y Detalles Don Augusto', owner: 'Augusto Palacios', desc: 'Organización de fiestas, cumpleaños y reuniones. Decoración, sonido y catering incluidos.',                               rating: 4.5, reviews: 47,  address: 'Cra 20 #14-08',         barrio: 'Alegría',      phone: '331 890 1234', whatsapp: true,  hours: 'Con cita previa',           openNow: false, closesAt: null,   specialty: 'Eventos sociales',     tags: ['Eventos', 'Catering'],               payments: ['Efectivo', 'Transferencia'],      verified: false, since: '2019', priceLevel: 2 },
+  ],
+};
+</script>
+<script type="text/babel">// Iconos — set mínimo, trazo 1.5, estilo Lucide-like
+// Cada uno acepta {size, className} y hereda currentColor
 
-<!-- Mount -->
-<script type="text/babel" src="main.jsx"></script>
+const _icon = (paths, vb = '0 0 24 24') => ({ size = 16, className = '', style = {} }) => (
+  <svg width={size} height={size} viewBox={vb} fill="none" stroke="currentColor"
+       strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
+       className={className} style={style} aria-hidden="true">
+    {paths}
+  </svg>
+);
+
+const Icon = {
+  Search:   _icon(<><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></>),
+  MapPin:   _icon(<><path d="M20 10c0 7-8 13-8 13S4 17 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></>),
+  Clock:    _icon(<><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>),
+  Phone:    _icon(<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/>),
+  Star:     _icon(<path d="M12 2 15.09 8.26 22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2Z"/>),
+  Check:    _icon(<path d="m5 12 5 5L20 7"/>),
+  ChevronR: _icon(<path d="m9 6 6 6-6 6"/>),
+  ChevronD: _icon(<path d="m6 9 6 6 6-6"/>),
+  Filter:   _icon(<path d="M3 6h18M6 12h12M10 18h4"/>),
+  Heart:    _icon(<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z"/>),
+  Share:    _icon(<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></>),
+  Message:  _icon(<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1 15.1-3.8 8.4 8.4 0 0 1 1 0Z"/>),
+  X:        _icon(<path d="M18 6 6 18M6 6l12 12"/>),
+  Menu:     _icon(<path d="M3 6h18M3 12h18M3 18h18"/>),
+  Navigate: _icon(<><path d="m3 11 19-9-9 19-2-8-8-2Z"/></>),
+  Sliders:  _icon(<><path d="M4 21V14M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></>),
+  Grid:     _icon(<><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></>),
+  List:     _icon(<><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="0.5"/><circle cx="4" cy="12" r="0.5"/><circle cx="4" cy="18" r="0.5"/></>),
+  Map:      _icon(<><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15M15 6v15"/></>),
+  Plus:     _icon(<path d="M12 5v14M5 12h14"/>),
+  Truck:    _icon(<><rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 9h4l3 3v5h-7V9Z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></>),
+  Wallet:   _icon(<><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/></>),
+  Calendar: _icon(<><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></>),
+  Verified: _icon(<><path d="m9 12 2 2 4-4"/><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3Z"/></>),
+  ArrowR:   _icon(<><path d="M5 12h14M13 5l7 7-7 7"/></>),
+  ArrowL:   _icon(<><path d="M19 12H5M11 5l-7 7 7 7"/></>),
+  Dot:      _icon(<circle cx="12" cy="12" r="4" fill="currentColor"/>),
+  Bookmark: _icon(<path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16Z"/>),
+};
+
+window.Icon = Icon;
+</script>
+<script type="text/babel">
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  // Auto-inject a rail toggle when a <deck-stage> is on the page. The
+  // toggle drives the deck's per-viewer _railVisible via window message;
+  // state is mirrored from the same localStorage key the deck reads so
+  // the control reflects reality across reloads. The mechanism is the
+  // message — authors who want custom placement can post it directly
+  // and pass noDeckControls to suppress this one.
+  const hasDeckStage = React.useMemo(
+    () => typeof document !== 'undefined' && !!document.querySelector('deck-stage'),
+    [],
+  );
+  // deck-stage enables its rail in connectedCallback, but this panel can
+  // mount before that element has upgraded. The initial read catches the
+  // common case; the listener covers mounting first. (Older deck-stage.js
+  // copies still wait for the host's __omelette_rail_enabled postMessage —
+  // same listener handles those.)
+  const [railEnabled, setRailEnabled] = React.useState(
+    () => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled,
+  );
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = (e) => {
+      if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try { return localStorage.getItem('deck-stage.railVisible') !== '0'; } catch (e) { return true; }
+  });
+  const toggleRail = (on) => {
+    setRailVisible(on);
+    window.postMessage({ type: '__deck_rail_visible', on }, '*');
+  };
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+          {hasDeckStage && railEnabled && !noDeckControls && (
+            <TweakSection label="Deck">
+              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+            </TweakSection>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+</script>
+<script type="text/babel">// EconoDirectorio — App principal
+const { useState, useEffect, useMemo, useRef } = React;
+const { CATEGORIES, BUSINESSES } = window.DATA;
+// BARRIOS se deriva dinámicamente del estado de negocios en App
+const I = window.Icon;
+
+// ---------- Helpers ----------
+const fmt = n => n.toLocaleString('es-CO');
+
+// SVG placeholder rayado (en vez de emoji gigante)
+function StripedThumb({ code, label, hue = 155, h = 132 }) {
+  const id = `s${code}-${hue}`;
+  // Hash-based offset for variety
+  const seed = code.charCodeAt(0) + code.charCodeAt(1);
+  const bg = `oklch(${88 + (seed % 6)}% 0.025 ${hue})`;
+  const fg = `oklch(${62 + (seed % 10)}% 0.07 ${hue})`;
+  return (
+    <div className="thumb" style={{ background: bg, height: h }}>
+      <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 200 132" aria-hidden="true">
+        <defs>
+          <pattern id={id} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)">
+            <rect width="14" height="14" fill={bg} />
+            <rect width="2" height="14" fill={fg} opacity="0.32" />
+          </pattern>
+        </defs>
+        <rect width="200" height="132" fill={`url(#${id})`} />
+      </svg>
+      <div className="thumb-tag"><span className="cat-code">{code}</span>{label}</div>
+    </div>
+  );
+}
+
+function PriceLevel({ level }) {
+  return (
+    <span className="price-level" title={`Nivel de precio ${level}/3`}>
+      {[1,2,3].map(i => <span key={i} className={i <= level ? 'on' : ''}>$</span>)}
+    </span>
+  );
+}
+
+function Stars({ rating, size = 12, compact = false }) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  if (compact) {
+    // Compact: solo estrellas llenas + media, sin vacías
+    return (
+      <span className="stars compact" style={{ '--star-size': size + 'px' }}>
+        {[...Array(5)].map((_, i) => {
+          if (i < full) return <span key={i} className="full">★</span>;
+          if (i === full && half) return <span key={i} className="half">★</span>;
+          return null;
+        })}
+      </span>
+    );
+  }
+  return (
+    <span className="stars" style={{ '--star-size': size + 'px' }}>
+      {[...Array(5)].map((_, i) => (
+        <span key={i} className={i < full ? 'full' : (i === full && half ? 'half' : 'empty')}>★</span>
+      ))}
+    </span>
+  );
+}
+
+// ---------- TopBar ----------
+function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, onOpenStats }) {
+  const [barrioOpen, setBarrioOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // Close barrio menu on outside click
+  useEffect(() => {
+    if (!barrioOpen) return;
+    const handler = e => { if (menuRef.current && !menuRef.current.contains(e.target)) setBarrioOpen(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [barrioOpen]);
+
+  return (
+    <header className="topbar">
+      <div className="brand">
+        <div className="brand-mark">ED</div>
+        <div className="brand-name">
+          Econo<span className="brand-accent">Directorio</span>
+          <span className="brand-meta">DIR · v2.0</span>
+        </div>
+      </div>
+
+      <div className="search-shell">
+        <I.Search size={16} />
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Buscar negocios, productos, oficios…"
+          aria-label="Buscar negocios"
+        />
+        {query
+          ? <button className="search-clear" onClick={() => setQuery('')} title="Limpiar búsqueda"><I.X size={14} /></button>
+          : <kbd>⌘K</kbd>
+        }
+      </div>
+
+      <div className="top-actions">
+        <button className="barrio-pill" onClick={() => setBarrioOpen(o => !o)} ref={menuRef}>
+          <I.MapPin size={14} />
+          <span>{barrio}</span>
+          <I.ChevronD size={12} />
+          {barrioOpen && (
+            <div className="barrio-menu" onClick={e => e.stopPropagation()}>
+              <div className="barrio-menu-head">Tu zona</div>
+              {barrios.map(b => (
+                <button key={b} className={'barrio-item ' + (b === barrio ? 'is-active' : '')}
+                  onClick={() => { setBarrio(b); setBarrioOpen(false); }}>
+                  <I.MapPin size={12} />
+                  <span>{b}</span>
+                  {b === barrio && <I.Check size={12} />}
+                </button>
+              ))}
+            </div>
+          )}
+        </button>
+        <button className="top-stats-btn" onClick={onOpenStats} title="Estadísticas">
+          <I.Sliders size={14} />
+          <span>Estadísticas</span>
+        </button>
+        <button className="top-link" onClick={onOpenMerchant}>
+          <I.Plus size={14} />
+          <span>Soy comerciante</span>
+        </button>
+        <div className="avatar" title="Cuenta">MA</div>
+      </div>
+    </header>
+  );
+}
+
+// ---------- Sidebar ----------
+function Sidebar({ catId, setCatId, filters, setFilter, counts, onResetFilters }) {
+  const activeFilters = Object.values(filters).filter(Boolean).length + (catId ? 1 : 0);
+  return (
+    <aside className="sidebar">
+      <div className="side-section">
+        <div className="side-label-row">
+          <span className="side-label">Categorías</span>
+          {activeFilters > 0 && (
+            <button className="side-reset" onClick={onResetFilters} title="Limpiar filtros">
+              <span className="filter-badge">{activeFilters}</span> Limpiar
+            </button>
+          )}
+        </div>
+        <button
+          className={'cat-row ' + (catId === null ? 'is-active' : '')}
+          onClick={() => setCatId(null)}>
+          <span className="cat-code dim">·</span>
+          <span className="cat-name">Todos los negocios</span>
+          <span className="cat-count">{counts.total}</span>
+        </button>
+        {CATEGORIES.map(c => (
+          <button key={c.id}
+            className={'cat-row ' + (catId === c.id ? 'is-active' : '')}
+            onClick={() => setCatId(c.id)}>
+            <span className="cat-code">{c.code}</span>
+            <span className="cat-name">{c.name}</span>
+            <span className="cat-count">{c.count}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="side-section">
+        <div className="side-label">Filtros rápidos</div>
+        <FilterToggle label="Abierto ahora"   active={filters.openNow}  onChange={v => setFilter('openNow', v)} dot />
+        <FilterToggle label="Verificados"     active={filters.verified} onChange={v => setFilter('verified', v)} />
+        <FilterToggle label="Hace domicilio"  active={filters.delivery} onChange={v => setFilter('delivery', v)} />
+        <FilterToggle label="Acepta Nequi"    active={filters.nequi}    onChange={v => setFilter('nequi', v)} />
+        <FilterToggle label="Calificación 4.5+" active={filters.topRated} onChange={v => setFilter('topRated', v)} />
+      </div>
+
+      <div className="side-footer">
+        <div className="kv"><span>Negocios</span><b>{fmt(248)}</b></div>
+        <div className="kv"><span>Categorías</span><b>14</b></div>
+        <div className="kv"><span>Barrios</span><b>12</b></div>
+        <div className="kv"><span>Actualizado</span><b>Hoy</b></div>
+      </div>
+    </aside>
+  );
+}
+
+function FilterToggle({ label, active, onChange, dot }) {
+  return (
+    <button className={'filter-row ' + (active ? 'is-on' : '')} onClick={() => onChange(!active)}>
+      <span className="check-box">{active && <I.Check size={10} />}</span>
+      <span className="filter-label">{label}</span>
+      {dot && <span className="live-dot" />}
+    </button>
+  );
+}
+
+// ---------- Toolbar ----------
+function Toolbar({ count, sort, setSort, view, setView, density, catName, query }) {
+  const title = query
+    ? <>Resultados para <em>«{query}»</em></>
+    : (catName ? <>{catName}</> : <>Cerca de ti</>);
+  return (
+    <div className="toolbar">
+      <div className="toolbar-title">
+        <h1>{title}</h1>
+        <div className="toolbar-meta">
+          <span><b>{count}</b> {count === 1 ? 'negocio' : 'negocios'}</span>
+          <span className="sep">·</span>
+          <span>Actualizado hace 4 min</span>
+        </div>
+      </div>
+      <div className="toolbar-right">
+        <div className="select-wrap">
+          <select value={sort} onChange={e => setSort(e.target.value)}>
+            <option value="relevance">Más relevantes</option>
+            <option value="rating">Mejor calificados</option>
+            <option value="reviews">Más reseñas</option>
+            <option value="nearby">Más cercanos</option>
+            <option value="newest">Más recientes</option>
+          </select>
+          <I.ChevronD size={12} />
+        </div>
+        <div className="view-seg">
+          <button className={view === 'grid' ? 'on' : ''} onClick={() => setView('grid')} title="Cuadrícula"><I.Grid size={14} /></button>
+          <button className={view === 'list' ? 'on' : ''} onClick={() => setView('list')} title="Lista"><I.List size={14} /></button>
+          <button className={view === 'map' ? 'on' : ''} onClick={() => setView('map')} title="Mapa"><I.Map size={14} /></button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- Card ----------
+function BusinessCard({ b, onOpen, onSave, saved, view, onContact }) {
+  const cat = CATEGORIES.find(c => c.id === b.cat);
+  const hueMap = {
+    restaurantes: 30, tiendas: 220, ropa: 320, salud: 165, talleres: 50,
+    belleza: 340, panaderia: 60, electronicos: 210, educacion: 250,
+    transporte: 25, artesania: 290, frutas: 130, tecnologia: 230, eventos: 280,
+  };
+  const hue = hueMap[b.cat] || 150;
+
+  // ── Vista Lista ──────────────────────────────────────────────
+  if (view === 'list') {
+    return (
+      <article className={'card list ' + (saved ? 'saved' : '')} onClick={() => onOpen(b)}>
+        <div className="card-thumb-wrap small">
+          <StripedThumb code={cat.code} label={cat.name} hue={hue} h={88} />
+        </div>
+
+        <div className="card-body">
+          <div className="card-top">
+            <div className="card-status">
+              <span className={'status-dot ' + (b.openNow ? 'open' : 'closed')} />
+              <span className="status-text">
+                {b.openNow ? `Abierto · cierra ${b.closesAt}` : 'Cerrado ahora'}
+              </span>
+              {b.verified && (
+                <span className="badge-v"><I.Verified size={10} /> Verificado</span>
+              )}
+            </div>
+            <div className="card-rating">
+              <Stars rating={b.rating} size={13} compact={true} />
+              <b>{b.rating}</b>
+              <span className="reviews">({b.reviews})</span>
+            </div>
+          </div>
+
+          <h3 className="card-name">{b.name}</h3>
+          <p className="card-desc">{b.desc}</p>
+
+          <div className="card-meta">
+            <span className="meta-item"><I.MapPin size={12} />{b.barrio} · {b.address}</span>
+            <span className="meta-item"><I.Clock size={12} />{b.hours}</span>
+            <PriceLevel level={b.priceLevel} />
+          </div>
+
+          <div className="card-tags">
+            {b.tags.map(t => <span key={t} className="tag">{t}</span>)}
+          </div>
+        </div>
+
+        {/* Acciones verticales — botón guardar siempre visible */}
+        <div className="card-actions vertical">
+          <button
+            className={'btn-icon ' + (saved ? 'is-saved' : '')}
+            onClick={e => { e.stopPropagation(); onSave(b.id); }}
+            title={saved ? 'Quitar de guardados' : 'Guardar negocio'}>
+            <I.Bookmark size={14} />
+          </button>
+          <button className="btn-primary" onClick={e => { e.stopPropagation(); onContact(b, 'call'); }}>
+            <I.Phone size={12} /> Llamar
+          </button>
+          {b.whatsapp && (
+            <button className="btn-secondary" onClick={e => { e.stopPropagation(); onContact(b, 'wa'); }}>
+              <I.Message size={12} /> WhatsApp
+            </button>
+          )}
+        </div>
+      </article>
+    );
+  }
+
+  // ── Vista Grid ───────────────────────────────────────────────
+  return (
+    <article className={'card grid ' + (saved ? 'saved' : '')} onClick={() => onOpen(b)}>
+      {/* Thumbnail con overlay de estado */}
+      <div className="card-thumb-wrap">
+        <StripedThumb code={cat.code} label={cat.name} hue={hue} />
+        <div className="thumb-overlay">
+          {b.verified && (
+            <span className="badge-v light"><I.Verified size={10} /> Verificado</span>
+          )}
+          <button
+            className={'btn-save ' + (saved ? 'is-saved' : '')}
+            onClick={e => { e.stopPropagation(); onSave(b.id); }}
+            title={saved ? 'Quitar de guardados' : 'Guardar'}>
+            <I.Bookmark size={13} />
+          </button>
+        </div>
+        <div className="thumb-status">
+          <span className={'status-dot ' + (b.openNow ? 'open' : 'closed')} />
+          <span>{b.openNow ? `Cierra ${b.closesAt}` : 'Cerrado'}</span>
+        </div>
+      </div>
+
+      {/* Cuerpo */}
+      <div className="card-body">
+        <div className="card-row-top">
+          <h3 className="card-name">{b.name}</h3>
+          <PriceLevel level={b.priceLevel} />
+        </div>
+
+        <div className="card-owner">{b.owner} · {b.specialty}</div>
+
+        <div className="card-rating">
+          <Stars rating={b.rating} size={13} compact={true} />
+          <b>{b.rating}</b>
+          <span className="reviews">({b.reviews})</span>
+        </div>
+
+        <div className="card-meta-row">
+          <span className="meta-item"><I.MapPin size={11} />{b.barrio}</span>
+          <span className="sep">·</span>
+          <span className="meta-item">{b.address}</span>
+        </div>
+
+        <div className="card-tags">
+          {b.tags.slice(0, 3).map(t => <span key={t} className="tag">{t}</span>)}
+        </div>
+
+        {/* Acciones: Llamar | ícono WA/Ruta | Ver más */}
+        <div className="card-actions">
+          <button className="btn-primary" onClick={e => { e.stopPropagation(); onContact(b, 'call'); }}>
+            <I.Phone size={12} /> Llamar
+          </button>
+          {b.whatsapp ? (
+            <button className="btn-icon" onClick={e => { e.stopPropagation(); onContact(b, 'wa'); }} title="WhatsApp">
+              <I.Message size={14} />
+            </button>
+          ) : (
+            <button className="btn-icon" onClick={e => { e.stopPropagation(); onContact(b, 'route'); }} title="Cómo llegar">
+              <I.Navigate size={14} />
+            </button>
+          )}
+          <button className="btn-icon" onClick={e => { e.stopPropagation(); onContact(b, 'rate'); }} title="Calificar">
+            <I.Star size={14} />
+          </button>
+          <button className="btn-ghost" onClick={e => { e.stopPropagation(); onOpen(b); }}>
+            Ver más
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+
+// ---------- RatingModal ----------
+function RatingModal({ business, onClose, onSubmit }) {
+  const [hover, setHover]     = React.useState(0);
+  const [rating, setRating]   = React.useState(0);
+  const [author, setAuthor]   = React.useState('');
+  const [comment, setComment] = React.useState('');
+  const [error, setError]     = React.useState('');
+
+  const labels = ['', 'Malo', 'Regular', 'Bueno', 'Muy bueno', 'Excelente'];
+
+  const submit = () => {
+    if (!rating)         return setError('Selecciona una calificación');
+    if (!author.trim())  return setError('Ingresa tu nombre');
+    if (!comment.trim()) return setError('Escribe un comentario');
+    onSubmit({ rating, author: author.trim(), comment: comment.trim() });
+  };
+
+  return (
+    <div className="rm-scrim" onClick={onClose}>
+      <div className="rm-modal" onClick={e => e.stopPropagation()}>
+        <div className="rm-head">
+          <div className="rm-head-info">
+            <p className="rm-eyebrow">Calificar negocio</p>
+            <h3 className="rm-title">{business.name}</h3>
+          </div>
+          <button className="rm-close" onClick={onClose}><I.X size={14}/></button>
+        </div>
+
+        <div className="rm-body">
+          {/* Estrellas interactivas */}
+          <div className="rm-stars-wrap">
+            <div className="rm-stars">
+              {[1,2,3,4,5].map(n => (
+                <button key={n} type="button"
+                  className={'rm-star ' + (n <= (hover || rating) ? 'rm-star--on' : '')}
+                  onMouseEnter={() => setHover(n)}
+                  onMouseLeave={() => setHover(0)}
+                  onClick={() => { setRating(n); setError(''); }}>
+                  ★
+                </button>
+              ))}
+            </div>
+            <span className="rm-star-label">
+              {labels[hover || rating] || 'Toca para calificar'}
+            </span>
+          </div>
+
+          {/* Nombre */}
+          <div className="rm-field">
+            <label className="rm-label">Tu nombre</label>
+            <input className="rm-input" type="text"
+              placeholder="Ej: María G."
+              value={author} onChange={e => { setAuthor(e.target.value); setError(''); }} />
+          </div>
+
+          {/* Comentario */}
+          <div className="rm-field">
+            <label className="rm-label">
+              Comentario
+              <span className="rm-char">{comment.length}/200</span>
+            </label>
+            <textarea className="rm-textarea" rows={4} maxLength={200}
+              placeholder="¿Cómo fue tu experiencia? ¿Qué destacarías?"
+              value={comment} onChange={e => { setComment(e.target.value); setError(''); }} />
+          </div>
+
+          {error && <p className="rm-error"><I.X size={11}/> {error}</p>}
+        </div>
+
+        <div className="rm-footer">
+          <button className="rm-btn-cancel" onClick={onClose}>Cancelar</button>
+          <button className="rm-btn-submit" onClick={submit}>
+            <I.Check size={14}/> Publicar reseña
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- Detail Panel ----------
+function DetailPanel({ business, onClose, onContact, saved, onSave, onRate }) {
+  const cat = business && CATEGORIES.find(c => c.id === business.cat);
+  const hueMap = { restaurantes: 30, tiendas: 220, ropa: 320, salud: 165, talleres: 50, belleza: 340, panaderia: 60, electronicos: 210, educacion: 250, transporte: 25, artesania: 290, frutas: 130, tecnologia: 230, eventos: 280 };
+  return (
+    <aside className={'detail-panel ' + (business ? 'is-open' : '')}>
+      {business && (
+        <div className="detail-inner">
+          <div className="detail-head">
+            <StripedThumb code={cat.code} label={cat.name} hue={hueMap[business.cat]} h={180} />
+            <button className="detail-close" onClick={onClose}><I.X size={14} /></button>
+          </div>
+          <div className="detail-body">
+            <div className="detail-status">
+              <span className={'status-dot ' + (business.openNow ? 'open' : 'closed')} />
+              <span>{business.openNow ? `Abierto ahora · cierra ${business.closesAt}` : 'Cerrado'}</span>
+              {business.verified && <span className="badge-v"><I.Verified size={10} /> Verificado</span>}
+            </div>
+            <h2 className="detail-name">{business.name}</h2>
+            <div className="detail-sub">{business.owner} · Desde {business.since}</div>
+            <div className="detail-rating">
+              <Stars rating={business.rating} size={15} compact={true} />
+              <b>{business.rating}</b>
+              <span className="sep">·</span>
+              <span>{business.reviews} reseñas</span>
+              <span className="sep">·</span>
+              <PriceLevel level={business.priceLevel} />
+            </div>
+            <p className="detail-desc">{business.desc}</p>
+
+            <div className="detail-actions">
+              <button className="btn-primary big" onClick={() => onContact(business, 'call')}>
+                <I.Phone size={14} /> Llamar {business.phone}
+              </button>
+              {business.whatsapp && (
+                <button className="btn-secondary big" onClick={() => onContact(business, 'wa')}>
+                  <I.Message size={14} /> WhatsApp
+                </button>
+              )}
+              <button className="btn-secondary big" onClick={() => onRate(business)} title="Calificar">
+                <I.Star size={14} /> Calificar
+              </button>
+              <button className="btn-icon big" onClick={() => onSave(business.id)} title="Guardar">
+                <I.Bookmark size={14} />
+              </button>
+            </div>
+
+            <div className="detail-grid">
+              <div className="info-block">
+                <div className="info-label"><I.MapPin size={11} /> Dirección</div>
+                <div className="info-value">{business.address}</div>
+                <div className="info-sub">{business.barrio}</div>
+              </div>
+              <div className="info-block">
+                <div className="info-label"><I.Clock size={11} /> Horario</div>
+                <div className="info-value">{business.hours}</div>
+                <div className="info-sub">{business.openNow ? 'Abierto ahora' : 'Cerrado ahora'}</div>
+              </div>
+              <div className="info-block">
+                <div className="info-label"><I.Verified size={11} /> Especialidad</div>
+                <div className="info-value">{business.specialty}</div>
+                <div className="info-sub">{cat.name}</div>
+              </div>
+              <div className="info-block">
+                <div className="info-label"><I.Wallet size={11} /> Pagos</div>
+                <div className="info-value">{business.payments.join(' · ')}</div>
+                <div className="info-sub">Nivel de precio {business.priceLevel}/3</div>
+              </div>
+            </div>
+
+            <div className="detail-section">
+              <div className="detail-section-title">Etiquetas</div>
+              <div className="card-tags">
+                {business.tags.map(t => <span key={t} className="tag">{t}</span>)}
+              </div>
+            </div>
+
+            <div className="detail-section">
+              <div className="detail-section-title">Ubicación</div>
+              <MiniMap business={business} />
+            </div>
+
+            <div className="detail-section">
+              <div className="detail-section-title">Reseñas recientes</div>
+              <FakeReviews business={business} onRate={onRate} />
+            </div>
+          </div>
+        </div>
+      )}
+    </aside>
+  );
+}
+
+function MiniMap({ business }) {
+  // Stylized grid — deliberately schematic
+  return (
+    <div className="mini-map" role="img" aria-label="Mapa esquemático del barrio">
+      <svg viewBox="0 0 320 180" width="100%" height="180" preserveAspectRatio="none">
+        <defs>
+          <pattern id="map-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <rect width="20" height="20" fill="var(--surface-2)" />
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--line)" strokeWidth="0.6" />
+          </pattern>
+        </defs>
+        <rect width="320" height="180" fill="url(#map-grid)" />
+        {/* Streets */}
+        <rect x="0" y="80" width="320" height="14" fill="var(--surface)" stroke="var(--line)" strokeWidth="0.5" />
+        <rect x="140" y="0" width="14" height="180" fill="var(--surface)" stroke="var(--line)" strokeWidth="0.5" />
+        <rect x="0" y="140" width="320" height="8" fill="var(--surface)" stroke="var(--line)" strokeWidth="0.5" />
+        {/* Pin */}
+        <g transform="translate(150 80)">
+          <circle r="22" fill="var(--accent)" opacity="0.15" />
+          <circle r="12" fill="var(--accent)" opacity="0.3" />
+          <circle r="6" fill="var(--accent)" />
+          <circle r="2" fill="white" />
+        </g>
+        <text x="160" y="120" fontSize="9" fill="var(--ink-3)" fontFamily="JetBrains Mono">{business.barrio.toUpperCase()}</text>
+      </svg>
+      <div className="map-meta">
+        <span><I.Navigate size={11} /> ~ 6 min a pie · 2 min en bici</span>
+        <button className="link">Cómo llegar →</button>
+      </div>
+    </div>
+  );
+}
+
+function FakeReviews({ business, onRate }) {
+  const DEFAULT_REVIEWS = business.id <= 22 ? [
+    { author: 'Marcela R.', date: 'hace 2 días',    rating: 5, text: 'Excelente atención y precios justos. Llevo años viniendo y nunca decepciona.' },
+    { author: 'Jhon S.',    date: 'hace 1 semana',  rating: 4, text: 'Buen servicio, el dueño es muy amable y honesto con los precios.' },
+  ] : [];
+
+  const allReviews = [...(business.userReviews || []), ...DEFAULT_REVIEWS];
+
+  return (
+    <div className="reviews-list">
+      {allReviews.length === 0 && (
+        <p className="reviews-empty">Aún no hay reseñas. ¡Sé el primero en calificar!</p>
+      )}
+      {allReviews.map((r, i) => (
+        <div key={i} className="review">
+          <div className="review-head">
+            <div className="review-avatar">{r.author.split(' ').map(s => s[0]).join('')}</div>
+            <div className="review-meta">
+              <b>{r.author}</b>
+              <span>{r.date || 'Ahora'}</span>
+            </div>
+            <Stars rating={r.rating} compact={true} size={12} />
+          </div>
+          <p>{r.text}</p>
+        </div>
+      ))}
+      <button className="link" onClick={() => onRate(business)}>
+        + Calificar este negocio
+      </button>
+    </div>
+  );
+}
+
+// ---------- Map View ----------
+function MapView({ items, onOpen, hoveredId, setHoveredId }) {
+  // Pseudo-random but stable positions
+  const pos = id => {
+    const x = ((id * 73) % 100);
+    const y = ((id * 41) % 100);
+    return { x: 8 + (x * 0.84), y: 8 + (y * 0.84) };
+  };
+  return (
+    <div className="map-view">
+      <div className="map-canvas">
+        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <pattern id="mv-grid" width="6" height="6" patternUnits="userSpaceOnUse">
+              <rect width="6" height="6" fill="var(--surface-2)" />
+              <path d="M 6 0 L 0 0 0 6" fill="none" stroke="var(--line)" strokeWidth="0.15" />
+            </pattern>
+          </defs>
+          <rect width="100" height="100" fill="url(#mv-grid)" />
+          <rect x="0" y="46" width="100" height="4" fill="var(--surface)" />
+          <rect x="48" y="0" width="4" height="100" fill="var(--surface)" />
+          <rect x="0" y="78" width="100" height="2.5" fill="var(--surface)" />
+          <rect x="22" y="0" width="2" height="100" fill="var(--surface)" />
+        </svg>
+        {items.map(b => {
+          const p = pos(b.id);
+          const hot = hoveredId === b.id;
+          return (
+            <button key={b.id}
+              className={'map-pin ' + (hot ? 'hot' : '')}
+              style={{ left: p.x + '%', top: p.y + '%' }}
+              onMouseEnter={() => setHoveredId(b.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              onClick={() => onOpen(b)}>
+              <span className="map-pin-dot" />
+              <span className="map-pin-label">{b.name}</span>
+            </button>
+          );
+        })}
+      </div>
+      <div className="map-side">
+        {items.map(b => (
+          <button key={b.id}
+            className={'map-row ' + (hoveredId === b.id ? 'hot' : '')}
+            onMouseEnter={() => setHoveredId(b.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => onOpen(b)}>
+            <div className="map-row-thumb"><span className="cat-code">{CATEGORIES.find(c => c.id === b.cat).code}</span></div>
+            <div className="map-row-body">
+              <b>{b.name}</b>
+              <span>{b.barrio} · ⭐ {b.rating} ({b.reviews})</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------- Empty State ----------
+function EmptyState({ onReset }) {
+  return (
+    <div className="empty">
+      <div className="empty-mark">
+        <I.Search size={20} />
+      </div>
+      <h3>Sin resultados</h3>
+      <p>No encontramos negocios con esos filtros. Prueba cambiando la búsqueda o el barrio.</p>
+      <button className="btn-primary" onClick={onReset}>
+        <I.X size={13} /> Limpiar filtros
+      </button>
+    </div>
+  );
+}
+
+// ---------- Toast ----------
+function Toast({ msg }) {
+  return <div className={'toast ' + (msg ? 'show' : '')}>{msg}</div>;
+}
+
+// ---------- Spotlight (featured strip on home) ----------
+function Spotlight({ items, onOpen }) {
+  if (!items.length) return null;
+  return (
+    <div className="spotlight">
+      <div className="spotlight-head">
+        <span className="kicker">Destacados de la semana</span>
+        <span className="kicker-sub">Negocios recomendados por la comunidad</span>
+      </div>
+      <div className="spotlight-grid">
+        {items.map(b => {
+          const cat = CATEGORIES.find(c => c.id === b.cat);
+          return (
+            <button key={b.id} className="spot-card" onClick={() => onOpen(b)}>
+              <div className="spot-tag">{cat.code} · {cat.name.toUpperCase()}</div>
+              <h3>{b.name}</h3>
+              <p>{b.desc}</p>
+              <div className="spot-meta">
+                <Stars rating={b.rating} /> <b>{b.rating}</b>
+                <span className="sep">·</span>
+                <span>{b.barrio}</span>
+                <span className="arrow">→</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+// ---------- RegisterPage ----------
+function RegisterPage({ onBack, showToast, onRegister, barrios }) {
+  const PAYMENT_OPTIONS = [
+    { id: 'efectivo',      label: 'Efectivo',      icon: '💵' },
+    { id: 'nequi',         label: 'Nequi',          icon: '📱' },
+    { id: 'daviplata',     label: 'Daviplata',      icon: '📲' },
+    { id: 'tarjeta',       label: 'Tarjeta',        icon: '💳' },
+    { id: 'transferencia', label: 'Transferencia',  icon: '🏦' },
+  ];
+  const DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const HOUR_OPTIONS = ['5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00',
+    '13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00'];
+
+  const [step, setStep]       = React.useState(1);
+  const [errors, setErrors]   = React.useState({});
+  const [submitted, setSubmitted] = React.useState(false);
+  const [form, setForm]       = React.useState({
+    name: '', owner: '', catId: '', specialty: '',
+    barrio: '', address: '',
+    phone: '', whatsapp: false,
+    days: [], openFrom: '8:00', openTo: '18:00',
+    desc: '', payments: [],
+  });
+
+  const set = (k, v) => {
+    setForm(f => ({ ...f, [k]: v }));
+    setErrors(e => ({ ...e, [k]: undefined }));
+  };
+  const toggleArr = (k, v) => setForm(f => ({
+    ...f, [k]: f[k].includes(v) ? f[k].filter(x => x !== v) : [...f[k], v]
+  }));
+
+  const validate = s => {
+    const e = {};
+    if (s === 1) {
+      if (!form.name.trim())  e.name  = 'Ingresa el nombre del negocio';
+      if (!form.owner.trim()) e.owner = 'Ingresa el nombre del propietario';
+      if (!form.catId)        e.catId = 'Selecciona una categoría';
+    }
+    if (s === 2) {
+      if (!form.barrio)         e.barrio  = 'Selecciona un barrio';
+      if (!form.address.trim()) e.address = 'Ingresa la dirección';
+      if (!form.phone.trim())   e.phone   = 'Ingresa un teléfono de contacto';
+    }
+    if (s === 3) {
+      if (!form.desc.trim())     e.desc     = 'Agrega una descripción';
+      if (!form.payments.length) e.payments = 'Selecciona al menos un método';
+    }
+    return e;
+  };
+
+  const next = () => {
+    const e = validate(step);
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setStep(s => s + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const prev = () => { setStep(s => s - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const submit = () => {
+    const e = validate(3);
+    if (Object.keys(e).length) { setErrors(e); return; }
+    // Construir objeto negocio compatible con el directorio
+    const cat = CATEGORIES.find(c => c.id === form.catId);
+    const newBusiness = {
+      id: Date.now(),
+      cat: form.catId,
+      name: form.name,
+      owner: form.owner,
+      desc: form.desc,
+      rating: 0,
+      reviews: 0,
+      address: form.address,
+      barrio: form.barrio,
+      phone: form.phone,
+      whatsapp: form.whatsapp,
+      hours: form.days.length
+        ? `${form.days.join('–')} · ${form.openFrom}–${form.openTo}`
+        : `${form.openFrom}–${form.openTo}`,
+      openNow: false,
+      closesAt: form.openTo,
+      specialty: form.specialty || cat?.name || '',
+      tags: [],
+      payments: form.payments,
+      verified: false,
+      since: new Date().getFullYear().toString(),
+      priceLevel: 1,
+    };
+    setSubmitted(true);
+    onRegister(newBusiness);
+  };
+
+  const STEPS = [
+    { num: 1, label: 'Tu negocio',  desc: 'Información básica' },
+    { num: 2, label: 'Ubicación',   desc: 'Dónde encontrarte'  },
+    { num: 3, label: 'Detalles',    desc: 'Último paso'        },
+  ];
+
+  const selectedCat = CATEGORIES.find(c => c.id === form.catId);
+
+  // ── Pantalla de éxito ──────────────────────────────────────
+  if (submitted) {
+    return (
+      <div className="app">
+        <header className="topbar">
+          <div className="brand">
+            <div className="brand-mark">ED</div>
+            <div className="brand-name">
+              Econo<span className="brand-accent">Directorio</span>
+              <span className="brand-meta">DIR · v2.0</span>
+            </div>
+          </div>
+        </header>
+        <div className="rp-success">
+          <div className="rp-success-ring">
+            <div className="rp-success-icon"><I.Check size={32} /></div>
+          </div>
+          <div className="rp-success-body">
+            <p className="rp-success-eyebrow">Registro completado</p>
+            <h2 className="rp-success-title">{form.name}</h2>
+            <p className="rp-success-sub">
+              Revisaremos tu solicitud y en menos de 48 horas
+              tu negocio estará visible en el directorio.
+            </p>
+            <div className="rp-success-card">
+              <div className="rp-success-row"><I.MapPin size={14}/><span>{form.barrio} · {form.address}</span></div>
+              <div className="rp-success-row"><I.Phone  size={14}/><span>{form.phone}</span></div>
+              <div className="rp-success-row"><I.Clock  size={14}/><span>{form.openFrom} – {form.openTo}</span></div>
+            </div>
+            <button className="rp-btn-primary" onClick={onBack}>
+              <I.ArrowL size={15}/> Volver al directorio
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="app rp-app">
+      {/* Header compacto */}
+      <header className="topbar">
+        <div className="brand">
+          <div className="brand-mark">ED</div>
+          <div className="brand-name">
+            Econo<span className="brand-accent">Directorio</span>
+            <span className="brand-meta">DIR · v2.0</span>
+          </div>
+        </div>
+        <div style={{flex:1}} />
+        <div className="top-actions">
+          <button className="btn-ghost" onClick={onBack}>
+            <I.ArrowL size={14}/> Volver
+          </button>
+        </div>
+      </header>
+
+      {/* Layout de dos columnas */}
+      <div className="rp-layout">
+
+        {/* ── Columna izquierda — Hero + progreso ── */}
+        <aside className="rp-sidebar">
+          <div className="rp-sidebar-inner">
+            <div className="rp-sidebar-top">
+              <p className="rp-eyebrow">Economía popular</p>
+              <h1 className="rp-hero-title">Registra tu<br/><em>negocio</em></h1>
+              <p className="rp-hero-sub">
+                Únete a más de 248 negocios que ya hacen parte del directorio de tu comunidad.
+              </p>
+            </div>
+
+            {/* Steps verticales */}
+            <nav className="rp-steps">
+              {STEPS.map((s, i) => {
+                const state = s.num < step ? 'done' : s.num === step ? 'active' : 'pending';
+                return (
+                  <div key={s.num} className={'rp-step rp-step--' + state}>
+                    <div className="rp-step-track">
+                      <div className="rp-step-dot">
+                        {state === 'done' ? <I.Check size={12}/> : s.num}
+                      </div>
+                      {i < STEPS.length - 1 && <div className="rp-step-connector"/>}
+                    </div>
+                    <div className="rp-step-text">
+                      <span className="rp-step-label">{s.label}</span>
+                      <span className="rp-step-desc">{s.desc}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </nav>
+
+            {/* Preview card si hay datos */}
+            {(form.name || form.catId) && (
+              <div className="rp-preview">
+                <p className="rp-preview-label">Vista previa</p>
+                <div className="rp-preview-card">
+                  {selectedCat && (
+                    <div className="rp-preview-cat">
+                      <span className="cat-code">{selectedCat.code}</span>
+                      <span>{selectedCat.name}</span>
+                    </div>
+                  )}
+                  <div className="rp-preview-name">{form.name || 'Nombre del negocio'}</div>
+                  {form.owner && <div className="rp-preview-owner">{form.owner}</div>}
+                  {form.barrio && (
+                    <div className="rp-preview-meta">
+                      <I.MapPin size={11}/> {form.barrio}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </aside>
+
+        {/* ── Columna derecha — Formulario ── */}
+        <main className="rp-main">
+          <div className="rp-form-wrap">
+
+            {/* Step 1 */}
+            {step === 1 && (
+              <div className="rp-step-content">
+                <div className="rp-form-header">
+                  <span className="rp-form-step-num">01</span>
+                  <h2 className="rp-form-title">Tu negocio</h2>
+                  <p className="rp-form-sub">Cuéntanos quién eres y a qué te dedicas.</p>
+                </div>
+
+                <div className="rp-fields">
+                  <div className="rp-field">
+                    <label className="rp-label">
+                      Nombre del negocio <span className="rp-req">*</span>
+                    </label>
+                    <input className={'rp-input' + (errors.name ? ' rp-input--err' : '')}
+                      type="text" placeholder="Ej: Tienda El Progreso"
+                      value={form.name} onChange={e => set('name', e.target.value)} autoFocus />
+                    {errors.name && <p className="rp-error"><I.X size={11}/> {errors.name}</p>}
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">
+                      Nombre del propietario <span className="rp-req">*</span>
+                    </label>
+                    <input className={'rp-input' + (errors.owner ? ' rp-input--err' : '')}
+                      type="text" placeholder="Ej: María González"
+                      value={form.owner} onChange={e => set('owner', e.target.value)} />
+                    {errors.owner && <p className="rp-error"><I.X size={11}/> {errors.owner}</p>}
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">
+                      Categoría <span className="rp-req">*</span>
+                    </label>
+                    <div className="rp-cat-grid">
+                      {CATEGORIES.map(c => (
+                        <button key={c.id} type="button"
+                          className={'rp-cat-chip' + (form.catId === c.id ? ' rp-cat-chip--on' : '')}
+                          onClick={() => set('catId', c.id)}>
+                          <span className={'cat-code' + (form.catId === c.id ? '' : ' dim')}>{c.code}</span>
+                          <span>{c.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                    {errors.catId && <p className="rp-error"><I.X size={11}/> {errors.catId}</p>}
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">Especialidad principal</label>
+                    <input className="rp-input"
+                      type="text" placeholder="Ej: Menú del día, Reparación de motos…"
+                      value={form.specialty} onChange={e => set('specialty', e.target.value)} />
+                    <p className="rp-hint">Lo que mejor describes tu negocio en pocas palabras.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2 */}
+            {step === 2 && (
+              <div className="rp-step-content">
+                <div className="rp-form-header">
+                  <span className="rp-form-step-num">02</span>
+                  <h2 className="rp-form-title">Ubicación y contacto</h2>
+                  <p className="rp-form-sub">¿Dónde y cómo pueden encontrarte tus clientes?</p>
+                </div>
+
+                <div className="rp-fields">
+                  <div className="rp-field-row">
+                    <div className="rp-field">
+                      <label className="rp-label">Barrio <span className="rp-req">*</span></label>
+                      <div className={'rp-select-wrap' + (errors.barrio ? ' rp-input--err' : '')}>
+                        <I.MapPin size={14} />
+                        <select className="rp-select"
+                          value={form.barrio} onChange={e => set('barrio', e.target.value)}>
+                          <option value="">Selecciona…</option>
+                          {barrios.map(b => <option key={b} value={b}>{b}</option>)}
+                        </select>
+                        <I.ChevronD size={13} />
+                      </div>
+                      {errors.barrio && <p className="rp-error"><I.X size={11}/> {errors.barrio}</p>}
+                    </div>
+
+                    <div className="rp-field">
+                      <label className="rp-label">Dirección <span className="rp-req">*</span></label>
+                      <div className={'rp-input-icon-wrap' + (errors.address ? ' rp-input--err' : '')}>
+                        <I.Navigate size={14}/>
+                        <input className="rp-input-icon"
+                          type="text" placeholder="Calle 12 #34-56"
+                          value={form.address} onChange={e => set('address', e.target.value)} />
+                      </div>
+                      {errors.address && <p className="rp-error"><I.X size={11}/> {errors.address}</p>}
+                    </div>
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">Teléfono <span className="rp-req">*</span></label>
+                    <div className={'rp-input-icon-wrap' + (errors.phone ? ' rp-input--err' : '')}>
+                      <I.Phone size={14}/>
+                      <input className="rp-input-icon"
+                        type="tel" placeholder="311 234 5678"
+                        value={form.phone} onChange={e => set('phone', e.target.value)} />
+                    </div>
+                    {errors.phone && <p className="rp-error"><I.X size={11}/> {errors.phone}</p>}
+                    <label className="rp-checkbox-label">
+                      <input type="checkbox" className="rp-checkbox"
+                        checked={form.whatsapp} onChange={e => set('whatsapp', e.target.checked)}/>
+                      <span className="rp-checkbox-box">{form.whatsapp && <I.Check size={10}/>}</span>
+                      Este número tiene WhatsApp
+                    </label>
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">Días de atención</label>
+                    <div className="rp-days">
+                      {DAYS.map(d => (
+                        <button key={d} type="button"
+                          className={'rp-day' + (form.days.includes(d) ? ' rp-day--on' : '')}
+                          onClick={() => toggleArr('days', d)}>{d}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">Horario de atención</label>
+                    <div className="rp-hours-row">
+                      <div className="rp-hours-block">
+                        <span className="rp-hours-lbl">Desde</span>
+                        <div className="rp-select-wrap rp-select-sm">
+                          <select className="rp-select"
+                            value={form.openFrom} onChange={e => set('openFrom', e.target.value)}>
+                            {HOUR_OPTIONS.map(h => <option key={h} value={h}>{h}</option>)}
+                          </select>
+                          <I.ChevronD size={12}/>
+                        </div>
+                      </div>
+                      <div className="rp-hours-dash">—</div>
+                      <div className="rp-hours-block">
+                        <span className="rp-hours-lbl">Hasta</span>
+                        <div className="rp-select-wrap rp-select-sm">
+                          <select className="rp-select"
+                            value={form.openTo} onChange={e => set('openTo', e.target.value)}>
+                            {HOUR_OPTIONS.map(h => <option key={h} value={h}>{h}</option>)}
+                          </select>
+                          <I.ChevronD size={12}/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3 */}
+            {step === 3 && (
+              <div className="rp-step-content">
+                <div className="rp-form-header">
+                  <span className="rp-form-step-num">03</span>
+                  <h2 className="rp-form-title">Detalles finales</h2>
+                  <p className="rp-form-sub">Ayuda a tus clientes a conocerte mejor.</p>
+                </div>
+
+                <div className="rp-fields">
+                  <div className="rp-field">
+                    <label className="rp-label">
+                      Descripción del negocio <span className="rp-req">*</span>
+                      <span className="rp-char-count">{form.desc.length}/200</span>
+                    </label>
+                    <textarea className={'rp-textarea' + (errors.desc ? ' rp-input--err' : '')}
+                      placeholder="Describe qué ofreces, qué te hace especial, por qué deben visitarte…"
+                      maxLength={200} rows={5}
+                      value={form.desc} onChange={e => set('desc', e.target.value)} />
+                    {errors.desc && <p className="rp-error"><I.X size={11}/> {errors.desc}</p>}
+                  </div>
+
+                  <div className="rp-field">
+                    <label className="rp-label">
+                      Métodos de pago <span className="rp-req">*</span>
+                    </label>
+                    <div className="rp-payment-grid">
+                      {PAYMENT_OPTIONS.map(p => {
+                        const on = form.payments.includes(p.id);
+                        return (
+                          <button key={p.id} type="button"
+                            className={'rp-payment-chip' + (on ? ' rp-payment-chip--on' : '')}
+                            onClick={() => toggleArr('payments', p.id)}>
+                            <span className="rp-payment-icon">{p.icon}</span>
+                            <span className="rp-payment-label">{p.label}</span>
+                            {on && <span className="rp-payment-check"><I.Check size={11}/></span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {errors.payments && <p className="rp-error"><I.X size={11}/> {errors.payments}</p>}
+                  </div>
+
+                  {/* Resumen final */}
+                  <div className="rp-summary">
+                    <p className="rp-summary-title">Confirma tu registro</p>
+                    <div className="rp-summary-grid">
+                      <div className="rp-summary-item">
+                        <span className="rp-summary-key">Negocio</span>
+                        <span className="rp-summary-val">{form.name}</span>
+                      </div>
+                      <div className="rp-summary-item">
+                        <span className="rp-summary-key">Propietario</span>
+                        <span className="rp-summary-val">{form.owner}</span>
+                      </div>
+                      <div className="rp-summary-item">
+                        <span className="rp-summary-key">Categoría</span>
+                        <span className="rp-summary-val">{selectedCat?.name || '—'}</span>
+                      </div>
+                      <div className="rp-summary-item">
+                        <span className="rp-summary-key">Ubicación</span>
+                        <span className="rp-summary-val">{form.barrio} · {form.address}</span>
+                      </div>
+                      <div className="rp-summary-item">
+                        <span className="rp-summary-key">Teléfono</span>
+                        <span className="rp-summary-val">{form.phone}{form.whatsapp ? ' · WhatsApp' : ''}</span>
+                      </div>
+                      <div className="rp-summary-item">
+                        <span className="rp-summary-key">Horario</span>
+                        <span className="rp-summary-val">{form.openFrom} – {form.openTo}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navegación */}
+            <div className="rp-nav">
+              <div className="rp-nav-left">
+                {step > 1 && (
+                  <button className="rp-btn-back" onClick={prev}>
+                    <I.ArrowL size={14}/> Anterior
+                  </button>
+                )}
+              </div>
+              <div className="rp-nav-right">
+                <span className="rp-nav-progress">{step} de 3</span>
+                {step < 3
+                  ? <button className="rp-btn-primary" onClick={next}>
+                      Siguiente <I.ArrowR size={14}/>
+                    </button>
+                  : <button className="rp-btn-primary rp-btn-submit" onClick={submit}>
+                      <I.Check size={14}/> Registrar negocio
+                    </button>
+                }
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+
+// ---------- StatsPage ----------
+function StatsPage({ businesses, barrios, onBack }) {
+  const [activeBarrio, setActiveBarrio] = React.useState('todos');
+
+  // ── Cálculos generales ──────────────────────────────────────
+  const total      = businesses.length;
+  const verified   = businesses.filter(b => b.verified).length;
+  const openNow    = businesses.filter(b => b.openNow).length;
+  const withWA     = businesses.filter(b => b.whatsapp).length;
+  const avgRating  = total ? (businesses.reduce((s, b) => s + b.rating, 0) / total).toFixed(1) : 0;
+  const totalReviews = businesses.reduce((s, b) => s + b.reviews, 0);
+
+  // ── Por barrio ──────────────────────────────────────────────
+  const byBarrio = barrios.map(br => {
+    const biz = businesses.filter(b => b.barrio === br);
+    const avg = biz.length ? (biz.reduce((s, b) => s + b.rating, 0) / biz.length).toFixed(1) : '—';
+    const topCat = (() => {
+      const counts = {};
+      biz.forEach(b => { counts[b.cat] = (counts[b.cat] || 0) + 1; });
+      const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+      return top ? CATEGORIES.find(c => c.id === top[0])?.name : '—';
+    })();
+    return { name: br, count: biz.length, avg, topCat, open: biz.filter(b => b.openNow).length };
+  }).sort((a, b) => b.count - a.count);
+
+  const maxCount = Math.max(...byBarrio.map(b => b.count), 1);
+
+  // ── Por categoría ───────────────────────────────────────────
+  const byCat = CATEGORIES.map(cat => {
+    const biz = businesses.filter(b => b.cat === cat.id);
+    const avg = biz.length ? (biz.reduce((s, b) => s + b.rating, 0) / biz.length).toFixed(1) : '—';
+    return { ...cat, count: biz.length, avg };
+  }).sort((a, b) => b.count - a.count);
+
+  const maxCatCount = Math.max(...byCat.map(c => c.count), 1);
+
+  // ── Métodos de pago ─────────────────────────────────────────
+  const paymentCounts = {};
+  businesses.forEach(b => b.payments.forEach(p => {
+    paymentCounts[p] = (paymentCounts[p] || 0) + 1;
+  }));
+  const payments = Object.entries(paymentCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([name, count]) => ({ name, count, pct: Math.round(count / total * 100) }));
+
+  // ── Filtro de barrio ────────────────────────────────────────
+  const filtered = activeBarrio === 'todos'
+    ? businesses
+    : businesses.filter(b => b.barrio === activeBarrio);
+
+  const filteredCats = CATEGORIES.map(cat => ({
+    ...cat,
+    count: filtered.filter(b => b.cat === cat.id).length,
+  })).filter(c => c.count > 0).sort((a, b) => b.count - a.count);
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div className="brand">
+          <div className="brand-mark">ED</div>
+          <div className="brand-name">
+            Econo<span className="brand-accent">Directorio</span>
+            <span className="brand-meta">DIR · v2.0</span>
+          </div>
+        </div>
+        <div className="st-topbar-title">
+          <I.Sliders size={14} />
+          <span>Panel de estadísticas</span>
+        </div>
+        <div className="top-actions">
+          <button className="btn-ghost" onClick={onBack}>
+            <I.ArrowL size={14} /> Volver
+          </button>
+        </div>
+      </header>
+
+      <div className="st-page">
+
+        {/* ── KPIs generales ── */}
+        <div className="st-kpis">
+          <div className="st-kpi">
+            <span className="st-kpi-val">{total}</span>
+            <span className="st-kpi-label">Negocios totales</span>
+          </div>
+          <div className="st-kpi">
+            <span className="st-kpi-val st-kpi-accent">{avgRating}</span>
+            <span className="st-kpi-label">Rating promedio</span>
+          </div>
+          <div className="st-kpi">
+            <span className="st-kpi-val">{openNow}</span>
+            <span className="st-kpi-label">Abiertos ahora</span>
+          </div>
+          <div className="st-kpi">
+            <span className="st-kpi-val">{verified}</span>
+            <span className="st-kpi-label">Verificados</span>
+          </div>
+          <div className="st-kpi">
+            <span className="st-kpi-val">{withWA}</span>
+            <span className="st-kpi-label">Con WhatsApp</span>
+          </div>
+          <div className="st-kpi">
+            <span className="st-kpi-val">{totalReviews.toLocaleString('es-CO')}</span>
+            <span className="st-kpi-label">Total reseñas</span>
+          </div>
+        </div>
+
+        <div className="st-grid">
+
+          {/* ── Negocios por barrio ── */}
+          <div className="st-card st-card--wide">
+            <div className="st-card-head">
+              <h2 className="st-card-title">Negocios por barrio</h2>
+              <span className="st-card-sub">{barrios.length} zonas registradas</span>
+            </div>
+            <div className="st-bars">
+              {byBarrio.map(br => (
+                <div key={br.name} className={'st-bar-row ' + (activeBarrio === br.name ? 'st-bar-row--active' : '')}
+                  onClick={() => setActiveBarrio(activeBarrio === br.name ? 'todos' : br.name)}
+                  title="Clic para filtrar">
+                  <div className="st-bar-label">
+                    <span className="st-bar-name">{br.name}</span>
+                    <span className="st-bar-meta">{br.topCat}</span>
+                  </div>
+                  <div className="st-bar-track">
+                    <div className="st-bar-fill" style={{ width: `${(br.count / maxCount) * 100}%` }} />
+                  </div>
+                  <div className="st-bar-right">
+                    <span className="st-bar-count">{br.count}</span>
+                    <span className="st-bar-rating">★ {br.avg}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {activeBarrio !== 'todos' && (
+              <button className="st-clear-filter" onClick={() => setActiveBarrio('todos')}>
+                <I.X size={11} /> Mostrando {activeBarrio} — quitar filtro
+              </button>
+            )}
+          </div>
+
+          {/* ── Distribución por categoría ── */}
+          <div className="st-card">
+            <div className="st-card-head">
+              <h2 className="st-card-title">
+                {activeBarrio === 'todos' ? 'Por categoría' : `Categorías · ${activeBarrio}`}
+              </h2>
+              <span className="st-card-sub">{filtered.length} negocios</span>
+            </div>
+            <div className="st-cat-list">
+              {(activeBarrio === 'todos' ? byCat : filteredCats).map(cat => (
+                <div key={cat.id} className="st-cat-row">
+                  <span className="cat-code">{cat.code}</span>
+                  <span className="st-cat-name">{cat.name}</span>
+                  <div className="st-cat-bar-track">
+                    <div className="st-cat-bar-fill"
+                      style={{ width: `${(cat.count / (activeBarrio === 'todos' ? maxCatCount : filteredCats[0]?.count || 1)) * 100}%` }} />
+                  </div>
+                  <span className="st-cat-count">{cat.count}</span>
+                  {activeBarrio === 'todos' && <span className="st-cat-rating">★ {cat.avg}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Métodos de pago ── */}
+          <div className="st-card">
+            <div className="st-card-head">
+              <h2 className="st-card-title">Métodos de pago</h2>
+              <span className="st-card-sub">Adopción en el directorio</span>
+            </div>
+            <div className="st-payments">
+              {payments.map(p => (
+                <div key={p.name} className="st-payment-row">
+                  <span className="st-payment-name">{p.name}</span>
+                  <div className="st-payment-track">
+                    <div className="st-payment-fill" style={{ width: `${p.pct}%` }} />
+                  </div>
+                  <span className="st-payment-pct">{p.pct}%</span>
+                  <span className="st-payment-count">{p.count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Ranking top negocios ── */}
+          <div className="st-card">
+            <div className="st-card-head">
+              <h2 className="st-card-title">Top 5 · Mejor calificados</h2>
+              <span className="st-card-sub">
+                {activeBarrio === 'todos' ? 'Todo el directorio' : activeBarrio}
+              </span>
+            </div>
+            <div className="st-ranking">
+              {filtered
+                .filter(b => b.reviews > 0)
+                .sort((a, b) => b.rating - a.rating || b.reviews - a.reviews)
+                .slice(0, 5)
+                .map((b, i) => {
+                  const cat = CATEGORIES.find(c => c.id === b.cat);
+                  return (
+                    <div key={b.id} className="st-rank-row">
+                      <span className={'st-rank-num ' + (i === 0 ? 'st-rank-num--gold' : i === 1 ? 'st-rank-num--silver' : i === 2 ? 'st-rank-num--bronze' : '')}>
+                        {i + 1}
+                      </span>
+                      <div className="st-rank-body">
+                        <span className="st-rank-name">{b.name}</span>
+                        <span className="st-rank-meta">
+                          <span className="cat-code dim">{cat?.code}</span>
+                          {b.barrio}
+                        </span>
+                      </div>
+                      <div className="st-rank-right">
+                        <span className="st-rank-rating">★ {b.rating}</span>
+                        <span className="st-rank-reviews">{b.reviews} reseñas</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              {filtered.filter(b => b.reviews > 0).length === 0 && (
+                <p className="st-empty">Sin negocios con reseñas en esta zona.</p>
+              )}
+            </div>
+          </div>
+
+          {/* ── Cobertura ── */}
+          <div className="st-card st-card--wide">
+            <div className="st-card-head">
+              <h2 className="st-card-title">Cobertura de servicios</h2>
+              <span className="st-card-sub">
+                {activeBarrio === 'todos' ? 'Todo el directorio' : activeBarrio}
+              </span>
+            </div>
+            <div className="st-coverage">
+              {[
+                { label: 'Negocios verificados',  val: filtered.filter(b => b.verified).length,      total: filtered.length, color: 'var(--accent)' },
+                { label: 'Abiertos ahora',         val: filtered.filter(b => b.openNow).length,       total: filtered.length, color: 'var(--open)'   },
+                { label: 'Con WhatsApp',            val: filtered.filter(b => b.whatsapp).length,     total: filtered.length, color: '#25D366'       },
+                { label: 'Hacen domicilio',         val: filtered.filter(b => b.tags.some(t => /domicilio/i.test(t))).length, total: filtered.length, color: 'var(--warn)' },
+                { label: 'Aceptan Nequi',           val: filtered.filter(b => b.payments.some(p => /nequi/i.test(p))).length, total: filtered.length, color: '#8B5CF6' },
+              ].map(item => {
+                const pct = item.total ? Math.round(item.val / item.total * 100) : 0;
+                return (
+                  <div key={item.label} className="st-cov-row">
+                    <span className="st-cov-label">{item.label}</span>
+                    <div className="st-cov-track">
+                      <div className="st-cov-fill" style={{ width: `${pct}%`, background: item.color }} />
+                    </div>
+                    <span className="st-cov-val">{item.val}<span className="st-cov-total">/{item.total}</span></span>
+                    <span className="st-cov-pct">{pct}%</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- App Root ----------
+function App() {
+  const [catId, setCatId] = useState(null);
+  const [query, setQuery] = useState('');
+  const [barrio, setBarrio] = useState('La Esperanza');
+  const [filters, setFilters] = useState({ openNow: false, verified: false, delivery: false, nequi: false, topRated: false });
+  const [sort, setSort] = useState('relevance');
+  const [view, setView] = useState('grid');
+  const [active, setActive] = useState(null);
+  const [saved, setSaved] = useState(new Set());
+  const [toast, setToast] = useState('');
+  const [hoveredId, setHoveredId] = useState(null);
+  const [ratingTarget, setRatingTarget] = useState(null);
+  const [page, setPage] = useState('home'); // 'home' | 'register' | 'stats'
+  const [businesses, setBusinesses] = useState(BUSINESSES);
+  const [barrios, setBarrios] = useState(window.DATA.BARRIOS);
+  // Barrios: parte del seed + crece con cada nuevo negocio registrado
+
+  const setFilter = (k, v) => setFilters(f => ({ ...f, [k]: v }));
+
+  const showToast = msg => {
+    setToast(msg);
+    clearTimeout(window.__toastT);
+    window.__toastT = setTimeout(() => setToast(''), 2400);
+  };
+
+  const onSave = id => {
+    setSaved(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) { next.delete(id); showToast('Quitado de guardados'); }
+      else { next.add(id); showToast('Guardado en tu lista'); }
+      return next;
+    });
+  };
+
+  const onContact = (b, mode) => {
+    if (mode === 'rate') { setRatingTarget(b); return; }
+    if (mode === 'call') showToast(`Llamando a ${b.name} · ${b.phone}`);
+    else if (mode === 'wa') showToast(`Abriendo WhatsApp · ${b.name}`);
+    else if (mode === 'route') showToast(`Calculando ruta a ${b.address}`);
+  };
+
+  const onRate = (b) => setRatingTarget(b);
+
+  const onSubmitRating = ({ rating, author, comment }) => {
+    const newReview = { author, rating, text: comment, date: 'Ahora' };
+    setBusinesses(prev => prev.map(b => {
+      if (b.id !== ratingTarget.id) return b;
+      const reviews    = (b.userReviews || []);
+      const allRatings = [...reviews.map(r => r.rating), rating];
+      const newAvg     = (allRatings.reduce((s, r) => s + r, 0) / allRatings.length);
+      return {
+        ...b,
+        userReviews: [newReview, ...reviews],
+        rating:  Math.round(newAvg * 10) / 10,
+        reviews: b.reviews + 1,
+      };
+    }));
+    setRatingTarget(null);
+    showToast(`¡Reseña publicada para ${ratingTarget.name}!`);
+  };
+
+  const onRegister = (newBusiness) => {
+    setBusinesses(prev => [newBusiness, ...prev]);
+    if (newBusiness.barrio) {
+      setBarrios(prev =>
+        prev.includes(newBusiness.barrio) ? prev : [...prev, newBusiness.barrio]
+      );
+    }
+    setPage('home');
+    showToast(`¡${newBusiness.name} ya está en el directorio!`);
+  };
+
+  const resetFilters = () => {
+    setFilters({ openNow: false, verified: false, delivery: false, nequi: false, topRated: false });
+    setQuery('');
+    setCatId(null);
+  };
+
+  // Filtering
+  const items = useMemo(() => {
+    let r = businesses.slice();
+    if (catId) r = r.filter(b => b.cat === catId);
+    if (query) {
+      const q = query.toLowerCase();
+      r = r.filter(b =>
+        b.name.toLowerCase().includes(q) ||
+        b.desc.toLowerCase().includes(q) ||
+        b.specialty.toLowerCase().includes(q) ||
+        b.tags.some(t => t.toLowerCase().includes(q)) ||
+        b.owner.toLowerCase().includes(q)
+      );
+    }
+    if (filters.openNow) r = r.filter(b => b.openNow);
+    if (filters.verified) r = r.filter(b => b.verified);
+    if (filters.delivery) r = r.filter(b => b.tags.some(t => /domicilio/i.test(t)));
+    if (filters.nequi) r = r.filter(b => b.payments.some(p => /nequi/i.test(p)));
+    if (filters.topRated) r = r.filter(b => b.rating >= 4.5);
+
+    if (sort === 'rating') r.sort((a, b) => b.rating - a.rating);
+    else if (sort === 'reviews') r.sort((a, b) => b.reviews - a.reviews);
+    else if (sort === 'newest') r.sort((a, b) => (+b.since) - (+a.since));
+    else if (sort === 'nearby') r.sort((a, b) => (a.barrio === barrio ? -1 : 1) - (b.barrio === barrio ? -1 : 1));
+    return r;
+  }, [catId, query, filters, sort, barrio, businesses]);
+
+  // Spotlight: top 3 by rating (only on home, no filters/query)
+  const spotlight = useMemo(() => {
+    if (catId || query || Object.values(filters).some(Boolean)) return [];
+    return businesses.filter(b => b.verified).sort((a, b) => b.rating - a.rating).slice(0, 3);
+  }, [catId, query, filters, businesses]);
+
+  const counts = { total: businesses.length };
+  const catName = catId ? CATEGORIES.find(c => c.id === catId).name : null;
+
+  // Esc to close detail
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') setActive(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  if (page === 'stats') {
+    return <StatsPage businesses={businesses} barrios={barrios} onBack={() => setPage('home')} />;
+  }
+
+  if (page === 'register') {
+    return <RegisterPage onBack={() => setPage('home')} showToast={showToast} onRegister={onRegister} barrios={barrios} />;
+  }
+
+  return (
+    <div className="app">
+      <TopBar query={query} setQuery={setQuery} barrio={barrio} setBarrio={setBarrio}
+        barrios={barrios} onOpenMerchant={() => setPage('register')} onOpenStats={() => setPage('stats')} />
+
+      <div className="shell">
+        <Sidebar catId={catId} setCatId={setCatId} filters={filters} setFilter={setFilter} counts={counts} onResetFilters={resetFilters} />
+
+        <main className="main">
+          <Toolbar count={items.length} sort={sort} setSort={setSort}
+            view={view} setView={setView}
+            catName={catName} query={query} />
+
+          {spotlight.length > 0 && <Spotlight items={spotlight} onOpen={setActive} />}
+
+          {items.length === 0 ? (
+            <EmptyState onReset={resetFilters} />
+          ) : view === 'map' ? (
+            <MapView items={items} onOpen={setActive} hoveredId={hoveredId} setHoveredId={setHoveredId} />
+          ) : (
+            <div className={'results ' + view}>
+              {items.map(b => (
+                <BusinessCard key={b.id} b={b} view={view}
+                  onOpen={setActive} onSave={onSave} saved={saved.has(b.id)}
+                  onContact={onContact} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
+
+      <DetailPanel business={active} onClose={() => setActive(null)}
+        onContact={onContact} saved={active && saved.has(active.id)}
+        onSave={onSave} onRate={onRate} />
+
+      {active && <div className="scrim" onClick={() => setActive(null)} />}
+
+      <Toast msg={toast} />
+      {ratingTarget && (
+        <RatingModal
+          business={ratingTarget}
+          onClose={() => setRatingTarget(null)}
+          onSubmit={onSubmitRating}
+        />
+      )}
+    </div>
+  );
+}
+
+window.App = App;
+</script>
+<script type="text/babel">// Wrap App with a tweaks-aware mount so we keep the hook ergonomics
+  function Root() {
+    const [t, setTweak] = useTweaks(window.TWEAK_DEFAULTS);
+
+    // Apply theme + density + accent via classes / vars
+    React.useEffect(() => {
+      document.documentElement.classList.toggle('is-dark', t.theme === 'dark');
+      document.documentElement.classList.toggle('is-compact', t.density === 'compact');
+      // Derive accent variants by adjusting the lightness
+      const m = (t.accent || '').match(/oklch\(\s*([0-9.]+)%\s+([0-9.]+)\s+([0-9.]+)/);
+      if (m) {
+        const [, L, C, H] = m;
+        document.documentElement.style.setProperty('--accent', t.accent);
+        document.documentElement.style.setProperty('--accent-2', `oklch(${Math.min(100, +L + 8)}% ${C} ${H})`);
+        document.documentElement.style.setProperty('--accent-soft', `oklch(94% 0.03 ${H})`);
+        document.documentElement.style.setProperty('--accent-ink',  `oklch(${Math.max(0, +L - 12)}% ${Math.max(0, +C - 0.015)} ${H})`);
+      }
+    }, [t.theme, t.density, t.accent]);
+
+    return (
+      <>
+        <App />
+        <TweaksPanel>
+          <TweakSection label="Vista" />
+          <TweakRadio  label="Densidad" value={t.density}
+                       options={['compact', 'regular']}
+                       onChange={v => setTweak('density', v)} />
+          <TweakRadio  label="Tema" value={t.theme}
+                       options={['light', 'dark']}
+                       onChange={v => setTweak('theme', v)} />
+          <TweakSection label="Marca" />
+          <TweakColor  label="Acento" value={t.accent}
+                       options={[
+                         'oklch(40% 0.075 155)',
+                         'oklch(52% 0.110 45)',
+                         'oklch(42% 0.110 270)',
+                         'oklch(38% 0.110 330)',
+                       ]}
+                       onChange={v => setTweak('accent', v)} />
+        </TweaksPanel>
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<Root />);</script>
 </body>
 </html>

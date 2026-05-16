@@ -37,9 +37,21 @@ function PriceLevel({ level }) {
   );
 }
 
-function Stars({ rating, size = 12 }) {
+function Stars({ rating, size = 12, compact = false }) {
   const full = Math.floor(rating);
   const half = rating % 1 >= 0.5;
+  if (compact) {
+    // Compact: solo estrellas llenas + media, sin vacías
+    return (
+      <span className="stars compact" style={{ '--star-size': size + 'px' }}>
+        {[...Array(5)].map((_, i) => {
+          if (i < full) return <span key={i} className="full">★</span>;
+          if (i === full && half) return <span key={i} className="half">★</span>;
+          return null;
+        })}
+      </span>
+    );
+  }
   return (
     <span className="stars" style={{ '--star-size': size + 'px' }}>
       {[...Array(5)].map((_, i) => (
@@ -52,6 +64,16 @@ function Stars({ rating, size = 12 }) {
 // ---------- TopBar ----------
 function TopBar({ query, setQuery, barrio, setBarrio, onOpenMerchant }) {
   const [barrioOpen, setBarrioOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // Close barrio menu on outside click
+  useEffect(() => {
+    if (!barrioOpen) return;
+    const handler = e => { if (menuRef.current && !menuRef.current.contains(e.target)) setBarrioOpen(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [barrioOpen]);
+
   return (
     <header className="topbar">
       <div className="brand">
@@ -69,12 +91,16 @@ function TopBar({ query, setQuery, barrio, setBarrio, onOpenMerchant }) {
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="Buscar negocios, productos, oficios…"
+          aria-label="Buscar negocios"
         />
-        <kbd>⌘K</kbd>
+        {query
+          ? <button className="search-clear" onClick={() => setQuery('')} title="Limpiar búsqueda"><I.X size={14} /></button>
+          : <kbd>⌘K</kbd>
+        }
       </div>
 
       <div className="top-actions">
-        <button className="barrio-pill" onClick={() => setBarrioOpen(o => !o)}>
+        <button className="barrio-pill" onClick={() => setBarrioOpen(o => !o)} ref={menuRef}>
           <I.MapPin size={14} />
           <span>{barrio}</span>
           <I.ChevronD size={12} />
@@ -103,11 +129,19 @@ function TopBar({ query, setQuery, barrio, setBarrio, onOpenMerchant }) {
 }
 
 // ---------- Sidebar ----------
-function Sidebar({ catId, setCatId, filters, setFilter, counts }) {
+function Sidebar({ catId, setCatId, filters, setFilter, counts, onResetFilters }) {
+  const activeFilters = Object.values(filters).filter(Boolean).length + (catId ? 1 : 0);
   return (
     <aside className="sidebar">
       <div className="side-section">
-        <div className="side-label">Categorías</div>
+        <div className="side-label-row">
+          <span className="side-label">Categorías</span>
+          {activeFilters > 0 && (
+            <button className="side-reset" onClick={onResetFilters} title="Limpiar filtros">
+              <span className="filter-badge">{activeFilters}</span> Limpiar
+            </button>
+          )}
+        </div>
         <button
           className={'cat-row ' + (catId === null ? 'is-active' : '')}
           onClick={() => setCatId(null)}>
@@ -194,48 +228,66 @@ function Toolbar({ count, sort, setSort, view, setView, density, catName, query 
 // ---------- Card ----------
 function BusinessCard({ b, onOpen, onSave, saved, view, onContact }) {
   const cat = CATEGORIES.find(c => c.id === b.cat);
-  const hueMap = { restaurantes: 30, tiendas: 220, ropa: 320, salud: 165, talleres: 50, belleza: 340, panaderia: 60, electronicos: 210, educacion: 250, transporte: 25, artesania: 290, frutas: 130, tecnologia: 230, eventos: 280 };
+  const hueMap = {
+    restaurantes: 30, tiendas: 220, ropa: 320, salud: 165, talleres: 50,
+    belleza: 340, panaderia: 60, electronicos: 210, educacion: 250,
+    transporte: 25, artesania: 290, frutas: 130, tecnologia: 230, eventos: 280,
+  };
   const hue = hueMap[b.cat] || 150;
 
+  // ── Vista Lista ──────────────────────────────────────────────
   if (view === 'list') {
     return (
       <article className={'card list ' + (saved ? 'saved' : '')} onClick={() => onOpen(b)}>
         <div className="card-thumb-wrap small">
           <StripedThumb code={cat.code} label={cat.name} hue={hue} h={88} />
         </div>
+
         <div className="card-body">
           <div className="card-top">
             <div className="card-status">
               <span className={'status-dot ' + (b.openNow ? 'open' : 'closed')} />
-              <span className="status-text">{b.openNow ? `Abierto · cierra ${b.closesAt}` : 'Cerrado ahora'}</span>
-              {b.verified && <span className="badge-v"><I.Verified size={10} /> Verificado</span>}
+              <span className="status-text">
+                {b.openNow ? `Abierto · cierra ${b.closesAt}` : 'Cerrado ahora'}
+              </span>
+              {b.verified && (
+                <span className="badge-v"><I.Verified size={10} /> Verificado</span>
+              )}
             </div>
             <div className="card-rating">
-              <Stars rating={b.rating} />
+              <Stars rating={b.rating} size={13} compact={true} />
               <b>{b.rating}</b>
               <span className="reviews">({b.reviews})</span>
             </div>
           </div>
+
           <h3 className="card-name">{b.name}</h3>
           <p className="card-desc">{b.desc}</p>
+
           <div className="card-meta">
             <span className="meta-item"><I.MapPin size={12} />{b.barrio} · {b.address}</span>
             <span className="meta-item"><I.Clock size={12} />{b.hours}</span>
             <PriceLevel level={b.priceLevel} />
           </div>
+
           <div className="card-tags">
             {b.tags.map(t => <span key={t} className="tag">{t}</span>)}
           </div>
         </div>
+
+        {/* Acciones verticales — botón guardar siempre visible */}
         <div className="card-actions vertical">
-          <button className="btn-icon" onClick={e => { e.stopPropagation(); onSave(b.id); }} title="Guardar">
+          <button
+            className={'btn-icon ' + (saved ? 'is-saved' : '')}
+            onClick={e => { e.stopPropagation(); onSave(b.id); }}
+            title={saved ? 'Quitar de guardados' : 'Guardar negocio'}>
             <I.Bookmark size={14} />
           </button>
           <button className="btn-primary" onClick={e => { e.stopPropagation(); onContact(b, 'call'); }}>
             <I.Phone size={12} /> Llamar
           </button>
           {b.whatsapp && (
-            <button className="btn-ghost" onClick={e => { e.stopPropagation(); onContact(b, 'wa'); }}>
+            <button className="btn-secondary" onClick={e => { e.stopPropagation(); onContact(b, 'wa'); }}>
               <I.Message size={12} /> WhatsApp
             </button>
           )}
@@ -244,13 +296,20 @@ function BusinessCard({ b, onOpen, onSave, saved, view, onContact }) {
     );
   }
 
+  // ── Vista Grid ───────────────────────────────────────────────
   return (
     <article className={'card grid ' + (saved ? 'saved' : '')} onClick={() => onOpen(b)}>
+      {/* Thumbnail con overlay de estado */}
       <div className="card-thumb-wrap">
         <StripedThumb code={cat.code} label={cat.name} hue={hue} />
         <div className="thumb-overlay">
-          {b.verified && <span className="badge-v light"><I.Verified size={10} /> Verificado</span>}
-          <button className="btn-save" onClick={e => { e.stopPropagation(); onSave(b.id); }}>
+          {b.verified && (
+            <span className="badge-v light"><I.Verified size={10} /> Verificado</span>
+          )}
+          <button
+            className={'btn-save ' + (saved ? 'is-saved' : '')}
+            onClick={e => { e.stopPropagation(); onSave(b.id); }}
+            title={saved ? 'Quitar de guardados' : 'Guardar'}>
             <I.Bookmark size={13} />
           </button>
         </div>
@@ -259,40 +318,48 @@ function BusinessCard({ b, onOpen, onSave, saved, view, onContact }) {
           <span>{b.openNow ? `Cierra ${b.closesAt}` : 'Cerrado'}</span>
         </div>
       </div>
+
+      {/* Cuerpo */}
       <div className="card-body">
         <div className="card-row-top">
           <h3 className="card-name">{b.name}</h3>
           <PriceLevel level={b.priceLevel} />
         </div>
+
         <div className="card-owner">{b.owner} · {b.specialty}</div>
+
         <div className="card-rating">
-          <Stars rating={b.rating} />
+          <Stars rating={b.rating} size={13} compact={true} />
           <b>{b.rating}</b>
-          <span className="reviews">({b.reviews} reseñas)</span>
+          <span className="reviews">({b.reviews})</span>
         </div>
+
         <div className="card-meta-row">
           <span className="meta-item"><I.MapPin size={11} />{b.barrio}</span>
           <span className="sep">·</span>
           <span className="meta-item">{b.address}</span>
         </div>
+
         <div className="card-tags">
           {b.tags.slice(0, 3).map(t => <span key={t} className="tag">{t}</span>)}
         </div>
+
+        {/* Acciones: Llamar | ícono WA/Ruta | Ver más */}
         <div className="card-actions">
           <button className="btn-primary" onClick={e => { e.stopPropagation(); onContact(b, 'call'); }}>
             <I.Phone size={12} /> Llamar
           </button>
           {b.whatsapp ? (
-            <button className="btn-ghost" onClick={e => { e.stopPropagation(); onContact(b, 'wa'); }}>
-              <I.Message size={12} />
+            <button className="btn-icon" onClick={e => { e.stopPropagation(); onContact(b, 'wa'); }} title="WhatsApp">
+              <I.Message size={14} />
             </button>
           ) : (
-            <button className="btn-ghost" onClick={e => { e.stopPropagation(); onContact(b, 'route'); }}>
-              <I.Navigate size={12} />
+            <button className="btn-icon" onClick={e => { e.stopPropagation(); onContact(b, 'route'); }} title="Cómo llegar">
+              <I.Navigate size={14} />
             </button>
           )}
           <button className="btn-ghost" onClick={e => { e.stopPropagation(); onOpen(b); }}>
-            Detalles
+            Ver más
           </button>
         </div>
       </div>
@@ -321,9 +388,10 @@ function DetailPanel({ business, onClose, onContact, saved, onSave }) {
             <h2 className="detail-name">{business.name}</h2>
             <div className="detail-sub">{business.owner} · Desde {business.since}</div>
             <div className="detail-rating">
-              <Stars rating={business.rating} size={14} />
+              <Stars rating={business.rating} size={15} compact={true} />
               <b>{business.rating}</b>
-              <span>· {business.reviews} reseñas</span>
+              <span className="sep">·</span>
+              <span>{business.reviews} reseñas</span>
               <span className="sep">·</span>
               <PriceLevel level={business.priceLevel} />
             </div>
@@ -355,12 +423,12 @@ function DetailPanel({ business, onClose, onContact, saved, onSave }) {
                 <div className="info-sub">{business.openNow ? 'Abierto ahora' : 'Cerrado ahora'}</div>
               </div>
               <div className="info-block">
-                <div className="info-label"><I.Star size={11} /> Especialidad</div>
+                <div className="info-label"><I.Verified size={11} /> Especialidad</div>
                 <div className="info-value">{business.specialty}</div>
                 <div className="info-sub">{cat.name}</div>
               </div>
               <div className="info-block">
-                <div className="info-label"><I.Wallet size={11} /> Métodos de pago</div>
+                <div className="info-label"><I.Wallet size={11} /> Pagos</div>
                 <div className="info-value">{business.payments.join(' · ')}</div>
                 <div className="info-sub">Nivel de precio {business.priceLevel}/3</div>
               </div>
@@ -513,9 +581,11 @@ function EmptyState({ onReset }) {
       <div className="empty-mark">
         <I.Search size={20} />
       </div>
-      <h3>No encontramos resultados</h3>
-      <p>Intenta cambiar de barrio, quitar algún filtro o buscar con otras palabras.</p>
-      <button className="btn-primary" onClick={onReset}>Restablecer filtros</button>
+      <h3>Sin resultados</h3>
+      <p>No encontramos negocios con esos filtros. Prueba cambiando la búsqueda o el barrio.</p>
+      <button className="btn-primary" onClick={onReset}>
+        <I.X size={13} /> Limpiar filtros
+      </button>
     </div>
   );
 }
@@ -647,7 +717,7 @@ function App() {
         onOpenMerchant={() => showToast('Próximamente: registro de negocios')} />
 
       <div className="shell">
-        <Sidebar catId={catId} setCatId={setCatId} filters={filters} setFilter={setFilter} counts={counts} />
+        <Sidebar catId={catId} setCatId={setCatId} filters={filters} setFilter={setFilter} counts={counts} onResetFilters={resetFilters} />
 
         <main className="main">
           <Toolbar count={items.length} sort={sort} setSort={setSort}
