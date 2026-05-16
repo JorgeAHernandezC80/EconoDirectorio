@@ -3445,7 +3445,7 @@ function DeliveryPanel({ delivery }) {
   );
 }
 
-// ---------- Detail Panel ----------
+// Detail Panel
 function DetailPanel({ business, onClose, onContact, saved, onSave, onRate, showToast }) {
   const cat = business && CATEGORIES.find(c => c.id === business.cat);
   const [reportOpen, setReportOpen] = React.useState(false);
