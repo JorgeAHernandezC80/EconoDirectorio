@@ -1767,6 +1767,95 @@
     display: flex; flex-direction: column; gap: 14px;
   }
 
+  /* ── Delivery: radio toggle km/mi ── */
+  .rp-unit-toggle {
+    display: flex; background: var(--surface-3);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: 2px; gap: 2px; flex-shrink: 0;
+  }
+  .rp-unit-btn {
+    background: none; border: none; padding: 3px 10px;
+    border-radius: 4px; font: inherit; font-size: 12px;
+    font-weight: 600; color: var(--ink-4); cursor: pointer;
+    transition: all 0.12s;
+  }
+  .rp-unit-btn.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px oklch(0% 0 0 / 0.08); }
+
+  /* ── Delivery: GPS coverage banner ── */
+  .rp-coverage-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; line-height: 1.4;
+    border: 1px solid;
+  }
+  .rp-coverage-banner.covered {
+    background: oklch(95% 0.04 150); border-color: oklch(78% 0.10 150);
+    color: oklch(30% 0.08 150);
+  }
+  .rp-coverage-banner.not-covered {
+    background: oklch(97% 0.04 30); border-color: oklch(82% 0.10 30);
+    color: oklch(38% 0.08 30);
+  }
+  .rp-coverage-banner.no-gps {
+    background: var(--surface-2); border-color: var(--line);
+    color: var(--ink-3);
+  }
+  .rp-coverage-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .covered .rp-coverage-dot { background: var(--open); box-shadow: 0 0 0 3px oklch(52% 0.14 158 / 0.2); }
+  .not-covered .rp-coverage-dot { background: var(--warn); }
+  .no-gps .rp-coverage-dot { background: var(--ink-4); }
+
+  /* ── Delivery: radius slider ── */
+  .rp-radius-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .rp-radius-row { display: flex; align-items: center; gap: 12px; }
+  .rp-radius-slider {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 4px; border-radius: 2px;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct, 40%), var(--line-2) var(--pct, 40%), var(--line-2) 100%);
+    outline: none; cursor: pointer;
+  }
+  .rp-radius-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--accent);
+    border: 2px solid white; box-shadow: 0 1px 4px oklch(0% 0 0 / 0.2);
+    cursor: pointer;
+  }
+  .rp-radius-val {
+    font-family: var(--f-mono); font-size: 13px; font-weight: 600;
+    color: var(--accent); min-width: 52px; text-align: right;
+  }
+
+  /* ── Delivery: preview card ── */
+  .rp-delivery-preview {
+    background: var(--surface); border: 1px solid oklch(80% 0.06 150);
+    border-radius: 10px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .rp-delivery-preview-title {
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-4);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .rp-delivery-preview-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--line);
+  }
+  .rp-delivery-chips {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .rp-delivery-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 500;
+    padding: 4px 10px; border-radius: 20px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    color: var(--ink-2);
+  }
+  .rp-delivery-chip.highlight {
+    background: oklch(93% 0.05 150); border-color: oklch(78% 0.10 150);
+    color: oklch(28% 0.08 150);
+  }
+
   /* ============ STATS PAGE ============ */
 
   .st-topbar-title {
@@ -2252,7 +2341,7 @@
   /* ── Main derecha — Formulario ── */
   .rp-main {
     display: flex; align-items: flex-start; justify-content: center;
-    padding: 48px 48px 80px;
+    padding: 28px 48px 40px;
     background: var(--bg);
   }
   .rp-form-wrap {
@@ -2266,28 +2355,30 @@
 
   /* Header del step */
   .rp-form-header {
-    padding: 36px 36px 0;
+    padding: 20px 28px 16px;
     border-bottom: 1px solid var(--line);
     margin-bottom: 0;
-    padding-bottom: 28px;
   }
   .rp-form-step-num {
     font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em;
     color: var(--accent); font-weight: 600;
-    display: block; margin-bottom: 6px;
+    display: block; margin-bottom: 4px;
   }
   .rp-form-title {
-    font-family: var(--f-display); font-size: 26px; font-weight: 500;
-    letter-spacing: -0.01em; color: var(--ink); margin-bottom: 4px;
+    font-family: var(--f-display); font-size: 22px; font-weight: 500;
+    letter-spacing: -0.01em; color: var(--ink); margin-bottom: 2px;
   }
-  .rp-form-sub { font-size: 14px; color: var(--ink-3); }
+  .rp-form-sub { font-size: 13px; color: var(--ink-3); }
 
   /* Campos */
   .rp-step-content { padding: 0; }
-  .rp-fields { padding: 28px 36px 0; display: flex; flex-direction: column; gap: 22px; }
+  .rp-fields { padding: 18px 28px 0; display: flex; flex-direction: column; gap: 14px; }
 
-  .rp-field { display: flex; flex-direction: column; gap: 7px; }
-  .rp-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .rp-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+  .rp-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 0; }
+  .rp-field-row > .rp-field { min-width: 0; overflow: hidden; }
+  .rp-input-icon-wrap { min-width: 0; }
+  .rp-input-icon { min-width: 0; width: 100%; }
 
   .rp-label {
     font-size: 13px; font-weight: 600; color: var(--ink-2);
@@ -2299,10 +2390,10 @@
   .rp-char-count { font-size: 12px; color: var(--ink-4); font-weight: 400; font-family: var(--f-mono); }
 
   .rp-input, .rp-textarea {
-    height: 44px;
+    height: 38px;
     background: var(--surface-2); border: 1.5px solid var(--line);
-    border-radius: 10px; padding: 0 14px;
-    font: inherit; font-size: 15px; color: var(--ink);
+    border-radius: 8px; padding: 0 12px;
+    font: inherit; font-size: 14px; color: var(--ink);
     outline: none; width: 100%; box-sizing: border-box;
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   }
@@ -2324,18 +2415,18 @@
     position: relative;
     display: flex; align-items: center;
     background: var(--surface-2); border: 1.5px solid var(--line);
-    border-radius: 10px; overflow: hidden;
+    border-radius: 8px; overflow: hidden;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
   .rp-input-icon-wrap:focus-within {
     border-color: var(--accent); background: var(--surface);
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
-  .rp-input-icon-wrap svg { flex-shrink: 0; margin-left: 14px; color: var(--ink-4); }
+  .rp-input-icon-wrap svg { flex-shrink: 0; margin-left: 10px; color: var(--ink-4); }
   .rp-input-icon {
-    flex: 1; height: 44px; padding: 0 14px;
+    flex: 1; height: 38px; padding: 0 12px 0 6px;
     background: none; border: none; outline: none;
-    font: inherit; font-size: 15px; color: var(--ink);
+    font: inherit; font-size: 14px; color: var(--ink);
   }
 
   /* Select con icono */
@@ -2356,8 +2447,8 @@
   .rp-select-sm { width: 130px; }
   .rp-select {
     appearance: none; background: none; border: none; outline: none;
-    flex: 1; height: 44px; padding: 0 32px 0 14px;
-    font: inherit; font-size: 15px; color: var(--ink); cursor: pointer;
+    flex: 1; height: 38px; padding: 0 32px 0 14px;
+    font: inherit; font-size: 14px; color: var(--ink); cursor: pointer;
   }
   .rp-select-wrap > svg:first-child ~ .rp-select { padding-left: 10px; }
 
@@ -2472,9 +2563,9 @@
   /* Navegación del form */
   .rp-nav {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 24px 36px 28px;
+    padding: 16px 28px 20px;
     border-top: 1px solid var(--line);
-    margin-top: 28px;
+    margin-top: 18px;
     background: var(--surface-2);
   }
   .rp-nav-left { display: flex; align-items: center; }
@@ -2724,28 +2815,28 @@ window.DATA = {
   BARRIOS: ['La Esperanza', 'El Centro', 'Villa Rosa', 'El Prado', 'Barrio Norte', 'Barrio Nuevo', 'La Paz', 'Alegría'],
 
   BUSINESSES: [
-    { id: 1,  cat: 'restaurantes', name: 'La Sazón de Doña Rosa',        owner: 'Rosa Martínez',     desc: 'Comida casera con los mejores sabores de la región. Menú del día con sopa, segundo y jugo natural.',                          rating: 4.8, reviews: 124, address: 'Calle 12 #34-56',        barrio: 'La Esperanza', phone: '+57 311 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–16:00',      openNow: true,  closesAt: '4pm',  specialty: 'Menú del día',         tags: ['Comida casera', 'Domicilio'],         payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1, delivery: { precio: 3000, minPedido: 15000, zonas: ['La Esperanza', 'El Centro', 'Villa Rosa'], tiempo: '20–35 min' } },
-    { id: 2,  cat: 'restaurantes', name: 'El Fogón Criollo',             owner: 'Carlos Pedraza',    desc: 'Especialidad en asados y fritanga. Ambiente familiar y precios populares para toda la familia.',                              rating: 4.6, reviews: 89,  address: 'Av. Popular #12-20',    barrio: 'El Centro',    phone: '+57 320 456 7890', whatsapp: true,  hours: 'Vie–Dom · 11:00–22:00',      openNow: false, closesAt: null,   specialty: 'Fritanga',             tags: ['Parrilla', 'Para llevar'],            payments: ['Efectivo', 'Daviplata'],          verified: false, since: '2021', priceLevel: 2 },
-    { id: 3,  cat: 'restaurantes', name: 'Sabores del Valle',            owner: 'Lucía Rondón',      desc: 'Platos típicos de la región andina. Bandeja paisa, ajiaco santafereño y postres artesanales.',                              rating: 4.9, reviews: 203, address: 'Carrera 5 #8-90',       barrio: 'Barrio Nuevo', phone: '+57 301 678 9012', whatsapp: true,  hours: 'Todos los días · 7:00–21:00', openNow: true,  closesAt: '9pm',  specialty: 'Bandeja paisa',        tags: ['Regional', 'Domicilio', 'Reservas'], payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2015', priceLevel: 2, delivery: { precio: 4000, minPedido: 20000, zonas: ['Barrio Nuevo', 'El Centro', 'Barrio Norte', 'El Prado'], tiempo: '25–40 min' } },
-    { id: 4,  cat: 'restaurantes', name: 'Tacos Don Memo',               owner: 'Guillermo Flores',  desc: 'Auténtica cocina mexicana adaptada al paladar local. Tacos, burritos y salsas caseras.',                                     rating: 4.5, reviews: 67,  address: 'Diagonal 45 #23-10',   barrio: 'Barrio Norte', phone: '+57 315 890 1234', whatsapp: false, hours: 'Lun–Sáb · 12:00–21:00',     openNow: true,  closesAt: '9pm',  specialty: 'Tacos al pastor',      tags: ['Mexicana', 'Para llevar'],            payments: ['Efectivo'],                       verified: false, since: '2022', priceLevel: 1 },
-    { id: 5,  cat: 'restaurantes', name: 'Caldo de Pollo Mama Juanita',  owner: 'Juanita Sánchez',   desc: 'Caldos, sancochos y sopas preparados con recetas de abuela. El mejor remedio para cualquier día.',                           rating: 4.7, reviews: 156, address: 'Calle 23 #45-67',       barrio: 'Villa Rosa',   phone: '+57 317 012 3456', whatsapp: true,  hours: 'Lun–Dom · 6:00–15:00',      openNow: true,  closesAt: '3pm',  specialty: 'Sancocho de gallina',  tags: ['Sopas', 'Desayunos'],                payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2010', priceLevel: 1 },
-    { id: 6,  cat: 'restaurantes', name: 'Pizzas al Carbón',             owner: 'Fernando Castro',   desc: 'Pizzas artesanales horneadas en leña. Masa madre, ingredientes frescos y sabor auténtico.',                                  rating: 4.4, reviews: 44,  address: 'Calle 7 #12-34',        barrio: 'Barrio Norte', phone: '+57 310 234 5678', whatsapp: true,  hours: 'Mié–Dom · 17:00–23:00',     openNow: false, closesAt: null,   specialty: 'Pizza artesanal',      tags: ['Italiana', 'Domicilio'],              payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: false, since: '2023', priceLevel: 2, delivery: { precio: 5000, minPedido: 25000, zonas: ['Barrio Norte', 'La Esperanza', 'El Centro'], tiempo: '30–45 min' } },
-    { id: 7,  cat: 'tiendas',      name: 'Tienda El Progreso',           owner: 'Marlene Ríos',      desc: 'Todo lo que necesitas para el hogar. Abarrotes, aseo y más. Fiado a clientes frecuentes.',                                  rating: 4.7, reviews: 211, address: 'Carrera 8 #15-30',      barrio: 'La Esperanza', phone: '+57 312 345 6789', whatsapp: false, hours: 'Lun–Dom · 6:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Abarrotes',            tags: ['General', 'Fiado'],                   payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2005', priceLevel: 1 },
-    { id: 8,  cat: 'tiendas',      name: 'Minimercado La Victoria',      owner: 'Pedro Gómez',       desc: 'Productos frescos, carnes y lácteos directos del proveedor. Precios justos cada día.',                                       rating: 4.5, reviews: 98,  address: 'Av. 3 #20-45',          barrio: 'El Centro',    phone: '+57 316 456 7890', whatsapp: true,  hours: 'Lun–Sáb · 7:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Carnes',               tags: ['Mercado', 'Domicilio'],               payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2012', priceLevel: 1, delivery: { precio: 2000, minPedido: 10000, zonas: ['El Centro', 'La Esperanza', 'Barrio Nuevo'], tiempo: '15–25 min' } },
-    { id: 9,  cat: 'ropa',         name: 'Modas Valentina',              owner: 'Valentina Cruz',    desc: 'Ropa para mujer confeccionada a mano. Diseños únicos con telas de calidad a precio accesible.',                             rating: 4.8, reviews: 78,  address: 'C.C. Popular L-34',     barrio: 'El Centro',    phone: '+57 318 567 8901', whatsapp: true,  hours: 'Lun–Sáb · 9:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Confección a medida',  tags: ['Confección', 'A medida'],             payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2019', priceLevel: 2 },
-    { id: 10, cat: 'ropa',         name: 'Zapatos y Más Don Julio',      owner: 'Julio Herrera',     desc: 'Ventas al por mayor y detal, calzado directamente de fábrica para damas, caballeros y niños.',                                                  rating: 4.3, reviews: 55,  address: 'Calle 10 #6-78',        barrio: 'Villa Rosa',   phone: '+57 313 678 9012', whatsapp: false, hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Reparación',           tags: ['Zapatería', 'Reparación'],            payments: ['Efectivo'],                       verified: false, since: '2008', priceLevel: 1 },
-    { id: 11, cat: 'salud',        name: 'Farmacia Popular San Rafael',  owner: 'Dra. Ana Bernal',   desc: 'Medicamentos genéricos y de marca. Servicio de tensión y glucosa gratuito. Atención personalizada.',                         rating: 4.9, reviews: 312, address: 'Calle 5 #9-20',         barrio: 'El Centro',    phone: '+57 319 789 0123', whatsapp: true,  hours: 'Lun–Dom · 8:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Farmacia 24h',         tags: ['Salud', 'Domicilio'],                payments: ['Efectivo', 'Tarjeta', 'Nequi'],   verified: true,  since: '2014', priceLevel: 2, delivery: { precio: 0, minPedido: 0, zonas: ['El Centro', 'La Esperanza', 'Villa Rosa', 'El Prado', 'Barrio Norte', 'Barrio Nuevo', 'La Paz', 'Alegría'], tiempo: '20–40 min' } },
-    { id: 12, cat: 'talleres',     name: 'Taller El Mecánico Honesto',   owner: 'Rodrigo Vargas',    desc: 'Servicio mecánico a domicilio y en taller. Motos y carros. Garantía en todos los trabajos.',                                rating: 4.7, reviews: 143, address: 'Calle Industrial #45-20', barrio: 'El Prado',     phone: '+57 321 890 1234', whatsapp: true,  hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Mecánica general',     tags: ['Automotriz', 'A domicilio'],          payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2011', priceLevel: 2, delivery: { precio: 10000, minPedido: 0, zonas: ['El Prado', 'La Esperanza', 'El Centro', 'Villa Rosa', 'Barrio Norte'], tiempo: '30–60 min' } },
-    { id: 13, cat: 'talleres',     name: 'Eléctrico Don Jaime',          owner: 'Jaime Morales',     desc: 'Instalaciones eléctricas residenciales y comerciales. Reparación de electrodomésticos.',                                     rating: 4.6, reviews: 88,  address: 'Calle 3 #18-44',        barrio: 'La Paz',       phone: '+57 322 901 2345', whatsapp: true,  hours: 'Lun–Vie · 8:00–17:00',      openNow: true,  closesAt: '5pm',  specialty: 'Eléctrico residencial', tags: ['Eléctrico', 'Urgencias'],             payments: ['Efectivo'],                       verified: false, since: '2016', priceLevel: 2 },
-    { id: 14, cat: 'belleza',      name: 'Peluquería Estilo Total',      owner: 'Sandra López',      desc: 'Cortes, tintes, alisados y peinados para toda la familia. Atención con y sin cita.',                                        rating: 4.8, reviews: 189, address: 'Carrera 12 #34-56',     barrio: 'Villa Rosa',   phone: '+57 323 012 3456', whatsapp: true,  hours: 'Mar–Dom · 9:00–19:00',       openNow: true,  closesAt: '7pm',  specialty: 'Tintes y alisados',    tags: ['Cabello', 'Sin cita'],               payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2013', priceLevel: 2 },
-    { id: 15, cat: 'panaderia',    name: 'Panadería El Trigal',          owner: 'Miguel Á. Torres',  desc: 'Pan artesanal horneado cada mañana. Postres, tortas para ocasiones especiales y café.',                                     rating: 4.9, reviews: 267, address: 'Calle 8 #20-10',        barrio: 'La Esperanza', phone: '+57 324 123 4567', whatsapp: true,  hours: 'Lun–Dom · 5:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Pan de masa madre',    tags: ['Panadería', 'Tortas'],               payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2007', priceLevel: 1 },
-    { id: 16, cat: 'electronicos', name: 'Tecno Reparaciones JR',        owner: 'Javier Rojas',      desc: 'Reparación de celulares, tablets y computadores. Venta de accesorios originales y económicos.',                             rating: 4.5, reviews: 112, address: 'C.C. Centro L-22',      barrio: 'El Centro',    phone: '+57 325 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Pantallas y baterías', tags: ['Tecnología', 'Garantía'],             payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2017', priceLevel: 2 },
-    { id: 17, cat: 'educacion',    name: 'Academia Futuro Brillante',    owner: 'Prof. Clara Mendoza', desc: 'Clases de refuerzo, matemáticas, español e inglés para niños y jóvenes. Grupos reducidos.',                               rating: 4.8, reviews: 76,  address: 'Calle 15 #7-30',        barrio: 'El Centro',    phone: '+57 326 345 6789', whatsapp: true,  hours: 'Lun–Vie · 14:00–19:00',     openNow: false, closesAt: null,   specialty: 'Refuerzo escolar',     tags: ['Académico', 'Niños'],                payments: ['Efectivo', 'Transferencia'],      verified: true,  since: '2019', priceLevel: 2 },
-    { id: 18, cat: 'transporte',   name: 'Fletes y Mudanzas El Confiable', owner: 'Hernán Díaz',    desc: 'Servicio de fletes locales y mudanzas. Camioneta disponible las 24 horas para emergencias.',                                rating: 4.6, reviews: 54,  address: 'Cra 22 #8-12',          barrio: 'El Prado',     phone: '+57 327 456 7890', whatsapp: true,  hours: '24 horas · 7 días',         openNow: true,  closesAt: '24h',  specialty: 'Mudanzas',             tags: ['Logística', '24h'],                  payments: ['Efectivo', 'Tarjeta'],            verified: false, since: '2020', priceLevel: 2 },
-    { id: 19, cat: 'artesania',    name: 'Arte y Manos Creativas',       owner: 'Patricia Suárez',   desc: 'Artesanías en madera, cerámica y tejido. Talleres para niños y adultos los fines de semana.',                               rating: 4.9, reviews: 91,  address: 'Casa Cultural, Calle 10', barrio: 'La Esperanza', phone: '+57 328 567 8901', whatsapp: true,  hours: 'Mié–Dom · 10:00–17:00',     openNow: true,  closesAt: '5pm',  specialty: 'Cerámica artesanal',   tags: ['Arte', 'Talleres'],                  payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2016', priceLevel: 2 },
-    { id: 20, cat: 'frutas',       name: 'Frutería La Cosecha Fresca',   owner: 'Esperanza Quiñones', desc: 'Frutas y verduras directas del campo. Domicilios sin costo adicional. Todo fresco cada mañana.',                           rating: 4.8, reviews: 178, address: 'Mercado Central L-45',   barrio: 'El Centro',    phone: '+57 329 678 9012', whatsapp: true,  hours: 'Lun–Dom · 6:00–12:00',      openNow: true,  closesAt: '12pm', specialty: 'Frutas del campo',     tags: ['Orgánico', 'Domicilio'],              payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1, delivery: { precio: 0, minPedido: 8000, zonas: ['El Centro', 'La Esperanza', 'Barrio Nuevo', 'Villa Rosa'], tiempo: '10–20 min' } },
-    { id: 21, cat: 'tecnologia',   name: 'Soluciones TIC Popular',       owner: 'Diego Ramírez',     desc: 'Diseño de páginas web, redes sociales y soporte técnico para pequeños negocios.',                                           rating: 4.7, reviews: 63,  address: 'Coworking Centro p2',    barrio: 'El Centro',    phone: '+57 330 789 0123', whatsapp: true,  hours: 'Lun–Vie · 9:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Web para pymes',       tags: ['Digital', 'Pymes'],                  payments: ['Transferencia', 'Tarjeta'],       verified: true,  since: '2021', priceLevel: 3 },
-    { id: 22, cat: 'eventos',      name: 'Fiestas y Detalles Don Augusto', owner: 'Augusto Palacios', desc: 'Organización de fiestas, cumpleaños y reuniones. Decoración, sonido y catering incluidos.',                               rating: 4.5, reviews: 47,  address: 'Cra 20 #14-08',         barrio: 'Alegría',      phone: '+57 331 890 1234', whatsapp: true,  hours: 'Con cita previa',           openNow: false, closesAt: null,   specialty: 'Eventos sociales',     tags: ['Eventos', 'Catering'],               payments: ['Efectivo', 'Transferencia'],      verified: false, since: '2019', priceLevel: 2 },
+    { id: 1,  cat: 'restaurantes', name: 'La Sazón de Doña Rosa',        owner: 'Rosa Martínez',     desc: 'Comida casera con los mejores sabores de la región. Menú del día con sopa, segundo y jugo natural.',                          rating: 4.8, reviews: 124, address: 'Calle 12 #34-56',        barrio: 'La Esperanza', phone: '+57 311 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–16:00',      openNow: true,  closesAt: '4pm',  specialty: 'Menú del día',         tags: ['Comida casera', 'Domicilio'],         payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1, delivery: { precio: 3000, minPedido: 15000, zonas: ['La Esperanza', 'El Centro', 'Villa Rosa'], tiempo: '20–35 min' }, lat: 4.6245, lng: -74.0630 },
+    { id: 2,  cat: 'restaurantes', name: 'El Fogón Criollo',             owner: 'Carlos Pedraza',    desc: 'Especialidad en asados y fritanga. Ambiente familiar y precios populares para toda la familia.',                              rating: 4.6, reviews: 89,  address: 'Av. Popular #12-20',    barrio: 'El Centro',    phone: '+57 320 456 7890', whatsapp: true,  hours: 'Vie–Dom · 11:00–22:00',      openNow: false, closesAt: null,   specialty: 'Fritanga',             tags: ['Parrilla', 'Para llevar'],            payments: ['Efectivo', 'Daviplata'],          verified: false, since: '2021', priceLevel: 2, lat: 4.6097, lng: -74.0817 },
+    { id: 3,  cat: 'restaurantes', name: 'Sabores del Valle',            owner: 'Lucía Rondón',      desc: 'Platos típicos de la región andina. Bandeja paisa, ajiaco santafereño y postres artesanales.',                              rating: 4.9, reviews: 203, address: 'Carrera 5 #8-90',       barrio: 'Barrio Nuevo', phone: '+57 301 678 9012', whatsapp: true,  hours: 'Todos los días · 7:00–21:00', openNow: true,  closesAt: '9pm',  specialty: 'Bandeja paisa',        tags: ['Regional', 'Domicilio', 'Reservas'], payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2015', priceLevel: 2, delivery: { precio: 4000, minPedido: 20000, zonas: ['Barrio Nuevo', 'El Centro', 'Barrio Norte', 'El Prado'], tiempo: '25–40 min' }, lat: 4.6312, lng: -74.0752 },
+    { id: 4,  cat: 'restaurantes', name: 'Tacos Don Memo',               owner: 'Guillermo Flores',  desc: 'Auténtica cocina mexicana adaptada al paladar local. Tacos, burritos y salsas caseras.',                                     rating: 4.5, reviews: 67,  address: 'Diagonal 45 #23-10',   barrio: 'Barrio Norte', phone: '+57 315 890 1234', whatsapp: false, hours: 'Lun–Sáb · 12:00–21:00',     openNow: true,  closesAt: '9pm',  specialty: 'Tacos al pastor',      tags: ['Mexicana', 'Para llevar'],            payments: ['Efectivo'],                       verified: false, since: '2022', priceLevel: 1, lat: 4.6380, lng: -74.0690 },
+    { id: 5,  cat: 'restaurantes', name: 'Caldo de Pollo Mama Juanita',  owner: 'Juanita Sánchez',   desc: 'Caldos, sancochos y sopas preparados con recetas de abuela. El mejor remedio para cualquier día.',                           rating: 4.7, reviews: 156, address: 'Calle 23 #45-67',       barrio: 'Villa Rosa',   phone: '+57 317 012 3456', whatsapp: true,  hours: 'Lun–Dom · 6:00–15:00',      openNow: true,  closesAt: '3pm',  specialty: 'Sancocho de gallina',  tags: ['Sopas', 'Desayunos'],                payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2010', priceLevel: 1, lat: 4.6178, lng: -74.0540 },
+    { id: 6,  cat: 'restaurantes', name: 'Pizzas al Carbón',             owner: 'Fernando Castro',   desc: 'Pizzas artesanales horneadas en leña. Masa madre, ingredientes frescos y sabor auténtico.',                                  rating: 4.4, reviews: 44,  address: 'Calle 7 #12-34',        barrio: 'Barrio Norte', phone: '+57 310 234 5678', whatsapp: true,  hours: 'Mié–Dom · 17:00–23:00',     openNow: false, closesAt: null,   specialty: 'Pizza artesanal',      tags: ['Italiana', 'Domicilio'],              payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: false, since: '2023', priceLevel: 2, delivery: { precio: 5000, minPedido: 25000, zonas: ['Barrio Norte', 'La Esperanza', 'El Centro'], tiempo: '30–45 min' }, lat: 4.6355, lng: -74.0730 },
+    { id: 7,  cat: 'tiendas',      name: 'Tienda El Progreso',           owner: 'Marlene Ríos',      desc: 'Todo lo que necesitas para el hogar. Abarrotes, aseo y más. Fiado a clientes frecuentes.',                                  rating: 4.7, reviews: 211, address: 'Carrera 8 #15-30',      barrio: 'La Esperanza', phone: '+57 312 345 6789', whatsapp: false, hours: 'Lun–Dom · 6:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Abarrotes',            tags: ['General', 'Fiado'],                   payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2005', priceLevel: 1, lat: 4.6230, lng: -74.0645 },
+    { id: 8,  cat: 'tiendas',      name: 'Minimercado La Victoria',      owner: 'Pedro Gómez',       desc: 'Productos frescos, carnes y lácteos directos del proveedor. Precios justos cada día.',                                       rating: 4.5, reviews: 98,  address: 'Av. 3 #20-45',          barrio: 'El Centro',    phone: '+57 316 456 7890', whatsapp: true,  hours: 'Lun–Sáb · 7:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Carnes',               tags: ['Mercado', 'Domicilio'],               payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2012', priceLevel: 1, delivery: { precio: 2000, minPedido: 10000, zonas: ['El Centro', 'La Esperanza', 'Barrio Nuevo'], tiempo: '15–25 min' }, lat: 4.6110, lng: -74.0800 },
+    { id: 9,  cat: 'ropa',         name: 'Modas Valentina',              owner: 'Valentina Cruz',    desc: 'Ropa para mujer confeccionada a mano. Diseños únicos con telas de calidad a precio accesible.',                             rating: 4.8, reviews: 78,  address: 'C.C. Popular L-34',     barrio: 'El Centro',    phone: '+57 318 567 8901', whatsapp: true,  hours: 'Lun–Sáb · 9:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Confección a medida',  tags: ['Confección', 'A medida'],             payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2019', priceLevel: 2, lat: 4.6085, lng: -74.0825 },
+    { id: 10, cat: 'ropa',         name: 'Zapatos y Más Don Julio',      owner: 'Julio Herrera',     desc: 'Ventas al por mayor y detal, calzado directamente de fábrica para damas, caballeros y niños.',                                                  rating: 4.3, reviews: 55,  address: 'Calle 10 #6-78',        barrio: 'Villa Rosa',   phone: '+57 313 678 9012', whatsapp: false, hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Reparación',           tags: ['Zapatería', 'Reparación'],            payments: ['Efectivo'],                       verified: false, since: '2008', priceLevel: 1, lat: 4.6155, lng: -74.0570 },
+    { id: 11, cat: 'salud',        name: 'Farmacia Popular San Rafael',  owner: 'Dra. Ana Bernal',   desc: 'Medicamentos genéricos y de marca. Servicio de tensión y glucosa gratuito. Atención personalizada.',                         rating: 4.9, reviews: 312, address: 'Calle 5 #9-20',         barrio: 'El Centro',    phone: '+57 319 789 0123', whatsapp: true,  hours: 'Lun–Dom · 8:00–22:00',      openNow: true,  closesAt: '10pm', specialty: 'Farmacia 24h',         tags: ['Salud', 'Domicilio'],                payments: ['Efectivo', 'Tarjeta', 'Nequi'],   verified: true,  since: '2014', priceLevel: 2, delivery: { precio: 0, minPedido: 0, zonas: ['El Centro', 'La Esperanza', 'Villa Rosa', 'El Prado', 'Barrio Norte', 'Barrio Nuevo', 'La Paz', 'Alegría'], tiempo: '20–40 min' }, lat: 4.6070, lng: -74.0840 },
+    { id: 12, cat: 'talleres',     name: 'Taller El Mecánico Honesto',   owner: 'Rodrigo Vargas',    desc: 'Servicio mecánico a domicilio y en taller. Motos y carros. Garantía en todos los trabajos.',                                rating: 4.7, reviews: 143, address: 'Calle Industrial #45-20', barrio: 'El Prado',     phone: '+57 321 890 1234', whatsapp: true,  hours: 'Lun–Sáb · 8:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Mecánica general',     tags: ['Automotriz', 'A domicilio'],          payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2011', priceLevel: 2, delivery: { precio: 10000, minPedido: 0, zonas: ['El Prado', 'La Esperanza', 'El Centro', 'Villa Rosa', 'Barrio Norte'], tiempo: '30–60 min' }, lat: 4.6290, lng: -74.0760 },
+    { id: 13, cat: 'talleres',     name: 'Eléctrico Don Jaime',          owner: 'Jaime Morales',     desc: 'Instalaciones eléctricas residenciales y comerciales. Reparación de electrodomésticos.',                                     rating: 4.6, reviews: 88,  address: 'Calle 3 #18-44',        barrio: 'La Paz',       phone: '+57 322 901 2345', whatsapp: true,  hours: 'Lun–Vie · 8:00–17:00',      openNow: true,  closesAt: '5pm',  specialty: 'Eléctrico residencial', tags: ['Eléctrico', 'Urgencias'],             payments: ['Efectivo'],                       verified: false, since: '2016', priceLevel: 2, lat: 4.6020, lng: -74.0870 },
+    { id: 14, cat: 'belleza',      name: 'Peluquería Estilo Total',      owner: 'Sandra López',      desc: 'Cortes, tintes, alisados y peinados para toda la familia. Atención con y sin cita.',                                        rating: 4.8, reviews: 189, address: 'Carrera 12 #34-56',     barrio: 'Villa Rosa',   phone: '+57 323 012 3456', whatsapp: true,  hours: 'Mar–Dom · 9:00–19:00',       openNow: true,  closesAt: '7pm',  specialty: 'Tintes y alisados',    tags: ['Cabello', 'Sin cita'],               payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2013', priceLevel: 2, lat: 4.6190, lng: -74.0555 },
+    { id: 15, cat: 'panaderia',    name: 'Panadería El Trigal',          owner: 'Miguel Á. Torres',  desc: 'Pan artesanal horneado cada mañana. Postres, tortas para ocasiones especiales y café.',                                     rating: 4.9, reviews: 267, address: 'Calle 8 #20-10',        barrio: 'La Esperanza', phone: '+57 324 123 4567', whatsapp: true,  hours: 'Lun–Dom · 5:00–20:00',      openNow: true,  closesAt: '8pm',  specialty: 'Pan de masa madre',    tags: ['Panadería', 'Tortas'],               payments: ['Efectivo', 'Nequi', 'Tarjeta'],   verified: true,  since: '2007', priceLevel: 1, lat: 4.6260, lng: -74.0620 },
+    { id: 16, cat: 'electronicos', name: 'Tecno Reparaciones JR',        owner: 'Javier Rojas',      desc: 'Reparación de celulares, tablets y computadores. Venta de accesorios originales y económicos.',                             rating: 4.5, reviews: 112, address: 'C.C. Centro L-22',      barrio: 'El Centro',    phone: '+57 325 234 5678', whatsapp: true,  hours: 'Lun–Sáb · 8:00–19:00',      openNow: true,  closesAt: '7pm',  specialty: 'Pantallas y baterías', tags: ['Tecnología', 'Garantía'],             payments: ['Efectivo', 'Tarjeta'],            verified: true,  since: '2017', priceLevel: 2, lat: 4.6130, lng: -74.0790 },
+    { id: 17, cat: 'educacion',    name: 'Academia Futuro Brillante',    owner: 'Prof. Clara Mendoza', desc: 'Clases de refuerzo, matemáticas, español e inglés para niños y jóvenes. Grupos reducidos.',                               rating: 4.8, reviews: 76,  address: 'Calle 15 #7-30',        barrio: 'El Centro',    phone: '+57 326 345 6789', whatsapp: true,  hours: 'Lun–Vie · 14:00–19:00',     openNow: false, closesAt: null,   specialty: 'Refuerzo escolar',     tags: ['Académico', 'Niños'],                payments: ['Efectivo', 'Transferencia'],      verified: true,  since: '2019', priceLevel: 2, lat: 4.6145, lng: -74.0775 },
+    { id: 18, cat: 'transporte',   name: 'Fletes y Mudanzas El Confiable', owner: 'Hernán Díaz',    desc: 'Servicio de fletes locales y mudanzas. Camioneta disponible las 24 horas para emergencias.',                                rating: 4.6, reviews: 54,  address: 'Cra 22 #8-12',          barrio: 'El Prado',     phone: '+57 327 456 7890', whatsapp: true,  hours: '24 horas · 7 días',         openNow: true,  closesAt: '24h',  specialty: 'Mudanzas',             tags: ['Logística', '24h'],                  payments: ['Efectivo', 'Tarjeta'],            verified: false, since: '2020', priceLevel: 2, lat: 4.6275, lng: -74.0780 },
+    { id: 19, cat: 'artesania',    name: 'Arte y Manos Creativas',       owner: 'Patricia Suárez',   desc: 'Artesanías en madera, cerámica y tejido. Talleres para niños y adultos los fines de semana.',                               rating: 4.9, reviews: 91,  address: 'Casa Cultural, Calle 10', barrio: 'La Esperanza', phone: '+57 328 567 8901', whatsapp: true,  hours: 'Mié–Dom · 10:00–17:00',     openNow: true,  closesAt: '5pm',  specialty: 'Cerámica artesanal',   tags: ['Arte', 'Talleres'],                  payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2016', priceLevel: 2, lat: 4.6215, lng: -74.0660 },
+    { id: 20, cat: 'frutas',       name: 'Frutería La Cosecha Fresca',   owner: 'Esperanza Quiñones', desc: 'Frutas y verduras directas del campo. Domicilios sin costo adicional. Todo fresco cada mañana.',                           rating: 4.8, reviews: 178, address: 'Mercado Central L-45',   barrio: 'El Centro',    phone: '+57 329 678 9012', whatsapp: true,  hours: 'Lun–Dom · 6:00–12:00',      openNow: true,  closesAt: '12pm', specialty: 'Frutas del campo',     tags: ['Orgánico', 'Domicilio'],              payments: ['Efectivo', 'Nequi'],              verified: true,  since: '2018', priceLevel: 1, delivery: { precio: 0, minPedido: 8000, zonas: ['El Centro', 'La Esperanza', 'Barrio Nuevo', 'Villa Rosa'], tiempo: '10–20 min' }, lat: 4.6105, lng: -74.0810 },
+    { id: 21, cat: 'tecnologia',   name: 'Soluciones TIC Popular',       owner: 'Diego Ramírez',     desc: 'Diseño de páginas web, redes sociales y soporte técnico para pequeños negocios.',                                           rating: 4.7, reviews: 63,  address: 'Coworking Centro p2',    barrio: 'El Centro',    phone: '+57 330 789 0123', whatsapp: true,  hours: 'Lun–Vie · 9:00–18:00',      openNow: true,  closesAt: '6pm',  specialty: 'Web para pymes',       tags: ['Digital', 'Pymes'],                  payments: ['Transferencia', 'Tarjeta'],       verified: true,  since: '2021', priceLevel: 3, lat: 4.6120, lng: -74.0810 },
+    { id: 22, cat: 'eventos',      name: 'Fiestas y Detalles Don Augusto', owner: 'Augusto Palacios', desc: 'Organización de fiestas, cumpleaños y reuniones. Decoración, sonido y catering incluidos.',                               rating: 4.5, reviews: 47,  address: 'Cra 20 #14-08',         barrio: 'Alegría',      phone: '+57 331 890 1234', whatsapp: true,  hours: 'Con cita previa',           openNow: false, closesAt: null,   specialty: 'Eventos sociales',     tags: ['Eventos', 'Catering'],               payments: ['Efectivo', 'Transferencia'],      verified: false, since: '2019', priceLevel: 2, lat: 4.6330, lng: -74.0680 },
   ],
 };
 </script>
@@ -3427,8 +3518,74 @@ function Stars({ rating, size = 12, compact = false }) {
   );
 }
 
+// ─── Haversine distance (km) between two lat/lng points ───────────────────────
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ─── Format distance for display ──────────────────────────────────────────────
+function fmtDist(km) {
+  if (km < 1) return Math.round(km * 1000) + ' m';
+  return km.toFixed(1) + ' km';
+}
+
+// ─── Hook: obtain GPS coords + reverse-geocode to a neighborhood name ─────────
+function useGeolocation() {
+  const [state, setState] = React.useState({
+    status: 'idle',   // 'idle' | 'loading' | 'ok' | 'error' | 'denied'
+    lat: null,
+    lng: null,
+    displayName: null,  // human-readable neighborhood / suburb
+    accuracy: null,
+  });
+
+  const request = React.useCallback(() => {
+    if (!navigator.geolocation) {
+      setState(s => ({ ...s, status: 'error' }));
+      return;
+    }
+    setState(s => ({ ...s, status: 'loading' }));
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude: lat, longitude: lng, accuracy } = pos.coords;
+        // Reverse geocode using Nominatim (free, no key)
+        let displayName = null;
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=15&addressdetails=1`,
+            { headers: { 'Accept-Language': 'es' } }
+          );
+          const data = await res.json();
+          const addr = data.address || {};
+          // Priority: neighbourhood > suburb > quarter > county > city
+          displayName = addr.neighbourhood || addr.suburb || addr.quarter
+                     || addr.county || addr.city || addr.town
+                     || addr.village || data.display_name?.split(',')[0]
+                     || 'Mi ubicación';
+          // Capitalize first letter
+          displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        } catch (_) {
+          displayName = 'Mi ubicación';
+        }
+        setState({ status: 'ok', lat, lng, displayName, accuracy });
+      },
+      (err) => {
+        const status = err.code === 1 ? 'denied' : 'error';
+        setState(s => ({ ...s, status }));
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  }, []);
+
+  return { ...state, request };
+}
+
 // ---------- TopBar ----------
-function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, onOpenStats, onOpenAbout }) {
+function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, onOpenStats, onOpenAbout, geo, onRequestGeo }) {
   const [barrioOpen, setBarrioOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -3440,8 +3597,22 @@ function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, o
     return () => document.removeEventListener('mousedown', handler);
   }, [barrioOpen]);
 
+  // Label shown in the pill
+  const pillLabel = geo.status === 'loading'
+    ? 'Ubicando…'
+    : geo.status === 'ok'
+    ? geo.displayName
+    : barrio;
+
+  const pillIcon = geo.status === 'loading'
+    ? <span style={{display:'inline-block',width:10,height:10,borderRadius:'50%',border:'2px solid var(--accent)',borderTopColor:'transparent',animation:'spin .7s linear infinite',flexShrink:0}}/>
+    : geo.status === 'ok'
+    ? <span style={{width:8,height:8,borderRadius:'50%',background:'var(--open)',boxShadow:'0 0 0 3px oklch(52% 0.14 158 / 0.22)',flexShrink:0,display:'inline-block'}}/>
+    : <I.MapPin size={14} />;
+
   return (
     <header className="topbar">
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}} .geo-dist{font-family:var(--f-mono);font-size:11px;color:var(--ink-4);padding:0 6px;}`}</style>
       <div className="brand">
         <div className="brand-mark">ED</div>
         <div className="brand-name">
@@ -3466,24 +3637,64 @@ function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, o
       </div>
 
       <div className="top-actions">
-        <button className="barrio-pill" onClick={() => setBarrioOpen(o => !o)} ref={menuRef}>
-          <I.MapPin size={14} />
-          <span>{barrio}</span>
+        {/* ── barrio-pill with live geolocation ── */}
+        <button className="barrio-pill" onClick={() => setBarrioOpen(o => !o)} ref={menuRef}
+          title={geo.status === 'ok' ? `Precisión: ±${Math.round(geo.accuracy||0)} m` : 'Seleccionar zona'}>
+          {pillIcon}
+          <span style={{maxWidth:160,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{pillLabel}</span>
           <I.ChevronD size={12} />
+
           {barrioOpen && (
-            <div className="barrio-menu" onClick={e => e.stopPropagation()}>
-              <div className="barrio-menu-head">Tu zona</div>
+            <div className="barrio-menu" onClick={e => e.stopPropagation()} style={{minWidth:240}}>
+
+              {/* ── GPS section ── */}
+              <div className="barrio-menu-head" style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                <span>📍 Ubicación real</span>
+                {geo.status === 'ok' && <span style={{fontSize:10,color:'var(--open)',fontFamily:'var(--f-mono)'}}>ACTIVA</span>}
+              </div>
+
+              {geo.status === 'idle' || geo.status === 'error' || geo.status === 'denied' ? (
+                <button className="barrio-item" style={{color:'var(--accent)',fontWeight:500}}
+                  onClick={() => { onRequestGeo(); }}>
+                  <I.Navigate size={13} />
+                  <span>
+                    {geo.status === 'denied'
+                      ? 'Permiso denegado — reintentar'
+                      : geo.status === 'error'
+                      ? 'Error de GPS — reintentar'
+                      : 'Detectar mi ubicación automáticamente'}
+                  </span>
+                </button>
+              ) : geo.status === 'loading' ? (
+                <div className="barrio-item" style={{color:'var(--ink-3)',cursor:'default'}}>
+                  <span style={{width:10,height:10,borderRadius:'50%',border:'2px solid var(--accent)',borderTopColor:'transparent',animation:'spin .7s linear infinite',flexShrink:0,display:'inline-block'}}/>
+                  <span>Obteniendo posición GPS…</span>
+                </div>
+              ) : (
+                <button className="barrio-item is-active"
+                  onClick={() => { setBarrio(geo.displayName); setBarrioOpen(false); }}>
+                  <span style={{width:8,height:8,borderRadius:'50%',background:'var(--open)',flexShrink:0,display:'inline-block'}}/>
+                  <span style={{flex:1}}>{geo.displayName}</span>
+                  <I.Check size={12} />
+                </button>
+              )}
+
+              {/* Divider */}
+              <div style={{height:1,background:'var(--line)',margin:'6px 0'}}/>
+              <div className="barrio-menu-head">Zonas del directorio</div>
+
               {barrios.map(b => (
-                <button key={b} className={'barrio-item ' + (b === barrio ? 'is-active' : '')}
+                <button key={b} className={'barrio-item ' + (b === barrio && geo.status !== 'ok' ? 'is-active' : '')}
                   onClick={() => { setBarrio(b); setBarrioOpen(false); }}>
                   <I.MapPin size={12} />
                   <span>{b}</span>
-                  {b === barrio && <I.Check size={12} />}
+                  {b === barrio && geo.status !== 'ok' && <I.Check size={12} />}
                 </button>
               ))}
             </div>
           )}
         </button>
+
         <button className="top-stats-btn" onClick={onOpenStats} title="Estadísticas">
           <I.Sliders size={14} />
           <span>Estadísticas</span>
@@ -3564,7 +3775,7 @@ function FilterToggle({ label, active, onChange, dot }) {
 }
 
 // ---------- Toolbar ----------
-function Toolbar({ count, sort, setSort, view, setView, density, catName, query }) {
+function Toolbar({ count, sort, setSort, view, setView, density, catName, query, geo }) {
   // Detectar si la query fue expandida por sinónimos
   const expandHint = React.useMemo(() => {
     if (!query) return null;
@@ -3577,9 +3788,18 @@ function Toolbar({ count, sort, setSort, view, setView, density, catName, query 
     return hits.length ? hits.join(', ') : null;
   }, [query]);
 
+  const geoOk = geo && geo.status === 'ok';
   const title = query
     ? <>Resultados para <em>«{query}»</em></>
-    : (catName ? <>{catName}</> : <>Cerca de ti</>);
+    : catName
+    ? <>{catName}</>
+    : geoOk
+    ? <>Todo alrededor de <em>{geo.displayName}</em></>
+    : <>Cerca de ti</>;
+
+  const subtitle = geoOk && !query
+    ? `${count} ${count === 1 ? 'negocio' : 'negocios'} ordenados por distancia real`
+    : `${count} ${count === 1 ? 'negocio' : 'negocios'}`;
   return (
     <div className="toolbar">
       <div className="toolbar-title">
@@ -3587,7 +3807,10 @@ function Toolbar({ count, sort, setSort, view, setView, density, catName, query 
         <div className="toolbar-meta">
           <span><b>{count}</b> {count === 1 ? 'negocio' : 'negocios'}</span>
           <span className="sep">·</span>
-          <span>Actualizado hace 4 min</span>
+          {geoOk && !query
+            ? <span style={{color:'var(--accent)',fontFamily:'var(--f-mono)',fontSize:12}}>📍 ordenados por distancia real</span>
+            : <span>Actualizado hace 4 min</span>
+          }
           {expandHint && (
             <span className="search-hint">
               🔍 También buscado: <em>{expandHint}</em>
@@ -3617,7 +3840,7 @@ function Toolbar({ count, sort, setSort, view, setView, density, catName, query 
 }
 
 // ---------- Card ----------
-function BusinessCard({ b, onOpen, onSave, saved, view, onContact, onCompare, inCompare }) {
+function BusinessCard({ b, onOpen, onSave, saved, view, onContact, onCompare, inCompare, geo }) {
   const cat = CATEGORIES.find(c => c.id === b.cat);
   const hueMap = {
     restaurantes: 30, tiendas: 220, ropa: 320, salud: 165, talleres: 50,
@@ -3625,6 +3848,17 @@ function BusinessCard({ b, onOpen, onSave, saved, view, onContact, onCompare, in
     transporte: 25, artesania: 290, frutas: 130, tecnologia: 230, eventos: 280,
   };
   const hue = hueMap[b.cat] || 150;
+
+  // Distance badge (only when GPS is active and business has coords)
+  const distKm = (geo && geo.status === 'ok' && geo.lat != null && b.lat != null)
+    ? haversineKm(geo.lat, geo.lng, b.lat, b.lng)
+    : null;
+  const distBadge = distKm != null
+    ? <span style={{display:'inline-flex',alignItems:'center',gap:3,fontFamily:'var(--f-mono)',fontSize:11,color:'var(--accent)',background:'var(--accent-soft)',padding:'2px 7px',borderRadius:4,flexShrink:0}}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 11 19-9-9 19-2-8-8-2Z"/></svg>
+        {fmtDist(distKm)}
+      </span>
+    : null;
 
   // ── Vista Lista ──────────────────────────────────────────────
   if (view === 'list') {
@@ -3660,6 +3894,7 @@ function BusinessCard({ b, onOpen, onSave, saved, view, onContact, onCompare, in
             <span className="meta-item"><I.Clock size={12} />{b.hours}</span>
             <PriceLevel level={b.priceLevel} />
             {b.delivery && <DeliveryBadge delivery={b.delivery} />}
+            {distBadge}
           </div>
 
           <div className="card-tags">
@@ -3730,6 +3965,7 @@ function BusinessCard({ b, onOpen, onSave, saved, view, onContact, onCompare, in
           <span className="meta-item"><I.MapPin size={11} />{b.barrio}</span>
           <span className="sep">·</span>
           <span className="meta-item">{b.address}</span>
+          {distBadge && <><span className="sep">·</span>{distBadge}</>}
         </div>
 
         <div className="card-tags">
@@ -4330,8 +4566,173 @@ function Spotlight({ items, onOpen }) {
 }
 
 
+// ---------- DeliveryFields ----------
+function DeliveryFields({ form, set, barrios, geo }) {
+  const [unit, setUnit] = React.useState('km'); // 'km' | 'mi'
+
+  const radius    = form.deliveryRadio || 3;
+  const maxRadius = unit === 'km' ? 30 : 20;
+  const pct       = Math.round((radius / maxRadius) * 100);
+
+  const setRadius = v => set('deliveryRadio', Number(v));
+
+  const toKm = (v, u) => u === 'km' ? v : v * 1.60934;
+
+  // GPS coverage check
+  let coverageBanner = null;
+  if (geo && geo.status === 'ok' && geo.lat != null && form.ciudad) {
+    const radiusKm = toKm(radius, unit);
+    // We don't have real coords for the business yet, so use a friendly message
+    coverageBanner = (
+      <div className="rp-coverage-banner covered">
+        <span className="rp-coverage-dot"/>
+        <span>
+          Tu ubicación GPS está activa · Con un radio de <strong>{radius} {unit}</strong> cubrirías aprox. <strong>{radiusKm < 2 ? 'tu cuadra y alrededores' : radiusKm < 5 ? 'tu barrio y vecinos' : 'varios barrios de la ciudad'}</strong>.
+        </span>
+      </div>
+    );
+  } else {
+    coverageBanner = (
+      <div className="rp-coverage-banner no-gps">
+        <span className="rp-coverage-dot"/>
+        <span>Activa tu ubicación GPS en el topbar para ver si cubres la zona del cliente.</span>
+      </div>
+    );
+  }
+
+  // Preview chips
+  const precio   = form.deliveryPrecio !== '' ? Number(form.deliveryPrecio) : null;
+  const minPed   = form.deliveryMin    !== '' ? Number(form.deliveryMin)    : null;
+  const tiempo   = form.deliveryTiempo || '';
+
+  return (
+    <div className="rp-delivery-fields">
+
+      {/* Header */}
+      <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+        <span style={{fontSize:13, fontWeight:600, color:'var(--ink-2)'}}>🛵 Configuración de domicilios</span>
+      </div>
+
+      {/* GPS coverage */}
+      {coverageBanner}
+
+      {/* Radio de cobertura */}
+      <div className="rp-field">
+        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:4}}>
+          <label className="rp-label" style={{marginBottom:0}}>Radio de cobertura</label>
+          <div className="rp-unit-toggle">
+            <button type="button" className={'rp-unit-btn ' + (unit==='km'?'on':'')} onClick={()=>setUnit('km')}>km</button>
+            <button type="button" className={'rp-unit-btn ' + (unit==='mi'?'on':'')} onClick={()=>setUnit('mi')}>mi</button>
+          </div>
+        </div>
+        <div className="rp-radius-wrap">
+          <div className="rp-radius-row">
+            <input type="range" className="rp-radius-slider"
+              min={1} max={maxRadius} step={0.5}
+              value={radius}
+              style={{'--pct': pct + '%'}}
+              onChange={e => setRadius(e.target.value)} />
+            <span className="rp-radius-val">{radius} {unit}</span>
+          </div>
+          <p className="rp-hint">Distancia máxima desde tu local hasta el cliente.</p>
+        </div>
+      </div>
+
+      {/* Costo envío / Pedido mínimo */}
+      <div className="rp-field-row">
+        <div className="rp-field">
+          <label className="rp-label">Costo de envío</label>
+          <div className="rp-input-icon-wrap">
+            <I.Truck size={14}/>
+            <input className="rp-input-icon" type="number" min="0"
+              placeholder="0 = gratis"
+              value={form.deliveryPrecio} onChange={e => set('deliveryPrecio', e.target.value)} />
+          </div>
+          <p className="rp-hint">Ingresa 0 si el envío es gratis.</p>
+        </div>
+        <div className="rp-field">
+          <label className="rp-label">Pedido mínimo</label>
+          <div className="rp-input-icon-wrap">
+            <I.Wallet size={14}/>
+            <input className="rp-input-icon" type="number" min="0"
+              placeholder="0 = sin mínimo"
+              value={form.deliveryMin} onChange={e => set('deliveryMin', e.target.value)} />
+          </div>
+          <p className="rp-hint">Valor mínimo del pedido.</p>
+        </div>
+      </div>
+
+      {/* Tiempo estimado / Horario domicilio */}
+      <div className="rp-field-row">
+        <div className="rp-field">
+          <label className="rp-label">Tiempo estimado</label>
+          <input className="rp-input" type="text"
+            placeholder="Ej: 20–35 min"
+            value={form.deliveryTiempo} onChange={e => set('deliveryTiempo', e.target.value)} />
+        </div>
+        <div className="rp-field">
+          <label className="rp-label">Horario de domicilios</label>
+          <div style={{display:'flex', alignItems:'center', gap:6}}>
+            <div className="rp-select-wrap" style={{flex:1}}>
+              <select className="rp-select"
+                value={form.deliveryHorarioDesde || '8:00'}
+                onChange={e => set('deliveryHorarioDesde', e.target.value)}>
+                {['5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00',
+                  '13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00',
+                  '21:00','22:00','23:00','24:00'].map(h => <option key={h} value={h}>{h}</option>)}
+              </select>
+              <I.ChevronD size={12}/>
+            </div>
+            <span style={{color:'var(--ink-4)', fontSize:13, flexShrink:0}}>–</span>
+            <div className="rp-select-wrap" style={{flex:1}}>
+              <select className="rp-select"
+                value={form.deliveryHorarioHasta || '21:00'}
+                onChange={e => set('deliveryHorarioHasta', e.target.value)}>
+                {['5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00',
+                  '13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00',
+                  '21:00','22:00','23:00','24:00'].map(h => <option key={h} value={h}>{h}</option>)}
+              </select>
+              <I.ChevronD size={12}/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Instrucciones especiales */}
+      <div className="rp-field">
+        <label className="rp-label">Instrucciones especiales</label>
+        <input className="rp-input" type="text"
+          placeholder="Ej: Llamar al llegar, no dejar en recepción…"
+          value={form.deliveryInstrucciones || ''} onChange={e => set('deliveryInstrucciones', e.target.value)} />
+        <p className="rp-hint">Opcional — aparecerá en la tarjeta del negocio.</p>
+      </div>
+
+      {/* Preview de cómo verá el cliente */}
+      <div className="rp-delivery-preview">
+        <div className="rp-delivery-preview-title">Así verá el cliente tu domicilio</div>
+        <div className="rp-delivery-chips">
+          <span className={'rp-delivery-chip ' + (precio === 0 ? 'highlight' : '')}>
+            🛵 {precio === 0 ? 'Envío gratis' : precio != null ? `Envío $${precio.toLocaleString('es-CO')}` : 'Costo de envío pendiente'}
+          </span>
+          {minPed != null && minPed > 0 && (
+            <span className="rp-delivery-chip">🛒 Mín. ${minPed.toLocaleString('es-CO')}</span>
+          )}
+          {tiempo && (
+            <span className="rp-delivery-chip highlight">⏱ {tiempo}</span>
+          )}
+          <span className="rp-delivery-chip">📍 Hasta {radius} {unit} de distancia</span>
+          {(form.deliveryHorarioDesde || form.deliveryHorarioHasta) && (
+            <span className="rp-delivery-chip">🕐 {form.deliveryHorarioDesde || '8:00'} – {form.deliveryHorarioHasta || '21:00'}</span>
+          )}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
 // ---------- RegisterPage ----------
-function RegisterPage({ onBack, showToast, onRegister, barrios }) {
+function RegisterPage({ onBack, showToast, onRegister, barrios, geo }) {
   const PAYMENT_OPTIONS = [
     { id: 'efectivo',      label: 'Efectivo',      icon: '💵' },
     { id: 'nequi',         label: 'Nequi',          icon: '📱' },
@@ -4348,11 +4749,13 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
   const [submitted, setSubmitted] = React.useState(false);
   const [form, setForm]       = React.useState({
     name: '', owner: '', catId: '', specialty: '',
-    barrio: '', address: '',
+    barrio: '', address: '', ciudad: '', departamento: '', codigoPostal: '',
     phone: '', whatsapp: false,
     days: [], openFrom: '8:00', openTo: '18:00',
     desc: '', payments: [],
-    hasDelivery: false, deliveryPrecio: '', deliveryMin: '', deliveryTiempo: '', deliveryZonas: [],
+    hasDelivery: false, deliveryPrecio: '', deliveryMin: '', deliveryTiempo: '',
+    deliveryRadio: 3, deliveryHorarioDesde: '8:00', deliveryHorarioHasta: '21:00',
+    deliveryInstrucciones: '', deliveryZonas: [],
   });
 
   const set = (k, v) => {
@@ -4371,9 +4774,10 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
       if (!form.catId)        e.catId = 'Selecciona una categoría';
     }
     if (s === 2) {
-      if (!form.barrio)         e.barrio  = 'Selecciona un barrio';
-      if (!form.address.trim()) e.address = 'Ingresa la dirección';
-      if (!form.phone.trim())   e.phone   = 'Ingresa un teléfono de contacto';
+      if (!form.address.trim())       e.address      = 'Ingresa la dirección';
+      if (!form.ciudad?.trim())       e.ciudad       = 'Ingresa la ciudad';
+      if (!form.departamento?.trim()) e.departamento = 'Ingresa el departamento o estado';
+      if (!form.phone.trim())         e.phone        = 'Ingresa un teléfono de contacto';
     }
     if (s === 3) {
       if (!form.desc.trim())     e.desc     = 'Agrega una descripción';
@@ -4416,10 +4820,15 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
       payments: form.payments,
       verified: false,
       delivery: form.hasDelivery ? {
-        precio:    parseInt(form.deliveryPrecio) || 0,
-        minPedido: parseInt(form.deliveryMin)    || 0,
-        tiempo:    form.deliveryTiempo || '30–45 min',
-        zonas:     form.deliveryZonas,
+        precio:          parseInt(form.deliveryPrecio) || 0,
+        minPedido:       parseInt(form.deliveryMin)    || 0,
+        tiempo:          form.deliveryTiempo || '30–45 min',
+        zonas:           form.deliveryZonas,
+        radio:           form.deliveryRadio  || 3,
+        horario:         form.deliveryHorarioDesde && form.deliveryHorarioHasta
+                           ? `${form.deliveryHorarioDesde}–${form.deliveryHorarioHasta}`
+                           : '',
+        instrucciones:   form.deliveryInstrucciones || '',
       } : null,
       since: new Date().getFullYear().toString(),
       priceLevel: 1,
@@ -4461,7 +4870,8 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
               tu negocio estará visible en el directorio.
             </p>
             <div className="rp-success-card">
-              <div className="rp-success-row"><I.MapPin size={14}/><span>{form.barrio} · {form.address}</span></div>
+              <div className="rp-success-row"><I.MapPin size={14}/><span>{form.address}{form.ciudad ? ', ' + form.ciudad : ''}{form.departamento ? ', ' + form.departamento : ''}{form.codigoPostal ? ' · CP ' + form.codigoPostal : ''}</span></div>
+              <div className="rp-success-row"><I.MapPin size={14}/><span>{form.barrio}</span></div>
               <div className="rp-success-row"><I.Phone  size={14}/><span>{form.phone}</span></div>
               <div className="rp-success-row"><I.Clock  size={14}/><span>{form.openFrom} – {form.openTo}</span></div>
             </div>
@@ -4543,7 +4953,7 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
                   {form.owner && <div className="rp-preview-owner">{form.owner}</div>}
                   {form.barrio && (
                     <div className="rp-preview-meta">
-                      <I.MapPin size={11}/> {form.barrio}
+                      <I.MapPin size={11}/> {form.barrio}{form.ciudad ? ' · ' + form.ciudad : ''}
                     </div>
                   )}
                 </div>
@@ -4624,48 +5034,72 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
                 </div>
 
                 <div className="rp-fields">
+
+                  {/* ── Dirección completa — full width ── */}
+                  <div className="rp-field">
+                    <label className="rp-label">Dirección <span className="rp-req">*</span></label>
+                    <div className={'rp-input-icon-wrap' + (errors.address ? ' rp-input--err' : '')}>
+                      <I.Navigate size={14}/>
+                      <input className="rp-input-icon"
+                        type="text" placeholder="Ej: Calle 12 #34-56, Local 2"
+                        value={form.address} onChange={e => set('address', e.target.value)} />
+                    </div>
+                    {errors.address && <p className="rp-error"><I.X size={11}/> {errors.address}</p>}
+                    <p className="rp-hint">Calle, carrera, número de puerta o local.</p>
+                  </div>
+
+                  {/* ── Ciudad / Departamento o Estado ── */}
                   <div className="rp-field-row">
                     <div className="rp-field">
-                      <label className="rp-label">Barrio <span className="rp-req">*</span></label>
-                      <div className={'rp-select-wrap' + (errors.barrio ? ' rp-input--err' : '')}>
-                        <I.MapPin size={14} />
-                        <select className="rp-select"
-                          value={form.barrio} onChange={e => set('barrio', e.target.value)}>
-                          <option value="">Selecciona…</option>
-                          {barrios.map(b => <option key={b} value={b}>{b}</option>)}
-                        </select>
-                        <I.ChevronD size={13} />
+                      <label className="rp-label">Ciudad <span className="rp-req">*</span></label>
+                      <div className={'rp-input-icon-wrap' + (errors.ciudad ? ' rp-input--err' : '')}>
+                        <I.MapPin size={14}/>
+                        <input className="rp-input-icon"
+                          type="text" placeholder="Ej: Bogotá, Medellín…"
+                          value={form.ciudad || ''} onChange={e => set('ciudad', e.target.value)} />
                       </div>
-                      {errors.barrio && <p className="rp-error"><I.X size={11}/> {errors.barrio}</p>}
+                      {errors.ciudad && <p className="rp-error"><I.X size={11}/> {errors.ciudad}</p>}
                     </div>
 
                     <div className="rp-field">
-                      <label className="rp-label">Dirección <span className="rp-req">*</span></label>
-                      <div className={'rp-input-icon-wrap' + (errors.address ? ' rp-input--err' : '')}>
-                        <I.Navigate size={14}/>
+                      <label className="rp-label">Departamento / Estado <span className="rp-req">*</span></label>
+                      <div className={'rp-input-icon-wrap' + (errors.departamento ? ' rp-input--err' : '')}>
+                        <I.MapPin size={14}/>
                         <input className="rp-input-icon"
-                          type="text" placeholder="Calle 12 #34-56"
-                          value={form.address} onChange={e => set('address', e.target.value)} />
+                          type="text" placeholder="Ej: Cundinamarca, Antioquia…"
+                          value={form.departamento || ''} onChange={e => set('departamento', e.target.value)} />
                       </div>
-                      {errors.address && <p className="rp-error"><I.X size={11}/> {errors.address}</p>}
+                      {errors.departamento && <p className="rp-error"><I.X size={11}/> {errors.departamento}</p>}
                     </div>
                   </div>
 
-                  <div className="rp-field">
-                    <label className="rp-label">Teléfono <span className="rp-req">*</span></label>
-                    <div className={'rp-input-icon-wrap' + (errors.phone ? ' rp-input--err' : '')}>
-                      <I.Phone size={14}/>
-                      <input className="rp-input-icon"
-                        type="tel" placeholder="311 234 5678"
-                        value={form.phone} onChange={e => set('phone', e.target.value)} />
+                  {/* ── Teléfono / Código Postal ── */}
+                  <div className="rp-field-row">
+                    <div className="rp-field">
+                      <label className="rp-label">Teléfono <span className="rp-req">*</span></label>
+                      <div className={'rp-input-icon-wrap' + (errors.phone ? ' rp-input--err' : '')}>
+                        <I.Phone size={14}/>
+                        <input className="rp-input-icon"
+                          type="tel" placeholder="311 234 5678"
+                          value={form.phone} onChange={e => set('phone', e.target.value)} />
+                      </div>
+                      {errors.phone && <p className="rp-error"><I.X size={11}/> {errors.phone}</p>}
+                      <label className="rp-checkbox-label">
+                        <input type="checkbox" className="rp-checkbox"
+                          checked={form.whatsapp} onChange={e => set('whatsapp', e.target.checked)}/>
+                        <span className="rp-checkbox-box">{form.whatsapp && <I.Check size={10}/>}</span>
+                        Este número tiene WhatsApp
+                      </label>
                     </div>
-                    {errors.phone && <p className="rp-error"><I.X size={11}/> {errors.phone}</p>}
-                    <label className="rp-checkbox-label">
-                      <input type="checkbox" className="rp-checkbox"
-                        checked={form.whatsapp} onChange={e => set('whatsapp', e.target.checked)}/>
-                      <span className="rp-checkbox-box">{form.whatsapp && <I.Check size={10}/>}</span>
-                      Este número tiene WhatsApp
-                    </label>
+
+                    <div className="rp-field">
+                      <label className="rp-label">Código postal</label>
+                      <input className="rp-input"
+                        type="text" inputMode="numeric" maxLength={10}
+                        placeholder="Ej: 110111"
+                        value={form.codigoPostal || ''} onChange={e => set('codigoPostal', e.target.value.replace(/\D/g,''))} />
+                      <p className="rp-hint">Opcional — mejora la geolocalización.</p>
+                    </div>
                   </div>
 
                   <div className="rp-field">
@@ -4716,47 +5150,7 @@ function RegisterPage({ onBack, showToast, onRegister, barrios }) {
                   </div>
 
                   {form.hasDelivery && (
-                    <div className="rp-delivery-fields">
-                      <label className="rp-label" style={{marginBottom:6}}>Detalles del domicilio</label>
-                      <div className="rp-field-row">
-                        <div className="rp-field">
-                          <label className="rp-label">Costo de envío</label>
-                          <div className="rp-input-icon-wrap">
-                            <I.Truck size={14}/>
-                            <input className="rp-input-icon" type="number" min="0"
-                              placeholder="0 = gratis"
-                              value={form.deliveryPrecio} onChange={e => set('deliveryPrecio', e.target.value)} />
-                          </div>
-                        </div>
-                        <div className="rp-field">
-                          <label className="rp-label">Pedido mínimo</label>
-                          <div className="rp-input-icon-wrap">
-                            <I.Wallet size={14}/>
-                            <input className="rp-input-icon" type="number" min="0"
-                              placeholder="0 = sin mínimo"
-                              value={form.deliveryMin} onChange={e => set('deliveryMin', e.target.value)} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="rp-field">
-                        <label className="rp-label">Tiempo estimado</label>
-                        <input className="rp-input" type="text"
-                          placeholder="Ej: 20–35 min"
-                          value={form.deliveryTiempo} onChange={e => set('deliveryTiempo', e.target.value)} />
-                      </div>
-                      <div className="rp-field">
-                        <label className="rp-label">Zonas de cobertura</label>
-                        <div className="rp-days" style={{flexWrap:'wrap'}}>
-                          {barrios.map(b => (
-                            <button key={b} type="button"
-                              className={'rp-day ' + (form.deliveryZonas.includes(b) ? 'rp-day--on' : '')}
-                              style={{width:'auto', padding:'0 12px'}}
-                              onClick={() => toggleArr('deliveryZonas', b)}>{b}</button>
-                          ))}
-                        </div>
-                        <p className="rp-hint">Selecciona los barrios a los que llegas.</p>
-                      </div>
-                    </div>
+                    <DeliveryFields form={form} set={set} barrios={barrios} geo={geo} />
                   )}
                 </div>
               </div>
@@ -5958,6 +6352,19 @@ function App() {
   const [page, setPage] = useState('home'); // 'home' | 'register' | 'stats' | 'about'
   const [businesses, setBusinesses] = useState(BUSINESSES);
   const [barrios, setBarrios] = useState(window.DATA.BARRIOS);
+
+  // ── Geolocation ──────────────────────────────────────────────
+  const geo = useGeolocation();
+
+  // When GPS succeeds: auto-set barrio display name + switch to nearest sort
+  useEffect(() => {
+    if (geo.status === 'ok') {
+      setBarrio(geo.displayName);
+      setSort('nearby');
+      showToast(`📍 Ubicación detectada: ${geo.displayName}`);
+    }
+  }, [geo.status, geo.displayName]);
+
   // Barrios: parte del seed + crece con cada nuevo negocio registrado
 
   const setFilter = (k, v) => setFilters(f => ({ ...f, [k]: v }));
@@ -6048,9 +6455,20 @@ function App() {
     if (sort === 'rating') r.sort((a, b) => b.rating - a.rating);
     else if (sort === 'reviews') r.sort((a, b) => b.reviews - a.reviews);
     else if (sort === 'newest') r.sort((a, b) => (+b.since) - (+a.since));
-    else if (sort === 'nearby') r.sort((a, b) => (a.barrio === barrio ? -1 : 1) - (b.barrio === barrio ? -1 : 1));
+    else if (sort === 'nearby') {
+      if (geo.status === 'ok' && geo.lat != null) {
+        // Sort by real GPS distance
+        r.sort((a, b) => {
+          const dA = (a.lat != null) ? haversineKm(geo.lat, geo.lng, a.lat, a.lng) : 999;
+          const dB = (b.lat != null) ? haversineKm(geo.lat, geo.lng, b.lat, b.lng) : 999;
+          return dA - dB;
+        });
+      } else {
+        r.sort((a, b) => (a.barrio === barrio ? -1 : 1) - (b.barrio === barrio ? -1 : 1));
+      }
+    }
     return r;
-  }, [catId, query, filters, sort, barrio, businesses]);
+  }, [catId, query, filters, sort, barrio, businesses, geo]);
 
   // Spotlight: top 3 by rating (only on home, no filters/query)
   const spotlight = useMemo(() => {
@@ -6082,13 +6500,14 @@ function App() {
   }
 
   if (page === 'register') {
-    return <RegisterPage onBack={() => setPage('home')} showToast={showToast} onRegister={onRegister} barrios={barrios} />;
+    return <RegisterPage onBack={() => setPage('home')} showToast={showToast} onRegister={onRegister} barrios={barrios} geo={geo} />;
   }
 
   return (
     <div className="app">
       <TopBar query={query} setQuery={setQuery} barrio={barrio} setBarrio={setBarrio}
-        barrios={barrios} onOpenMerchant={() => setPage('register')} onOpenStats={() => setPage('stats')} onOpenAbout={() => setPage('about')} />
+        barrios={barrios} onOpenMerchant={() => setPage('register')} onOpenStats={() => setPage('stats')} onOpenAbout={() => setPage('about')}
+        geo={geo} onRequestGeo={geo.request} />
 
       <div className="shell">
         <Sidebar catId={catId} setCatId={setCatId} filters={filters} setFilter={setFilter} counts={counts} onResetFilters={resetFilters} />
@@ -6096,7 +6515,7 @@ function App() {
         <main className="main">
           <Toolbar count={items.length} sort={sort} setSort={setSort}
             view={view} setView={setView}
-            catName={catName} query={query} />
+            catName={catName} query={query} geo={geo} />
 
           {spotlight.length > 0 && <Spotlight items={spotlight} onOpen={setActive} />}
 
@@ -6110,7 +6529,8 @@ function App() {
                 <BusinessCard key={b.id} b={b} view={view}
                   onOpen={setActive} onSave={onSave} saved={saved.has(b.id)}
                   onContact={onContact} onCompare={onCompare}
-                  inCompare={compareIds.includes(b.id)} />
+                  inCompare={compareIds.includes(b.id)}
+                  geo={geo} />
               ))}
             </div>
           )}
