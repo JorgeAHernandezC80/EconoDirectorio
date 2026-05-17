@@ -12,6 +12,214 @@
 <style>
 body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
 </style>
+<style>
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE SYSTEM — 4 breakpoints mobile-first
+   480 | 640 | 768 | 980
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Bottom Nav (mobile only, hidden by default) ──────── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;z-index:40;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -4px 16px oklch(0% 0 0 / 0.06);padding:0 4px;align-items:stretch;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex:1;border:none;background:none;color:var(--ink-4);font-size:10px;font-family:var(--f-ui);font-weight:500;padding:6px 2px;transition:color 0.15s;cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent;}
+.bottom-nav-btn.active{color:var(--accent);}
+.bottom-nav-btn svg{flex-shrink:0;}
+.bottom-nav-btn span{font-size:10px;line-height:1;}
+
+/* ── Drawer overlay ───────────────────────────────────── */
+.drawer-overlay{display:none;position:fixed;inset:0;z-index:35;background:oklch(10% 0 0 / 0.40);animation:fadeIn 0.2s ease;}
+.drawer-overlay.open{display:block;}
+
+/* ── Mobile search bar (hidden by default) ────────────── */
+.mobile-search-bar{display:none;position:fixed;top:56px;left:0;right:0;z-index:29;padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 4px 12px oklch(0% 0 0 / 0.06);}
+.mobile-search-bar.open{display:block;}
+.mobile-search-bar .search-shell{width:100%;margin:0;height:40px;}
+
+/* ── FAB filters ──────────────────────────────────────── */
+.fab-filter{display:none;position:fixed;bottom:72px;right:16px;z-index:35;width:52px;height:52px;border-radius:50%;background:var(--accent);color:white;border:none;box-shadow:0 4px 16px oklch(40% 0.075 155 / 0.4);align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s;-webkit-tap-highlight-color:transparent;}
+.fab-filter:active{transform:scale(0.94);}
+.fab-filter .fab-badge{position:absolute;top:-2px;right:-2px;width:18px;height:18px;border-radius:50%;background:var(--warn);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--surface);}
+
+/* ── Topbar mobile buttons (hidden on desktop) ────────── */
+.topbar-btn-mobile{display:none;background:none;border:none;width:38px;height:38px;border-radius:8px;color:var(--ink-2);cursor:pointer;align-items:center;justify-content:center;transition:background 0.12s;-webkit-tap-highlight-color:transparent;flex-shrink:0;}
+.topbar-btn-mobile:hover{background:var(--surface-2);}
+
+/* ══ 980px — Tablet landscape ══════════════════════════ */
+@media(max-width:980px){
+  .shell{grid-template-columns:1fr;}
+  .sidebar{position:fixed;top:64px;left:-100%;bottom:0;width:300px;z-index:36;transition:left 0.28s cubic-bezier(.22,.61,.36,1);height:calc(100vh - 64px);box-shadow:var(--shadow-3);}
+  .sidebar.is-open{left:0;}
+  .topbar{grid-template-columns:auto 1fr auto;}
+  .brand{min-width:unset;padding:0 16px;border-right:none;}
+  .brand-meta{display:none;}
+  .top-link span{display:none;}
+  .top-actions-sep{display:none;}
+  .search-shell{margin:0 12px;}
+  .top-actions{padding:0 12px;gap:4px;}
+  .top-about-label{display:none;}
+  .spotlight-grid{grid-template-columns:repeat(2,1fr);}
+  .results.grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+  .card.list{grid-template-columns:96px 1fr;}
+  .card.list .card-actions{grid-column:1/-1;flex-direction:row;min-width:0;}
+  .map-view{grid-template-columns:1fr;height:auto;}
+  .map-canvas{height:360px;}
+  .main{padding:20px 20px 80px;}
+  .st-page{padding:20px 16px 60px;}
+  .st-kpis{grid-template-columns:repeat(3,1fr);}
+  .st-grid{grid-template-columns:1fr;}
+  .st-card--wide{grid-column:1;}
+  .st-bar-row{grid-template-columns:130px 1fr 70px;}
+  .st-cov-row{grid-template-columns:140px 1fr 44px 36px;}
+  .top-stats-btn span{display:none;}
+  .compare-modal-scrim{padding:16px;}
+  .compare-modal-head{padding:18px 18px 14px;gap:12px;}
+  .compare-modal-title{font-size:22px;}
+  .compare-verdict{margin:12px 14px 0;padding:12px 14px;grid-template-columns:auto 1fr;}
+  .compare-verdict-score{grid-column:1/-1;text-align:left;display:flex;align-items:baseline;gap:8px;}
+  .compare-col{padding:16px 18px;}
+  .compare-col-name{font-size:18px;}
+  .compare-row-header,.compare-cell{padding-left:18px;padding-right:18px;}
+  .compare-modal-footer{padding:14px 18px;flex-direction:column;align-items:stretch;}
+  .compare-modal-actions{min-width:0;flex-direction:column;}
+  .compare-action-btn{max-width:none;}
+  .rp-layout{grid-template-columns:1fr;}
+  .rp-sidebar{position:static;height:auto;padding-bottom:0;}
+  .rp-sidebar-inner{padding:32px 24px 24px;}
+  .rp-hero-title{font-size:32px;}
+  .rp-steps{flex-direction:row;gap:0;margin-bottom:0;}
+  .rp-step{flex-direction:column;align-items:center;flex:1;}
+  .rp-step-track{flex-direction:row;width:100%;}
+  .rp-step-connector{width:auto;flex:1;height:1.5px;margin:0 4px;}
+  .rp-step-text{align-items:center;padding:8px 0 0;}
+  .rp-step-desc{display:none;}
+  .rp-preview{display:none;}
+  .rp-main{padding:24px 16px 60px;}
+  .rp-form-header{padding:24px 20px 20px;}
+  .rp-fields{padding:20px 20px 0;gap:18px;}
+  .rp-nav{padding:20px 20px 24px;}
+  .rp-cat-grid{grid-template-columns:repeat(2,1fr);}
+  .rp-payment-grid{grid-template-columns:repeat(3,1fr);}
+  .about-hero{grid-template-columns:1fr;gap:32px;padding:48px 32px 40px;}
+  .about-hero-img{display:none;}
+  .about-mv-grid{grid-template-columns:1fr;}
+  .about-two-col{grid-template-columns:1fr;gap:32px;}
+  .about-values-grid{grid-template-columns:repeat(2,1fr);}
+  .about-metrics-strip{grid-template-columns:repeat(2,1fr);}
+  .about-pillars-grid{grid-template-columns:1fr;}
+  .about-cta{grid-template-columns:1fr;gap:24px;}
+}
+
+/* ══ 768px — Tablet portrait ════════════════════════════ */
+@media(max-width:768px){
+  .topbar{height:56px;}
+  .brand{padding:0 12px;gap:8px;}
+  .brand-name{font-size:15px;}
+  .brand-mark{width:28px;height:28px;font-size:10px;}
+  .search-shell{height:34px;margin:0 8px;padding:0 10px;}
+  .search-shell input{font-size:14px;}
+  .search-shell input::placeholder{font-size:14px;}
+  .search-shell kbd{display:none;}
+  .top-actions{padding:0 8px;gap:4px;}
+  .barrio-pill{padding:0 8px;font-size:12px;gap:4px;}
+  .top-about-btn{display:none;}
+  .avatar{width:30px;height:30px;font-size:12px;}
+  .sidebar{top:56px;height:calc(100vh - 56px);}
+  .bottom-nav{display:flex;}
+  .fab-filter{display:flex;}
+  .main{padding:16px 16px 80px;}
+  .toolbar{flex-direction:column;align-items:flex-start;gap:10px;}
+  .toolbar-right{width:100%;justify-content:space-between;}
+  .toolbar h1{font-size:18px;}
+  .results.grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .spotlight-grid{grid-template-columns:1fr;}
+  .card.list{grid-template-columns:80px 1fr;gap:12px;padding:12px;}
+  .card.list .card-actions.vertical{display:none;}
+  .detail-panel{width:100%;max-width:100%;border-left:none;border-top:1px solid var(--line);top:auto;height:85vh;border-radius:20px 20px 0 0;transform:translateY(100%);}
+  .detail-panel.is-open{transform:translateY(0);}
+  .compare-bar{padding:10px 16px;gap:10px;}
+  .compare-slots{display:none;}
+  .st-kpis{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .about-body{padding:0 24px 60px;}
+  .about-hero{padding:32px 24px 28px;}
+  .about-values-grid{grid-template-columns:1fr;}
+  .about-metrics-strip{grid-template-columns:1fr;}
+  .rp-field-row{grid-template-columns:1fr;}
+  .rp-payment-grid{grid-template-columns:repeat(2,1fr);}
+  .rp-main{padding:16px 12px 80px;}
+  .rp-sidebar-inner{padding:24px 16px 16px;}
+}
+
+/* ══ 640px — Mobile large ════════════════════════════════ */
+@media(max-width:640px){
+  .search-shell{display:none;}
+  .topbar-btn-mobile{display:flex;}
+  .spotlight{display:none;}
+  .results.grid{grid-template-columns:1fr;gap:10px;}
+  .card.grid{flex-direction:row;height:auto;border-radius:10px;}
+  .card.grid .card-thumb-wrap{width:90px;flex-shrink:0;border-bottom:none;border-right:1px solid var(--line);}
+  .card.grid .card-body{padding:10px 12px;gap:4px;}
+  .card.grid .card-name{font-size:15px;min-height:unset;-webkit-line-clamp:1;line-clamp:1;}
+  .card.grid .card-owner{display:none;}
+  .card.grid .card-tags{display:none;}
+  .card.grid .card-actions{padding-top:8px;margin-top:auto;}
+  .card.grid .card-actions .btn-ghost{display:none;}
+  .card.grid .card-actions .btn-compare{display:none;}
+  .thumb-overlay .badge-v{display:none;}
+  .main{padding:12px 12px 76px;}
+  .toolbar{gap:8px;margin-bottom:10px;padding-bottom:10px;}
+  .toolbar h1{font-size:16px;}
+  .toolbar-meta{font-size:12px;flex-wrap:wrap;gap:4px;}
+  .detail-panel{height:92vh;border-radius:16px 16px 0 0;}
+  .detail-body{padding:16px 16px 32px;}
+  .detail-name{font-size:22px;}
+  .detail-actions{flex-wrap:wrap;gap:8px;}
+  .compare-cols{grid-template-columns:1fr;}
+  .compare-col:last-child{display:none;}
+  .st-kpis{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .st-kpi{padding:14px 12px;}
+  .st-kpi-val{font-size:26px;}
+  .about-hero{padding:24px 16px;}
+  .about-hero-title{font-size:clamp(26px,8vw,36px);}
+  .about-body{padding:0 16px 60px;}
+  .about-cta{padding:32px 16px;flex-direction:column;gap:24px;}
+  .about-cta-actions{flex-direction:column;}
+  .rp-form-wrap{border-radius:12px;}
+  .rp-form-header{padding:16px 16px 14px;}
+  .rp-fields{padding:16px 16px 0;gap:14px;}
+  .rp-nav{padding:14px 16px 16px;}
+  .rp-cat-grid{grid-template-columns:repeat(2,1fr);gap:6px;}
+  .rp-payment-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .rp-sidebar-inner{padding:20px 16px 12px;}
+  .rp-hero-title{font-size:26px;}
+  .rp-delivery-fields{padding:12px 14px;gap:12px;}
+  .bottom-nav-btn span{display:none;}
+  .bottom-nav{height:52px;}
+  .fab-filter{bottom:64px;right:12px;width:46px;height:46px;}
+  .barrio-menu{left:0;right:0;min-width:unset;}
+}
+
+/* ══ 480px — Mobile small (iPhone SE) ═══════════════════ */
+@media(max-width:480px){
+  .topbar{height:52px;}
+  .brand-mark{width:26px;height:26px;}
+  .brand-name{font-size:14px;}
+  .top-link{display:none;}
+  .barrio-pill span{max-width:80px;}
+  .top-actions{padding:0 6px;gap:2px;}
+  .sidebar{top:52px;height:calc(100vh - 52px);}
+  .mobile-search-bar{top:52px;}
+  .card.grid .card-thumb-wrap{width:76px;}
+  .card.grid .card-name{font-size:14px;}
+  .card.grid .card-meta-row{display:none;}
+  .card.grid .card-delivery-row{display:none;}
+  .detail-panel{height:94vh;}
+  .st-kpi-val{font-size:22px;}
+  .st-kpi-label{font-size:10px;}
+  .st-kpis{gap:6px;}
+  .main{padding:10px 10px 70px;}
+  .toast{bottom:auto;top:60px;transform:translate(-50%,-20px);}
+  .toast.show{transform:translate(-50%,0);}
+}
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -815,7 +1023,7 @@ function useGeolocation() {
 }
 
 // ---------- TopBar ----------
-function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, onOpenStats, onOpenAbout, geo, onRequestGeo }) {
+function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, onOpenStats, onOpenAbout, geo, onRequestGeo, onToggleDrawer, onToggleSearch }) {
   const [barrioOpen, setBarrioOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -867,6 +1075,13 @@ function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, o
       </div>
 
       <div className="top-actions">
+        {/* Mobile: hamburger + search */}
+        <button className="topbar-btn-mobile" onClick={onToggleDrawer} aria-label="Filtros">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <button className="topbar-btn-mobile" onClick={onToggleSearch} aria-label="Buscar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
         {/* ── barrio-pill with live geolocation ── */}
         <button className="barrio-pill" onClick={() => setBarrioOpen(o => !o)} ref={menuRef}
           title={geo.status === 'ok' ? `Precisión: ±${Math.round(geo.accuracy||0)} m` : 'Seleccionar zona'}>
@@ -944,10 +1159,10 @@ function TopBar({ query, setQuery, barrio, setBarrio, barrios, onOpenMerchant, o
 }
 
 // ---------- Sidebar ----------
-function Sidebar({ catId, setCatId, filters, setFilter, counts, onResetFilters }) {
+function Sidebar({ catId, setCatId, filters, setFilter, counts, onResetFilters, isOpen, onClose }) {
   const activeFilters = Object.values(filters).filter(Boolean).length + (catId ? 1 : 0);
   return (
-    <aside className="sidebar">
+    <aside className={'sidebar ' + (isOpen ? 'is-open' : '')}>
       <div className="side-section">
         <div className="side-label-row">
           <span className="side-label">Categorías</span>
@@ -1756,6 +1971,35 @@ function EmptyState({ onReset }) {
         <I.X size={13} /> Limpiar filtros
       </button>
     </div>
+  );
+}
+
+// ---------- BottomNav ----------
+function BottomNav({ page, setPage, view, setView }) {
+  const I = window.Icon;
+  return (
+    <nav className="bottom-nav" aria-label="Navegación principal">
+      <button className={'bottom-nav-btn ' + (page==='home'&&view!=='map'?'active':'')}
+        onClick={()=>{setPage('home');setView('grid');}}>
+        <I.Grid size={20}/><span>Inicio</span>
+      </button>
+      <button className={'bottom-nav-btn ' + (page==='home'&&view==='map'?'active':'')}
+        onClick={()=>{setPage('home');setView('map');}}>
+        <I.Map size={20}/><span>Mapa</span>
+      </button>
+      <button className={'bottom-nav-btn ' + (page==='register'?'active':'')}
+        onClick={()=>setPage('register')}>
+        <I.Plus size={20}/><span>Registrar</span>
+      </button>
+      <button className={'bottom-nav-btn ' + (page==='stats'?'active':'')}
+        onClick={()=>setPage('stats')}>
+        <I.Sliders size={20}/><span>Stats</span>
+      </button>
+      <button className={'bottom-nav-btn ' + (page==='about'?'active':'')}
+        onClick={()=>setPage('about')}>
+        <I.Info size={20}/><span>Info</span>
+      </button>
+    </nav>
   );
 }
 
@@ -3710,38 +3954,57 @@ function App() {
   const counts = { total: businesses.length };
   const catName = catId ? CATEGORIES.find(c => c.id === catId).name : null;
 
-  // Esc to close detail
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [mobileSearch, setMobileSearch] = useState(false);
+  const activeFilters = Object.values(filters).filter(Boolean).length + (catId ? 1 : 0);
+
+  useEffect(() => { setDrawerOpen(false); }, [page]);
+
   useEffect(() => {
-    const onKey = e => { if (e.key === 'Escape') setActive(null); };
+    const onKey = e => { if (e.key === 'Escape') { setActive(null); setDrawerOpen(false); setMobileSearch(false); }};
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
   if (page === 'about') {
-    return <AboutPage
-      onBack={(p) => setPage(p || 'home')}
-      onOpenMerchant={() => setPage('register')}
-      businesses={businesses}
-      barrios={barrios}
-    />;
+    return (<><AboutPage onBack={(p)=>setPage(p||'home')} onOpenMerchant={()=>setPage('register')} businesses={businesses} barrios={barrios}/><BottomNav page={page} setPage={setPage} view={view} setView={setView}/></>);
   }
-
   if (page === 'stats') {
-    return <StatsPage businesses={businesses} barrios={barrios} onBack={() => setPage('home')} />;
+    return (<><StatsPage businesses={businesses} barrios={barrios} onBack={()=>setPage('home')}/><BottomNav page={page} setPage={setPage} view={view} setView={setView}/></>);
   }
-
   if (page === 'register') {
-    return <RegisterPage onBack={() => setPage('home')} showToast={showToast} onRegister={onRegister} barrios={barrios} geo={geo} />;
+    return (<><RegisterPage onBack={()=>setPage('home')} showToast={showToast} onRegister={onRegister} barrios={barrios} geo={geo}/><BottomNav page={page} setPage={setPage} view={view} setView={setView}/></>);
   }
 
   return (
     <div className="app">
       <TopBar query={query} setQuery={setQuery} barrio={barrio} setBarrio={setBarrio}
-        barrios={barrios} onOpenMerchant={() => setPage('register')} onOpenStats={() => setPage('stats')} onOpenAbout={() => setPage('about')}
-        geo={geo} onRequestGeo={geo.request} />
+        barrios={barrios} onOpenMerchant={()=>setPage('register')} onOpenStats={()=>setPage('stats')} onOpenAbout={()=>setPage('about')}
+        geo={geo} onRequestGeo={geo.request}
+        onToggleDrawer={()=>setDrawerOpen(o=>!o)}
+        onToggleSearch={()=>setMobileSearch(o=>!o)} />
+
+      {/* Mobile search bar */}
+      {mobileSearch && (
+        <div className="mobile-search-bar open">
+          <div className="search-shell" style={{width:'100%',display:'flex'}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--ink-4)',flexShrink:0}}><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" value={query} onChange={e=>setQuery(e.target.value)}
+              placeholder="Buscar negocios, productos…" autoFocus
+              style={{border:'none',outline:'none',background:'transparent',flex:1,fontSize:15,color:'var(--ink)',marginLeft:8}}/>
+            <button style={{background:'none',border:'none',color:'var(--ink-4)',display:'flex',alignItems:'center',cursor:'pointer'}}
+              onClick={()=>{setMobileSearch(false);setQuery('');}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Drawer overlay */}
+      <div className={'drawer-overlay ' + (drawerOpen ? 'open' : '')} onClick={()=>setDrawerOpen(false)} />
 
       <div className="shell">
-        <Sidebar catId={catId} setCatId={setCatId} filters={filters} setFilter={setFilter} counts={counts} onResetFilters={resetFilters} />
+        <Sidebar catId={catId} setCatId={setCatId} filters={filters} setFilter={setFilter} counts={counts} onResetFilters={resetFilters} isOpen={drawerOpen} onClose={()=>setDrawerOpen(false)} />
 
         <main className="main">
           <Toolbar count={items.length} sort={sort} setSort={setSort}
@@ -3773,6 +4036,14 @@ function App() {
         onSave={onSave} onRate={onRate} showToast={showToast} />
 
       {active && <div className="scrim" onClick={() => setActive(null)} />}
+
+      {/* FAB filters */}
+      <button className="fab-filter" onClick={()=>setDrawerOpen(o=>!o)} aria-label="Filtros">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M4 21V14M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>
+        {activeFilters > 0 && <span className="fab-badge">{activeFilters}</span>}
+      </button>
+
+      <BottomNav page={page} setPage={setPage} view={view} setView={setView} />
 
       <Toast msg={toast} />
       <CompareBar
